@@ -11,29 +11,38 @@ import type { ProductCategory, SortOption } from "@/types";
 import { useTranslation } from "@/utils/i18n";
 import { formatPriceSimple } from "@/utils";
 
+/**
+ * صفحة المتجر (ShopPage)
+ * تعرض المنتجات بطريقة منسقة، وتتيح للمستخدم إمكانية تصفية المنتجات حسب الفئات،
+ * الأسعار، التقييمات، وتدعم الفرز والترتيب التصاعدي والتنازلي.
+ */
 export default function ShopPage() {
+  // حالات التحكم بفلاتر التصفية والفرز
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory | "all">("all");
   const [selectedSort, setSelectedSort] = useState<SortOption>("featured");
   const [priceRange, setPriceRange] = useState<number>(100);
   const [minRating, setMinRating] = useState<number>(0);
-  const [showFiltersMobile, setShowFiltersMobile] = useState(false);
+  const [showFiltersMobile, setShowFiltersMobile] = useState(false); // إظهار فلاتر الموبايل
   const { t } = useTranslation();
 
-  // Filter & sort logic
+  // معالجة تصفية وترتيب المنتجات ديناميكياً لتجنب العمليات الحسابية المكررة
   const filteredProducts = useMemo(() => {
     let result = [...MOCK_PRODUCTS];
 
+    // التصفية حسب الفئة
     if (selectedCategory !== "all") {
       result = result.filter((p) => p.category === selectedCategory);
     }
 
+    // التصفية حسب الحد الأقصى للسعر
     result = result.filter((p) => p.price <= priceRange);
 
+    // التصفية حسب الحد الأدنى للتقييم
     if (minRating > 0) {
       result = result.filter((p) => p.rating >= minRating);
     }
 
-    // Sort
+    // ترتيب وفرز النتائج
     switch (selectedSort) {
       case "price_asc":
         result.sort((a, b) => a.price - b.price);
@@ -50,12 +59,14 @@ export default function ShopPage() {
         );
         break;
       default:
+        // الترتيب الافتراضي (المنتجات المميزة أولاً)
         result.sort((a, b) => (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0));
     }
 
     return result;
   }, [selectedCategory, selectedSort, priceRange, minRating]);
 
+  // دالة إعادة تعيين الفلاتر إلى قيمها الافتراضية
   const resetFilters = () => {
     startTransition(() => {
       setSelectedCategory("all");
@@ -65,12 +76,14 @@ export default function ShopPage() {
     });
   };
 
+  // دالة جلب الاسم المترجم للفئات من ملف الترجمة
   const getTranslatedCategory = (catVal: string, defaultLabel: string) => {
     const key = `shop.categories.${catVal}`;
     const trans = t(key);
     return trans !== key ? trans : defaultLabel;
   };
 
+  // دالة جلب النص المترجم لخيارات الترتيب
   const getTranslatedSort = (sortVal: string, defaultLabel: string) => {
     const key = `shop.sort.${sortVal}`;
     const trans = t(key);
@@ -80,7 +93,8 @@ export default function ShopPage() {
   return (
     <div className="bg-cream/40 min-h-screen py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+        
+        {/* ترويسة الصفحة */}
         <div className="mb-10 text-center md:text-left">
           <h1 className="text-4xl font-bold tracking-tight text-black">{t("shop.title")}</h1>
           <p className="mt-2 text-sm text-muted-foreground">
@@ -89,7 +103,7 @@ export default function ShopPage() {
         </div>
 
         <div className="grid gap-8 lg:grid-cols-4">
-          {/* Sidebar Filters — Desktop */}
+          {/* الشريط الجانبي للفلاتر — يظهر فقط على الشاشات الكبيرة */}
           <aside className="hidden lg:block space-y-6">
             <div className="rounded-3xl border border-beige bg-white p-6 shadow-sm">
               <div className="flex items-center justify-between mb-6 border-b border-beige pb-4">
@@ -105,7 +119,7 @@ export default function ShopPage() {
                 </button>
               </div>
 
-              {/* Categories */}
+              {/* قسم تصفية الفئات */}
               <div className="mb-6">
                 <h3 className="text-sm font-semibold mb-3">{t("shop.filters.categories")}</h3>
                 <div className="space-y-2">
@@ -135,7 +149,7 @@ export default function ShopPage() {
                 </div>
               </div>
 
-              {/* Price range */}
+              {/* قسم شريط تصفية السعر */}
               <div className="mb-6">
                 <div className="flex justify-between text-sm font-semibold mb-3">
                   <h3>{t("shop.filters.maxPrice")}</h3>
@@ -156,7 +170,7 @@ export default function ShopPage() {
                 </div>
               </div>
 
-              {/* Rating */}
+              {/* قسم تصفية التقييمات بالنجوم */}
               <div>
                 <h3 className="text-sm font-semibold mb-3">{t("shop.filters.minRating")}</h3>
                 <div className="space-y-1.5">
@@ -178,7 +192,7 @@ export default function ShopPage() {
             </div>
           </aside>
 
-          {/* Catalog & Sorting */}
+          {/* الكتالوج الرئيسي وقائمة المنتجات */}
           <main className="lg:col-span-3 space-y-6">
             <div className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-beige bg-white px-6 py-4 shadow-sm">
               <p className="text-sm text-muted-foreground">
@@ -186,7 +200,7 @@ export default function ShopPage() {
               </p>
 
               <div className="flex items-center gap-3">
-                {/* Mobile Filter toggle */}
+                {/* زر الفتح لفلاتر الهواتف */}
                 <Button
                   variant="outline"
                   size="sm"
@@ -197,7 +211,7 @@ export default function ShopPage() {
                   {t("shop.filters.title")}
                 </Button>
 
-                {/* Sort */}
+                {/* قائمة الترتيب والفرز */}
                 <select
                   value={selectedSort}
                   onChange={(e) => setSelectedSort(e.target.value as SortOption)}
@@ -212,7 +226,7 @@ export default function ShopPage() {
               </div>
             </div>
 
-            {/* Products grid */}
+            {/* شبكة عرض كروت المنتجات */}
             {filteredProducts.length > 0 ? (
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 <AnimatePresence mode="popLayout">
@@ -231,6 +245,7 @@ export default function ShopPage() {
                 </AnimatePresence>
               </div>
             ) : (
+              /* واجهة عدم العثور على أي منتج يطابق الفلاتر */
               <div className="rounded-3xl border border-dashed border-beige bg-white py-20 text-center">
                 <p className="font-semibold text-lg">{t("shop.noProducts")}</p>
                 <p className="text-sm text-muted-foreground mt-1">
@@ -246,10 +261,11 @@ export default function ShopPage() {
         </div>
       </div>
 
-      {/* Mobile Filters Modal */}
+      {/* نافذة الفلاتر المنبثقة للهواتف المحمولة */}
       <AnimatePresence>
         {showFiltersMobile && (
           <>
+            {/* خلفية معتمة لإغلاق النافذة */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -257,6 +273,7 @@ export default function ShopPage() {
               onClick={() => setShowFiltersMobile(false)}
               className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm lg:hidden"
             />
+            {/* القائمة المنزلقة من اليسار */}
             <motion.div
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
@@ -277,7 +294,7 @@ export default function ShopPage() {
                 </button>
               </div>
 
-              {/* Mobile filter components */}
+              {/* عناصر التصفية للهواتف */}
               <div className="space-y-6">
                 <div>
                   <h3 className="text-sm font-semibold mb-3">{t("shop.filters.categories")}</h3>

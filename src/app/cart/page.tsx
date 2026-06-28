@@ -11,7 +11,13 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useTranslation } from "@/utils/i18n";
 
+/**
+ * صفحة السلة التفصيلية (CartPage)
+ * تعرض تفاصيل المنتجات المضافة للسلة، وتتيح إمكانية زيادة/نقصان الكميات،
+ * حذف المنتجات، تطبيق قسائم الخصم، وعرض شريط تقدم الشحن المجاني وحساب المجموع الكلي.
+ */
 export default function CartPage() {
+  // استدعاء قيم متجر السلة وحالتها العامة
   const {
     items,
     removeItem,
@@ -23,16 +29,20 @@ export default function CartPage() {
   } = useCartStore();
   const { t } = useTranslation();
 
+  // حالة محلية لإدخال كود كوبون الخصم من قبل المستخدم
   const [couponCode, setCouponCode] = useState("");
 
+  // جلب ملخص السلة وحساب المبلغ المتبقي للتأهل للشحن المجاني
   const summary = getSummary();
   const freeShippingRemaining = Math.max(0, FREE_SHIPPING_THRESHOLD - summary.subtotal);
 
+  // دالة التحقق وتطبيق الكوبون
   const handleApplyCoupon = (e: React.FormEvent) => {
     e.preventDefault();
     const clean = couponCode.trim().toUpperCase();
     if (!clean) return;
 
+    // التحقق من صحة الكوبون (افتراضياً ندعم الكود LUXETAN20 ليعطي خصم 20%)
     if (clean === "LUXETAN20") {
       applyCoupon({
         code: "LUXETAN20",
@@ -56,11 +66,13 @@ export default function CartPage() {
   return (
     <div className="bg-cream/20 min-h-screen py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* عنوان الصفحة الرئيسي */}
         <h1 className="text-3xl font-bold tracking-tight text-black mb-10 text-center sm:text-left">
           {t("cartPage.title")}
         </h1>
 
         {items.length === 0 ? (
+          /* واجهة السلة الفارغة */
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -83,8 +95,9 @@ export default function CartPage() {
             </Button>
           </motion.div>
         ) : (
+          /* واجهة السلة المحملة بالمنتجات */
           <div className="grid gap-10 lg:grid-cols-12">
-            {/* Left: Cart Items list */}
+            {/* القسم الأيمن: قائمة عناصر السلة */}
             <div className="lg:col-span-8 space-y-6">
               <div className="rounded-3xl border border-beige bg-white shadow-sm overflow-hidden">
                 <ul className="divide-y divide-beige" role="list">
@@ -100,7 +113,7 @@ export default function CartPage() {
                         exit={{ opacity: 0 }}
                         className="flex flex-col sm:flex-row gap-4 p-6"
                       >
-                        {/* Image placeholder */}
+                        {/* صورة المنتج المصغرة */}
                         <Link
                           href={`/products/${item.product.slug}`}
                           className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-golden/20 to-amber-100 mx-auto sm:mx-0"
@@ -110,7 +123,7 @@ export default function CartPage() {
                           </span>
                         </Link>
 
-                        {/* Content */}
+                        {/* تفاصيل الاسم والسعر والتحكم */}
                         <div className="flex flex-1 flex-col gap-2 min-w-0">
                           <div className="flex justify-between gap-4">
                             <Link
@@ -127,7 +140,7 @@ export default function CartPage() {
                             {t("cartPage.category")}: {getTranslatedCategory(item.product.category, item.product.category.replace("-", " "))}
                           </p>
 
-                          {/* Controls */}
+                          {/* أزرار تعديل الكمية وحذف العنصر */}
                           <div className="flex items-center justify-between mt-4">
                             <div className="flex items-center gap-2">
                               <button
@@ -165,7 +178,7 @@ export default function CartPage() {
                 </ul>
               </div>
 
-              {/* Shopping navigation */}
+              {/* زر العودة للمتجر */}
               <div className="flex justify-between items-center px-2">
                 <Button variant="ghost" asChild>
                   <Link href="/shop" className="flex items-center gap-2">
@@ -176,9 +189,9 @@ export default function CartPage() {
               </div>
             </div>
 
-            {/* Right: Order Summary */}
+            {/* القسم الأيسر: ملخص الطلب والخصومات والجمارك */}
             <div className="lg:col-span-4 space-y-6">
-              {/* Shipping alert */}
+              {/* التنبيه بخصوص الشحن المجاني */}
               <div className="rounded-3xl border border-beige bg-white p-6 shadow-sm">
                 {freeShippingRemaining > 0 ? (
                   <div>
@@ -199,11 +212,11 @@ export default function CartPage() {
                 )}
               </div>
 
-              {/* Order total card */}
+              {/* ملخص الحساب النهائي للطلب */}
               <div className="rounded-3xl border border-beige bg-white p-6 shadow-sm space-y-6">
                 <h2 className="font-bold text-lg border-b border-beige pb-4">{t("cartPage.summaryTitle")}</h2>
 
-                {/* Subtotal details */}
+                {/* تفاصيل المجموع الفرعي والخصومات والشحن */}
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">{t("cartPage.subtotal")}</span>
@@ -239,7 +252,7 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                {/* Coupon entry form */}
+                {/* نموذج إدخال الكوبون */}
                 {!coupon ? (
                   <form onSubmit={handleApplyCoupon} className="flex gap-2">
                     <input
@@ -254,6 +267,7 @@ export default function CartPage() {
                     </Button>
                   </form>
                 ) : (
+                  /* عرض تفاصيل الكوبون النشط وإزالته */
                   <div className="flex items-center justify-between rounded-xl bg-emerald-50 border border-emerald-100 px-4 py-2.5 text-sm text-emerald-700">
                     <span className="font-semibold">{t("cartPage.couponApplied").replace("{code}", coupon.code)}</span>
                     <button
@@ -265,7 +279,7 @@ export default function CartPage() {
                   </div>
                 )}
 
-                {/* Proceed button */}
+                {/* زر الدفع النهائي */}
                 <Button className="w-full" size="lg" onClick={() => {
                   const checkMsg = t("cartPage.toast.checkoutSuccess") !== "cartPage.toast.checkoutSuccess"
                     ? t("cartPage.toast.checkoutSuccess")
@@ -283,6 +297,7 @@ export default function CartPage() {
     </div>
   );
 
+  // دالة مساعدة لترجمة مسار فئة المنتج وعرض التسمية المترجمة المقابلة
   function getTranslatedCategory(catVal: string, defaultLabel: string) {
     const key = `shop.categories.${catVal}`;
     const trans = t(key);

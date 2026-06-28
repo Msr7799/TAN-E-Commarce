@@ -1,8 +1,5 @@
 "use client";
 
-// ============================================================
-// ProductDetailClient — interactive client layout for detail page
-// ============================================================
 import { useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
@@ -33,22 +30,30 @@ interface ProductDetailClientProps {
   relatedProducts: Product[];
 }
 
+/**
+ * صفحة تفاصيل المنتج (ProductDetailClient)
+ * تعرض معلومات شاملة عن منتج محدد تشمل الصور والمخزون، التقييم، الوصف التفصيلي،
+ * والمواصفات الفنية، مع إتاحة خيارات الإضافة للسلة أو الشراء المباشر.
+ */
 export default function ProductDetailClient({
   product,
   relatedProducts,
 }: ProductDetailClientProps) {
+  // حالات التحكم بالكمية المحددة والتبويب النشط (الوصف / المواصفات)
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<"description" | "specs">("description");
-  const [isCopied, setIsCopied] = useState(false);
-  const [isAdding, setIsAdding] = useState(false);
+  const [isCopied, setIsCopied] = useState(false); // حالة نسخ رابط المنتج لمشاركته
+  const [isAdding, setIsAdding] = useState(false); // حالة تحميل زر الإضافة إلى السلة
   const { t } = useTranslation();
 
+  // دوال الإضافة للسلة والمفضلة
   const addItem = useCartStore((s) => s.addItem);
   const { toggleItem, isInWishlist } = useWishlistStore();
   const inWishlist = isInWishlist(product.id);
   const stockInfo = getStockLabel(product.stockStatus, product.stockCount);
   const isOutOfStock = product.stockStatus === "out_of_stock";
 
+  // معالجة مشاركة رابط المنتج عبر نسخه للحافظة
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
@@ -66,6 +71,7 @@ export default function ProductDetailClient({
     }
   };
 
+  // إضافة المنتج إلى السلة بالكمية المحددة
   const handleAddToCart = async () => {
     if (isOutOfStock || isAdding) return;
     setIsAdding(true);
@@ -78,12 +84,13 @@ export default function ProductDetailClient({
     setIsAdding(false);
   };
 
+  // الشراء المباشر الفوري (إضافة للسلة وفتح قائمة السلة الجانبية فوراً)
   const handleBuyNow = () => {
     addItem(product, quantity);
-    // Directly close details and open cart drawer
     useCartStore.getState().openCart();
   };
 
+  // تنسيق وجلب حالة توفر المنتج من المخزن ومواءمتها مع اللغات
   const getTranslatedStockLabel = () => {
     if (product.stockStatus === "out_of_stock") {
       return t("productDetail.stock.outOfStock");
@@ -94,6 +101,7 @@ export default function ProductDetailClient({
     return t("productDetail.stock.inStock");
   };
 
+  // استدعاء معلومات المنتج المترجمة (الاسم، الوصف، والوصف المختصر)
   const translatedName = t(`products.${product.id}.name`);
   const productName = translatedName !== `products.${product.id}.name` ? translatedName : product.name;
 
@@ -108,7 +116,8 @@ export default function ProductDetailClient({
   return (
     <div className="bg-cream/20 min-h-screen py-12 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumb */}
+        
+        {/* مسار الصفحة التتبعي (Breadcrumbs) */}
         <nav className="mb-8 text-sm" aria-label="Breadcrumb">
           <ol className="flex items-center gap-2 text-muted-foreground" role="list">
             <li>
@@ -129,16 +138,16 @@ export default function ProductDetailClient({
           </ol>
         </nav>
 
-        {/* Main Product Layout */}
+        {/* تصميم الصفحة الرئيسي */}
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-          {/* Left: Gallery Placeholder */}
+          
+          {/* القسم الأيمن: معرض صور المنتج (مع شارات الخصم والجديد) */}
           <div className="space-y-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               className="relative aspect-square w-full overflow-hidden rounded-[2.5rem] border border-beige bg-gradient-to-br from-cream via-beige/30 to-beige shadow-lg"
             >
-              {/* Product Placeholder Display */}
               <div className="flex h-full w-full items-center justify-center">
                 <div className="text-center space-y-4">
                   <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-full bg-golden/10 shadow-inner">
@@ -154,7 +163,6 @@ export default function ProductDetailClient({
                 </div>
               </div>
 
-              {/* Float badges */}
               <div className="absolute left-6 top-6 flex flex-col gap-2">
                 {product.isNew && <Badge variant="new">{newLabel}</Badge>}
                 {product.discount && <Badge variant="golden">-{product.discount}%</Badge>}
@@ -162,7 +170,7 @@ export default function ProductDetailClient({
             </motion.div>
           </div>
 
-          {/* Right: Product Details Info */}
+          {/* القسم الأيسر: معلومات المنتج، الأسعار، وأزرار التنفيذ */}
           <div className="flex flex-col gap-6">
             <div>
               <span className={cn("text-sm font-semibold", stockInfo.color)}>
@@ -174,12 +182,12 @@ export default function ProductDetailClient({
               <p className="mt-1 text-xs text-muted-foreground">{t("productDetail.sku")}: {product.sku}</p>
             </div>
 
-            {/* Rating */}
+            {/* تقييم النجوم والآراء */}
             <div className="flex items-center gap-4">
               <StarRating rating={product.rating} reviewCount={product.reviewCount} />
             </div>
 
-            {/* Price */}
+            {/* الأسعار الفرعية والخصومات */}
             <div className="flex items-baseline gap-4">
               <span className="text-3xl font-extrabold text-golden">
                 {formatPriceSimple(product.price)}
@@ -191,12 +199,12 @@ export default function ProductDetailClient({
               )}
             </div>
 
-            {/* Description intro */}
+            {/* وصف قصير */}
             <p className="text-base leading-relaxed text-muted-foreground">
               {productShortDesc}
             </p>
 
-            {/* Customizer: Quantity selector & action buttons */}
+            {/* خيارات تحديد الكمية والأزرار */}
             <div className="border-y border-beige py-6 space-y-4">
               <div className="flex items-center gap-6">
                 <span className="text-sm font-semibold">{t("productDetail.quantity")}</span>
@@ -220,7 +228,7 @@ export default function ProductDetailClient({
                 </div>
               </div>
 
-              {/* Action buttons */}
+              {/* أزرار الإضافة والمفضلة والمشاركة */}
               <div className="flex flex-wrap gap-4 pt-2">
                 <Button
                   size="lg"
@@ -242,8 +250,8 @@ export default function ProductDetailClient({
                   {t("productDetail.buyNow")}
                 </Button>
 
-                {/* Wishlist & Share */}
                 <div className="flex gap-2">
+                  {/* زر إضافة/حذف من المفضلة */}
                   <button
                     onClick={() => toggleItem(product.id)}
                     className={cn(
@@ -256,6 +264,7 @@ export default function ProductDetailClient({
                   >
                     <Heart className="h-5 w-5" fill={inWishlist ? "currentColor" : "none"} />
                   </button>
+                  {/* زر مشاركة رابط المنتج */}
                   <button
                     onClick={handleShare}
                     className="flex h-12 w-12 items-center justify-center rounded-full border border-beige bg-white text-muted-foreground hover:border-golden hover:text-golden transition-all"
@@ -267,7 +276,7 @@ export default function ProductDetailClient({
               </div>
             </div>
 
-            {/* Accordion Specs / Info tabs */}
+            {/* تفاصيل المنتج ومواصفاته الفنية */}
             <div className="space-y-4">
               <div className="flex border-b border-beige">
                 <button
@@ -294,6 +303,7 @@ export default function ProductDetailClient({
                 </button>
               </div>
 
+              {/* محتوى تبويب الوصف أو المواصفات */}
               <div className="py-2 text-sm leading-relaxed text-muted-foreground min-h-[120px]">
                 {activeTab === "description" ? (
                   <div className="space-y-4">
@@ -326,7 +336,7 @@ export default function ProductDetailClient({
           </div>
         </div>
 
-        {/* Related Products Grid */}
+        {/* المنتجات ذات الصلة الموصى بها */}
         {relatedProducts.length > 0 && (
           <section className="mt-24 border-t border-beige pt-16">
             <h2 className="mb-10 text-2xl font-bold text-black text-center sm:text-left">

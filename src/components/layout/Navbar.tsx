@@ -1,8 +1,5 @@
 "use client";
 
-// ============================================================
-// Navbar — sticky, blur-on-scroll, motion animations
-// ============================================================
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -15,26 +12,34 @@ import { NAV_LINKS } from "@/constants";
 import { useTranslation } from "@/utils/i18n";
 import { cn } from "@/utils";
 
+/**
+ * مكون شريط التنقل العلوي (Navbar)
+ * يتميز بكونه ثابتاً (sticky) مع تأثير الضباب والشفافية عند التمرير،
+ * ويحتوي على أزرار البحث، السلة، تبديل اللغة (عربي/إنجليزي)، وقائمة تفاعلية للهواتف المحمولة.
+ */
 export function Navbar() {
-  const pathname = usePathname();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const itemCount = useCartStore((s) => s.getItemCount());
-  const toggleCart = useCartStore((s) => s.toggleCart);
+  const pathname = usePathname(); // تتبع المسار الحالي لتحديد الصفحة النشطة
+  const [isScrolled, setIsScrolled] = useState(false); // حالة تتبع التمرير لتطبيق تأثير الخلفية
+  const itemCount = useCartStore((s) => s.getItemCount()); // عدد العناصر المضافة للسلة
+  const toggleCart = useCartStore((s) => s.toggleCart); // دالة فتح وإغلاق السلة الجانبية
+  
+  // استدعاء الحالات والعمليات العامة من متجر واجهة المستخدم (UI Store)
   const { isSearchOpen, toggleSearch, isMobileMenuOpen, toggleMobileMenu, closeMobileMenu } =
     useUIStore();
   const { t, locale, setLocale } = useTranslation();
 
-  // Detect scroll to apply blur effect
+  // دالة مراقبة التمرير لإضافة تأثير الضباب (backdrop-blur) بعد إزاحة 20 بكسل
   const handleScroll = useCallback(() => {
     setIsScrolled(window.scrollY > 20);
   }, []);
 
+  // إضافة مستمع لحدث التمرير عند تركيب المكون وإزالته عند إلغاء التركيب لمنع تسرب الذاكرة
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  // Close mobile menu on route change
+  // إغلاق قائمة الهواتف تلقائياً عند تغيير المسار والانتقال لصفحة أخرى
   useEffect(() => {
     closeMobileMenu();
   }, [pathname, closeMobileMenu]);
@@ -56,8 +61,8 @@ export function Navbar() {
           className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
           aria-label="Main navigation"
         >
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight" aria-label={`go to homepage`}>
+          {/* شعار الموقع مع حركة دوران خفيفة عند تمرير مؤشر الفأرة */}
+          <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight" aria-label="go to homepage">
             <motion.div
               whileHover={{ rotate: 20 }}
               transition={{ type: "spring", stiffness: 300 }}
@@ -70,7 +75,7 @@ export function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop nav links */}
+          {/* روابط التنقل الرئيسية للشاشات الكبيرة */}
           <ul className="hidden items-center gap-1 md:flex" role="list">
             {NAV_LINKS.map((link) => {
               const isActive = pathname === link.href;
@@ -85,6 +90,7 @@ export function Navbar() {
                     aria-current={isActive ? "page" : undefined}
                   >
                     {t(link.label)}
+                    {/* مؤشر الصفحة النشطة السفلي مع حركة انتقال سلسة */}
                     {isActive && (
                       <motion.span
                         layoutId="nav-indicator"
@@ -98,9 +104,9 @@ export function Navbar() {
             })}
           </ul>
 
-          {/* Actions */}
+          {/* أيقونات وأزرار التحكم */}
           <div className="flex items-center gap-1">
-            {/* Language switcher */}
+            {/* مبدل لغة الموقع للشاشات المتوسطة والكبيرة */}
             <div className="hidden items-center gap-2 sm:flex">
               <button
                 onClick={() => setLocale("en")}
@@ -125,7 +131,7 @@ export function Navbar() {
               </button>
             </div>
 
-            {/* Search button */}
+            {/* زر البحث المنبثق */}
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -137,7 +143,7 @@ export function Navbar() {
               <Search className="h-5 w-5" />
             </motion.button>
 
-            {/* Cart button */}
+            {/* زر السلة مع شارة توضح عدد العناصر المضافة */}
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -162,7 +168,7 @@ export function Navbar() {
               </AnimatePresence>
             </motion.button>
 
-            {/* Mobile menu button */}
+            {/* زر القائمة الجانبية المخصص للهواتف المحمولة */}
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -200,11 +206,11 @@ export function Navbar() {
         </nav>
       </motion.header>
 
-      {/* Mobile Menu Overlay */}
+      {/* لوحة القائمة المخصصة للهواتف المحمولة */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
-            {/* Backdrop */}
+            {/* خلفية سوداء شبه شفافة تغطي بقية الصفحة */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -214,7 +220,7 @@ export function Navbar() {
               aria-hidden="true"
             />
 
-            {/* Menu panel */}
+            {/* محتوى القائمة المنزلقة من اليمين */}
             <motion.nav
               id="mobile-menu"
               initial={{ x: "100%" }}
@@ -224,7 +230,7 @@ export function Navbar() {
               className="fixed right-0 top-0 bottom-0 z-50 flex w-72 flex-col bg-white shadow-2xl md:hidden"
               aria-label="Mobile navigation"
             >
-              {/* Mobile header */}
+              {/* ترويسة قائمة الهاتف */}
               <div className="flex items-center justify-between border-b border-beige px-6 py-4">
                 <span className="font-bold text-lg text-golden">{t("siteName")}</span>
                 <button
@@ -236,7 +242,7 @@ export function Navbar() {
                 </button>
               </div>
 
-              {/* Links */}
+              {/* روابط التنقل في قائمة الهاتف */}
               <ul className="flex flex-col gap-1 p-4" role="list">
                 {NAV_LINKS.map((link, i) => (
                   <motion.li
@@ -261,7 +267,7 @@ export function Navbar() {
                 ))}
               </ul>
 
-              {/* Mobile Language Switcher */}
+              {/* مبدل لغة متجاوب لنسخة الهواتف المحمولة */}
               <div className="border-t border-beige p-4 flex justify-center gap-4">
                 <button
                   onClick={() => {
@@ -291,7 +297,7 @@ export function Navbar() {
                 </button>
               </div>
 
-              {/* CTA */}
+              {/* زر الدعوة للتسوق */}
               <div className="mt-auto border-t border-beige p-6">
                 <Button className="w-full" asChild>
                   <Link href="/shop">{t("actions.shopNow")}</Link>

@@ -6,19 +6,26 @@ import { ArrowRight, Star, Shield, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/utils/i18n";
 
+/**
+ * مكون قسم الواجهة الرئيسي (HeroSection)
+ * يتميز بتصميم متجاوب بالكامل وتأثيرات حركة المنظر (Parallax) وعناصر عائمة تفاعلية.
+ */
 export function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
+  
+  // تتبع حركة التمرير لتطبيق تأثير البارالاكس
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
   });
 
-  // Parallax transforms — subtle on all screen sizes
+  // تأثيرات الإزاحة والشفافية والحجم بناءً على التمرير
   const y = useTransform(scrollYProgress, [0, 1], [0, 80]);
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.05]);
 
+  // قائمة شارات الثقة المعروضة أسفل أزرار اتخاذ القرار (CTAs)
   const TRUST_BADGES = [
     { icon: Star, label: t("hero.badges.customers") },
     { icon: Leaf, label: t("hero.badges.vegan") },
@@ -31,7 +38,7 @@ export function HeroSection() {
       className="relative overflow-hidden bg-gradient-to-br from-cream via-white to-beige"
       aria-labelledby="hero-heading"
     >
-      {/* Animated background blobs — smaller on mobile */}
+      {/* بقع الألوان المتحركة في الخلفية — تتقلص تلقائياً على الشاشات الصغيرة */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         <motion.div
           animate={{ scale: [1, 1.1, 1], x: [0, 30, 0], y: [0, -20, 0] }}
@@ -45,7 +52,7 @@ export function HeroSection() {
         />
       </div>
 
-      {/* Decorative rings — hidden on small screens */}
+      {/* الدوائر التزيينية — تظهر على الشاشات الكبيرة فقط */}
       <motion.div
         style={{ y, opacity }}
         className="pointer-events-none absolute inset-0 hidden sm:flex items-center justify-center"
@@ -63,14 +70,14 @@ export function HeroSection() {
         />
       </motion.div>
 
-      {/* Main content grid */}
+      {/* شبكة المحتوى الرئيسية */}
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-8 py-12 sm:py-16 lg:grid-cols-2 lg:gap-16 lg:py-28 min-h-[100svh] lg:min-h-screen">
 
-          {/* ── Left: Text ── */}
+          {/* ── القسم الأيمن/الأيسر: نصوص التعريف والـ CTA ── */}
           <div className="flex flex-col gap-6 text-center lg:text-left order-2 lg:order-1">
 
-            {/* Tag pill */}
+            {/* شارة التعريف الصغيرة (Tag) */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -83,7 +90,7 @@ export function HeroSection() {
               </span>
             </motion.div>
 
-            {/* Heading — responsive font sizes */}
+            {/* العنوان الرئيسي للموقع — متجاوب في أحجام الخطوط */}
             <motion.h1
               id="hero-heading"
               initial={{ opacity: 0, y: 30 }}
@@ -108,7 +115,7 @@ export function HeroSection() {
               {t("hero.subtitle")}
             </motion.h1>
 
-            {/* Description */}
+            {/* وصف الفكرة العامة للموقع */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -118,7 +125,7 @@ export function HeroSection() {
               {t("hero.description")}
             </motion.p>
 
-            {/* CTA Buttons */}
+            {/* أزرار الانتقال المباشر (CTAs) */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -139,7 +146,7 @@ export function HeroSection() {
               </Button>
             </motion.div>
 
-            {/* Trust badges */}
+            {/* شارات الثقة */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -158,7 +165,7 @@ export function HeroSection() {
             </motion.div>
           </div>
 
-          {/* ── Right: Image ── */}
+          {/* ── القسم الأيسر/الأيمن: صورة المنتج الترويجية وشارات التقييم العائمة ── */}
           <motion.div
             initial={{ opacity: 0, scale: 0.92, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -167,7 +174,7 @@ export function HeroSection() {
             className="relative order-1 lg:order-2"
           >
             <div className="relative mx-auto max-w-[320px] sm:max-w-sm md:max-w-md lg:max-w-none">
-              {/* Main image card */}
+              {/* بطاقة الصورة الرئيسية */}
               <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] bg-gradient-to-br from-golden/20 via-amber-100 to-beige shadow-2xl shadow-golden/20">
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
                   <motion.div
@@ -185,7 +192,7 @@ export function HeroSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" aria-hidden="true" />
               </div>
 
-              {/* Floating stats card — positioned inside the card bounds on mobile */}
+              {/* بطاقة الإحصائيات العائمة (عدد العملاء) */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -200,7 +207,7 @@ export function HeroSection() {
                 </p>
               </motion.div>
 
-              {/* Floating rating card — positioned inside the card bounds on mobile */}
+              {/* بطاقة التقييم بالنجوم العائمة */}
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -221,7 +228,7 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Scroll indicator — hidden on very small screens */}
+      {/* مؤشر التمرير للأسفل (مخفي على الشاشات الصغيرة جداً) */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}

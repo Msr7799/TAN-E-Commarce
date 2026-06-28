@@ -50,7 +50,6 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["lucide-react", "motion"],
   },
-
   // Security headers applied to all routes
   async headers() {
     return [

@@ -11,10 +11,17 @@ import { toast } from "sonner";
 import { logger } from "@/lib/logger";
 import { useTranslation } from "@/utils/i18n";
 
+/**
+ * صفحة اتصل بنا (ContactPage)
+ * توفر نموذج تواصل متكامل مع التحقق من صحة المدخلات باستخدام Zod و React Hook Form،
+ * مع عرض وسائل التواصل المباشرة والربط مع تطبيق الواتساب.
+ */
 export default function ContactPage() {
+  // حالة التحكم في تحميل زر إرسال النموذج لمنع نقرات الإرسال المتكررة
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { t } = useTranslation();
 
+  // إعداد نموذج التواصل وربطه بمخطط التحقق Zod (contactFormSchema)
   const {
     register,
     handleSubmit,
@@ -30,20 +37,27 @@ export default function ContactPage() {
     },
   });
 
+  // معالجة إرسال النموذج بعد التحقق من صحة الحقول
   const onSubmit = async (data: ContactFormValues) => {
     setIsSubmitting(true);
+    
+    // تسجيل محاولة الإرسال بشكل آمن في السجلات
     logger.info("Secure contact form submission attempted", {
       subject: data.subject,
       emailDomain: data.email.split("@")[1],
     });
-    // Simulate API request
+    
+    // محاكاة طلب خادم (API) لمدة 1.2 ثانية
     await new Promise((r) => setTimeout(r, 1200));
     setIsSubmitting(false);
     
+    // جلب نص نجاح الإرسال المترجم وإظهاره للمستخدم
     const successMsg = t("contact.successToast") !== "contact.successToast"
       ? t("contact.successToast")
       : "Thank you! Your message has been received.";
     toast.success(successMsg);
+    
+    // إعادة تعيين حقول النموذج إلى قيمها الافتراضية الفارغة
     reset();
   };
 
@@ -51,7 +65,7 @@ export default function ContactPage() {
     <div className="bg-cream/20 min-h-screen py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
-        {/* Header */}
+        {/* ترويسة الصفحة (العنوان والوصف) */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <span className="text-xs font-semibold uppercase tracking-widest text-golden">
             {t("contact.tag")}
@@ -65,13 +79,14 @@ export default function ContactPage() {
         </div>
 
         <div className="grid gap-12 lg:grid-cols-12 max-w-5xl mx-auto">
-          {/* Left: Contact Info */}
+          {/* القسم الأيمن (معلومات الاتصال المباشر والواتساب) */}
           <div className="lg:col-span-5 space-y-8">
             <div className="rounded-3xl border border-beige bg-white p-8 shadow-sm space-y-6">
               <h2 className="font-bold text-xl mb-4 border-b border-beige pb-4">
                 {t("contact.infoTitle")}
               </h2>
 
+              {/* البريد الإلكتروني */}
               <div className="flex items-start gap-4">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cream text-golden">
                   <Mail className="h-5 w-5" />
@@ -83,6 +98,7 @@ export default function ContactPage() {
                 </div>
               </div>
 
+              {/* رقم الهاتف */}
               <div className="flex items-start gap-4">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cream text-golden">
                   <Phone className="h-5 w-5" />
@@ -94,6 +110,7 @@ export default function ContactPage() {
                 </div>
               </div>
 
+              {/* العنوان الفعلي */}
               <div className="flex items-start gap-4">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cream text-golden">
                   <MapPin className="h-5 w-5" />
@@ -106,7 +123,7 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* WhatsApp direct link card */}
+              {/* بطاقة الانتقال للواتساب */}
               <div className="border-t border-beige pt-6">
                 <a
                   href={WHATSAPP_URL}
@@ -121,12 +138,12 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* Right: Contact Form */}
+          {/* القسم الأيسر (نموذج إرسال الرسالة الإلكترونية) */}
           <div className="lg:col-span-7">
             <div className="rounded-3xl border border-beige bg-white p-8 shadow-sm">
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                 
-                {/* Name */}
+                {/* حقل الاسم */}
                 <div>
                   <label htmlFor="name" className="block text-sm font-semibold mb-1">
                     {t("contact.form.name")}
@@ -145,7 +162,7 @@ export default function ContactPage() {
                   )}
                 </div>
 
-                {/* Email */}
+                {/* حقل البريد الإلكتروني */}
                 <div>
                   <label htmlFor="email" className="block text-sm font-semibold mb-1">
                     {t("contact.form.email")}
@@ -164,7 +181,7 @@ export default function ContactPage() {
                   )}
                 </div>
 
-                {/* Subject */}
+                {/* حقل عنوان الرسالة (الموضوع) */}
                 <div>
                   <label htmlFor="subject" className="block text-sm font-semibold mb-1">
                     {t("contact.form.subject")}
@@ -183,7 +200,7 @@ export default function ContactPage() {
                   )}
                 </div>
 
-                {/* Message */}
+                {/* حقل نص الرسالة */}
                 <div>
                   <label htmlFor="message" className="block text-sm font-semibold mb-1">
                     {t("contact.form.message")}
@@ -202,7 +219,7 @@ export default function ContactPage() {
                   )}
                 </div>
 
-                {/* Submit button */}
+                {/* زر الإرسال التفاعلي */}
                 <Button type="submit" className="w-full" size="lg" isLoading={isSubmitting}>
                   <Send className="h-4.5 w-4.5 mr-2" />
                   {t("contact.form.submit")}

@@ -1,24 +1,29 @@
 // ============================================================
-// Utility functions
+// الدوال المساعدة العامة (Utility Functions)
 // ============================================================
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { CURRENCY_SYMBOL, FREE_SHIPPING_THRESHOLD, SHIPPING_COST } from "@/constants";
+import { FREE_SHIPPING_THRESHOLD, SHIPPING_COST } from "@/constants";
 import type { CartItem, CartSummary } from "@/types";
 
-// ——— Tailwind class merge helper ————————————
+/**
+ * دالة مساعدة لدمج كلاسات Tailwind CSS بشكل آمن وتجنب التكرار والتعارض.
+ * تستخدم clsx لتجميع الكلاسات و twMerge لحل التعارضات.
+ */
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+// واجهة برمجية لتحديد خصائص العملة وتكوينها
 interface CurrencyConfig {
-  code: string;
-  symbolEn: string;
-  symbolAr: string;
-  rate: number;
-  decimals: number;
+  code: string;       // رمز العملة الدولي (مثل BHD, SAR)
+  symbolEn: string;   // الرمز باللغة الإنجليزية (مثل BD, SR)
+  symbolAr: string;   // الرمز باللغة العربية (مثل د.ب, ر.س)
+  rate: number;       // سعر الصرف مقابل الدينار البحريني (العملة الأساسية للموقع)
+  decimals: number;   // عدد الخانات العشرية بعد الفاصلة
 }
 
+// قائمة العملات المدعومة في دول الخليج والدولار الأمريكي مع أسعار الصرف بالنسبة للدينار البحريني
 const CURRENCIES: Record<string, CurrencyConfig> = {
   BHD: { code: "BHD", symbolEn: "BD", symbolAr: "د.ب", rate: 1.0, decimals: 3 },
   SAR: { code: "SAR", symbolEn: "SR", symbolAr: "ر.س", rate: 9.97, decimals: 2 },
@@ -29,9 +34,13 @@ const CURRENCIES: Record<string, CurrencyConfig> = {
   USD: { code: "USD", symbolEn: "$", symbolAr: "$", rate: 2.65, decimals: 2 },
 };
 
+/**
+ * دالة للتعرف التلقائي على دولة المستخدم وعملتها بناءً على المنطقة الزمنية للمتصفح (Timezone)
+ * أو لغة المتصفح المفضلة (Navigator Language) كخيار احتياطي.
+ */
 export function getDetectedCurrency(): CurrencyConfig {
   if (typeof window === "undefined") {
-    return CURRENCIES.BHD;
+    return CURRENCIES.BHD; // الإرجاع الافتراضي أثناء المعالجة على الخادم (SSR)
   }
   try {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -42,7 +51,7 @@ export function getDetectedCurrency(): CurrencyConfig {
     if (tz.includes("Qatar") || tz.includes("Doha") || tz.includes("Asia/Qatar")) return CURRENCIES.QAR;
     if (tz.includes("Bahrain") || tz.includes("Asia/Bahrain")) return CURRENCIES.BHD;
     
-    // Check navigator languages as secondary hint
+    // فحص كود الدولة في لغة المتصفح كخيار ثانوي
     const lang = navigator.language.toLowerCase();
     if (lang.endsWith("-sa")) return CURRENCIES.SAR;
     if (lang.endsWith("-ae")) return CURRENCIES.AED;
@@ -51,13 +60,16 @@ export function getDetectedCurrency(): CurrencyConfig {
     if (lang.endsWith("-qa")) return CURRENCIES.QAR;
     if (lang.endsWith("-bh")) return CURRENCIES.BHD;
 
-    return CURRENCIES.BHD;
+    return CURRENCIES.BHD; // القيمة الافتراضية هي الدينار البحريني
   } catch {
     return CURRENCIES.BHD;
   }
 }
 
-// ——— Currency formatting ———————————————————
+/**
+ * تنسيق السعر بالكامل مع الرمز كعملة رسمية للنظام.
+ * تقوم بالتحويل التلقائي بناءً على سعر صرف العملة النشطة.
+ */
 export function formatPrice(amount: number, currency?: string): string {
   const config = getDetectedCurrency();
   const activeCurrency = currency || config.code;
@@ -72,7 +84,9 @@ export function formatPrice(amount: number, currency?: string): string {
   }).format(convertedAmount);
 }
 
-// ——— Price with symbol only ———————————————
+/**
+ * تنسيق السعر البسيط مع وضع الرمز بجانب الرقم مع مراعاة اتجاه اللغة (عربي / إنجليزي).
+ */
 export function formatPriceSimple(amount: number): string {
   const isClient = typeof window !== "undefined";
   const isArabic = isClient && document.documentElement.lang === "ar";
@@ -91,18 +105,23 @@ export function formatPriceSimple(amount: number): string {
   return isArabic ? `${formattedAmount} ${symbol}` : `${symbol} ${formattedAmount}`;
 }
 
-// ——— Discount percentage display ——————————
+/**
+ * دالة لحساب وعرض نسبة الخصم بين السعر الأصلي وسعر البيع.
+ */
 export function formatDiscount(original: number, sale: number): string {
   const pct = Math.round(((original - sale) / original) * 100);
   return `-${pct}%`;
 }
 
-// ——— Cart summary calculation ——————————————
+/**
+ * حساب ملخص السلة بما يشمل المجموع الفرعي، تكلفة الشحن، قيمة الخصم والمجموع الكلي.
+ */
 export function calculateCartSummary(items: CartItem[], couponDiscount = 0): CartSummary {
   const subtotal = items.reduce(
     (sum, item) => sum + item.product.price * item.quantity,
     0
   );
+  // الشحن مجاني إذا تجاوز المجموع الحد الأدنى المحدد في الثوابت
   const shipping = subtotal >= FREE_SHIPPING_THRESHOLD || items.length === 0 ? 0 : SHIPPING_COST;
   const discount = subtotal * (couponDiscount / 100);
   const total = Math.max(0, subtotal - discount + shipping);
@@ -111,7 +130,9 @@ export function calculateCartSummary(items: CartItem[], couponDiscount = 0): Car
   return { subtotal, shipping, discount, total, itemCount };
 }
 
-// ——— Slug generation ——————————————————————
+/**
+ * توليد اسم لطيف (Slug) للروابط (URL) من اسم المنتج.
+ */
 export function generateSlug(name: string): string {
   return name
     .toLowerCase()
@@ -121,13 +142,17 @@ export function generateSlug(name: string): string {
     .trim();
 }
 
-// ——— Truncate text ———————————————————————
+/**
+ * قص النصوص الطويلة وعرض علامة (...) في نهايتها.
+ */
 export function truncate(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
   return `${text.slice(0, maxLength).trim()}…`;
 }
 
-// ——— Debounce ————————————————————————————
+/**
+ * دالة التحكم بمعدل التنفيذ (Debounce) لمنع تنفيذ العمليات المتكررة بكثرة (مثل البحث أثناء الكتابة).
+ */
 export function debounce<T extends (...args: Parameters<T>) => ReturnType<T>>(
   fn: T,
   delay: number
@@ -139,12 +164,16 @@ export function debounce<T extends (...args: Parameters<T>) => ReturnType<T>>(
   };
 }
 
-// ——— Pluralise ——————————————————————————
+/**
+ * دالة تحديد صيغة الجمع للكلمات باللغة الإنجليزية بناءً على العدد.
+ */
 export function pluralise(count: number, singular: string, plural: string): string {
   return count === 1 ? singular : plural;
 }
 
-// ——— Rating star display ————————————————
+/**
+ * حساب عدد النجوم الكاملة والنصف فارغة والنجوم الفارغة لتقييم المنتج.
+ */
 export function getRatingStars(rating: number): {
   full: number;
   half: boolean;
@@ -156,7 +185,9 @@ export function getRatingStars(rating: number): {
   return { full, half, empty };
 }
 
-// ——— Safe JSON parse ————————————————————
+/**
+ * تحليل نصوص الـ JSON بشكل آمن وتجنب توقف التطبيق في حال وجود أخطاء في الصياغة.
+ */
 export function safeJsonParse<T>(str: string | null, fallback: T): T {
   if (!str) return fallback;
   try {
@@ -166,7 +197,9 @@ export function safeJsonParse<T>(str: string | null, fallback: T): T {
   }
 }
 
-// ——— Stock status label ———————————————
+/**
+ * تحديد مسمى وحالة توفر المخزن للمنتج وتحديد كود اللون المناسب (أخضر للمتوفر، برتقالي للقرب النفاد، أحمر للنافد).
+ */
 export function getStockLabel(
   status: string,
   count: number
@@ -177,12 +210,16 @@ export function getStockLabel(
   return { label: "In Stock", color: "text-emerald-500" };
 }
 
-// ——— Wait / delay ————————————————————
+/**
+ * دالة مساعدة لعمل تأخير زمني (Wait / Sleep) باستخدام الـ Promises.
+ */
 export function wait(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// ——— URL builder ——————————————————————
+/**
+ * بناء روابط الـ URL مع معاملات البحث (Query Parameters) بشكل آمن وتجاهل المعاملات الفارغة.
+ */
 export function buildUrl(base: string, params: Record<string, string | number | boolean | undefined>): string {
   const url = new URL(base, "http://localhost");
   Object.entries(params).forEach(([key, value]) => {

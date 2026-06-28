@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useTranslation } from "@/utils/i18n";
 
+// مصفوفة تعريف القيم الأساسية للعلامة التجارية وربطها بالأيقونات والمفاتيح المترجمة
 const VALUES = [
   { icon: Sparkles, key: "quality" },
   { icon: Shield, key: "skin" },
@@ -13,6 +14,11 @@ const VALUES = [
   { icon: Award, key: "award" },
 ];
 
+/**
+ * صفحة من نحن (AboutPage)
+ * تستعرض قصة العلامة التجارية ورؤيتها، بالإضافة إلى توضيح القيم الأساسية
+ * باستخدام لوحة عرض تفاعلية وتأثيرات ظهور متحركة.
+ */
 export default function AboutPage() {
   const { t } = useTranslation();
 
@@ -20,7 +26,7 @@ export default function AboutPage() {
     <div className="bg-cream/20 min-h-screen py-16 sm:py-24">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         
-        {/* Intro */}
+        {/* مقدمة الصفحة */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <motion.span
             initial={{ opacity: 0, y: 10 }}
@@ -47,7 +53,7 @@ export default function AboutPage() {
           </motion.p>
         </div>
 
-        {/* Brand visual placeholder */}
+        {/* لوحة عرض تزيينية تمثل الطابع البصري للعلامة التجارية */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -61,7 +67,7 @@ export default function AboutPage() {
           </div>
         </motion.div>
 
-        {/* Values section */}
+        {/* قسم القيم الأساسية للشركة */}
         <section className="space-y-12">
           <h2 className="text-2xl font-bold text-black text-center">{t("about.valuesTitle")}</h2>
           
@@ -76,6 +82,7 @@ export default function AboutPage() {
                   transition={{ delay: idx * 0.1 }}
                   className="rounded-3xl border border-beige bg-white p-6 shadow-sm flex items-start gap-4"
                 >
+                  {/* حاوية الأيقونة التزيينية */}
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-cream text-golden">
                     <Icon className="h-6 w-6" />
                   </div>
@@ -89,7 +96,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* CTA */}
+        {/* قسم الدعوة لاتخاذ قرار (CTA) */}
         <div className="mt-20 text-center rounded-[2.5rem] bg-black text-white p-12 shadow-xl">
           <h2 className="text-2xl font-bold mb-4">{t("about.cta.title")}</h2>
           <p className="text-white/60 text-sm max-w-md mx-auto mb-6">
