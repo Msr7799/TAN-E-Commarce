@@ -46,7 +46,7 @@
     "tag": "Premium Tanning Collection 2026",
     "title": "Glow Like Golden",
     "subtitle": "Sun-Kissed Skin",
-    "description": "Discover our luxury range of premium self-tanners, bronzers and tanning essentials — crafted to give you a natural, radiant glow all year round. Vegan, cruelty-free, and loved by thousands.",
+    "description": "Discover our luxury range of premium self-tanners, bronzers and tanning essentials — crafted to give everyone a natural, radiant glow all year round. For men and women. Vegan, cruelty-free, and loved by thousands.",
     "cta": {
       "shop": "Shop Now",
       "learnMore": "Learn More"
@@ -56,6 +56,10 @@
       "vegan": "100% Vegan & Cruelty-Free",
       "moneyback": "30-Day Money Back",
       "rated": "Rated 4.8/5"
+    },
+    "stats": {
+      "number": "50K+",
+      "label": "Happy Customers"
     },
     "scroll": "Scroll to explore"
   },
@@ -97,7 +101,7 @@
     },
     "cta": {
       "title": "Ready to Experience the Glow?",
-      "description": "Discover our customized bronzing mousse, gradual tanners, and accessory bundles.",
+      "description": "For men and women — discover our bronzing mousse, gradual tanners, and accessory bundles.",
       "button": "Shop the Collection"
     }
   },
@@ -168,7 +172,12 @@
     "couponPlaceholder": "Coupon: LUXETAN20",
     "couponApply": "Apply",
     "couponApplied": "{code} applied!",
-    "checkout": "Proceed to Checkout"
+    "checkout": "Proceed to Checkout",
+    "toast": {
+      "couponSuccess": "Coupon applied! 20% Off!",
+      "couponFail": "Invalid coupon. Try LUXETAN20",
+      "checkoutSuccess": "Checkout simulation successful!"
+    }
   },
   "cartDrawer": {
     "title": "Your Cart",
@@ -192,17 +201,23 @@
     "wishlistAdd": "Add to wishlist",
     "wishlistRemove": "Remove from wishlist",
     "share": "Share product",
+    "new": "New",
     "tabs": {
       "details": "Product Details",
       "specs": "Specifications"
     },
-    "shippingAlert": "Free shipping on all orders above BD 30.",
+    "shippingAlert": "Free shipping on all orders above {threshold}.",
     "guarantee": "30-Day satisfaction guarantee returns.",
     "related": "Related Products",
     "stock": {
       "inStock": "In Stock",
       "lowStock": "Only {count} left!",
       "outOfStock": "Out of Stock"
+    },
+    "toast": {
+      "added": "Added {quantity} {name} to cart!",
+      "shareSuccess": "Link copied to clipboard!",
+      "shareFail": "Failed to copy link."
     }
   },
   "faq": {
