@@ -1,0 +1,282 @@
+{
+  "siteName": "Luxe Tan",
+  "nav": {
+    "home": "Home",
+    "shop": "Shop",
+    "about": "About",
+    "faq": "FAQ",
+    "contact": "Contact"
+  },
+  "actions": {
+    "search": "Open search",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "shopNow": "Shop Now",
+    "cart": "Shopping cart, {count} item{plural}"
+  },
+  "footer": {
+    "description": "Premium tanning products crafted for radiant, sun-kissed skin. Vegan, cruelty-free, and made with love.",
+    "rights": "All Rights Reserved.",
+    "headers": {
+      "shop": "Shop",
+      "support": "Support",
+      "company": "Company"
+    },
+    "shop": {
+      "allProducts": "All Products",
+      "selfTanners": "Self Tanners",
+      "tanningLotions": "Tanning Lotions",
+      "bronzers": "Bronzers",
+      "accessories": "Accessories",
+      "bundles": "Bundles"
+    },
+    "support": {
+      "faq": "FAQ",
+      "contactUs": "Contact Us",
+      "shippingPolicy": "Shipping Policy",
+      "returns": "Returns"
+    },
+    "company": {
+      "aboutUs": "About Us",
+      "privacyPolicy": "Privacy Policy",
+      "termsOfService": "Terms of Service"
+    }
+  },
+  "hero": {
+    "tag": "Premium Tanning Collection 2026",
+    "title": "Glow Like Golden",
+    "subtitle": "Sun-Kissed Skin",
+    "description": "Discover our luxury range of premium self-tanners, bronzers and tanning essentials — crafted to give you a natural, radiant glow all year round. Vegan, cruelty-free, and loved by thousands.",
+    "cta": {
+      "shop": "Shop Now",
+      "learnMore": "Learn More"
+    },
+    "badges": {
+      "customers": "50K+ Happy Customers",
+      "vegan": "100% Vegan & Cruelty-Free",
+      "moneyback": "30-Day Money Back",
+      "rated": "Rated 4.8/5"
+    },
+    "scroll": "Scroll to explore"
+  },
+  "bestsellers": {
+    "tag": "Bestsellers",
+    "title": "Premium Collection",
+    "description": "Discover our most-loved tanning products, trusted by thousands of customers for a natural, golden glow.",
+    "viewAll": "View All Products"
+  },
+  "faqSection": {
+    "tag": "FAQ",
+    "title": "Answers to Your Questions",
+    "description": "Everything you need to know about our premium tanning products, application, and shipping."
+  },
+  "about": {
+    "tag": "Our Story",
+    "title": "Crafted for Radiant Glow",
+    "description": "At Luxe Tan, we believe that a healthy, golden glow shouldn't come at the cost of your skin's health. Our products combine state-of-the-art tanning DHA with premium hydration ingredients to feed your skin while you bronzify.",
+    "heroSubtitle": "Pure Hydration & Natural Bronze",
+    "heroDesc": "Premium Skin Ingredients only",
+    "valuesTitle": "Our Core Values",
+    "values": {
+      "quality": {
+        "title": "Premium Quality",
+        "description": "We use only the finest cosmetic-grade ingredients for a glowing, streak-free result."
+      },
+      "skin": {
+        "title": "Skin First",
+        "description": "Formulated with hydrating argan oil, aloe, and hyaluronic acid to nourish your skin."
+      },
+      "vegan": {
+        "title": "100% Vegan",
+        "description": "Cruelty-free formulations that respect nature. No animal testing, ever."
+      },
+      "award": {
+        "title": "Award Winning",
+        "description": "Recognized globally by beauty experts and loved by thousands of happy customers."
+      }
+    },
+    "cta": {
+      "title": "Ready to Experience the Glow?",
+      "description": "Discover our customized bronzing mousse, gradual tanners, and accessory bundles.",
+      "button": "Shop the Collection"
+    }
+  },
+  "contact": {
+    "tag": "Get in Touch",
+    "title": "We'd Love to Hear from You",
+    "description": "Have questions about application, shipping, or returns? Drop us a message or chat directly on WhatsApp.",
+    "infoTitle": "Contact Information",
+    "email": {
+      "title": "Email Us",
+      "desc": "Response in 24 hours"
+    },
+    "call": {
+      "title": "Call Us",
+      "desc": "24/7 Call number"
+    },
+    "address": {
+      "title": "Headquarters",
+      "desc": "Made in Bahrain"
+    },
+    "whatsapp": "Chat Instantly on WhatsApp",
+    "form": {
+      "name": "Your Name",
+      "namePlaceholder": "Enter your name",
+      "email": "Your Email",
+      "emailPlaceholder": "Enter your email",
+      "subject": "Subject",
+      "subjectPlaceholder": "Subject of your message",
+      "message": "Message",
+      "messagePlaceholder": "Write your message here…",
+      "submit": "Send Message"
+    }
+  },
+  "shop": {
+    "title": "Shop Our Products",
+    "description": "Explore our collection of luxurious self-tanners, bronzers and tanning accessories.",
+    "filters": {
+      "title": "Filters",
+      "reset": "Reset All",
+      "categories": "Categories",
+      "all": "All Categories",
+      "maxPrice": "Max Price",
+      "minRating": "Minimum Rating",
+      "apply": "Apply Filters",
+      "ratingUp": "★ {rating} & Up"
+    },
+    "showing": "Showing {count} products",
+    "noProducts": "No products found",
+    "noProductsDesc": "Try adjusting your filters or resetting",
+    "resetButton": "Reset Filters"
+  },
+  "cartPage": {
+    "title": "Shopping Cart",
+    "emptyTitle": "Your cart is currently empty",
+    "emptyDesc": "Browse our premium tanning line to find your perfect bronze match.",
+    "goToShop": "Go to Shop",
+    "category": "Category",
+    "remove": "Remove",
+    "continue": "Continue Shopping",
+    "shippingFreeAlert": "Spend {amount} more for FREE Shipping!",
+    "shippingFreeSuccess": "Congrats! Your order qualifies for free standard shipping!",
+    "summaryTitle": "Order Summary",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "shipping": "Shipping",
+    "free": "Free",
+    "total": "Total",
+    "couponPlaceholder": "Coupon: LUXETAN20",
+    "couponApply": "Apply",
+    "couponApplied": "{code} applied!",
+    "checkout": "Proceed to Checkout"
+  },
+  "cartDrawer": {
+    "title": "Your Cart",
+    "itemsCount": "({count} item{plural})",
+    "close": "Close cart",
+    "shippingFreeAlert": "Add {amount} more for FREE shipping!",
+    "shippingFreeSuccess": "You qualify for free shipping!",
+    "emptyTitle": "Your cart is empty",
+    "emptyDesc": "Discover our premium tanning collection",
+    "shopNow": "Shop Now",
+    "addCoupon": "Add coupon code",
+    "continue": "Continue Shopping"
+  },
+  "productDetail": {
+    "breadcrumbHome": "Home",
+    "breadcrumbShop": "Shop",
+    "sku": "SKU",
+    "quantity": "Quantity",
+    "addToCart": "Add to Cart",
+    "buyNow": "Buy Now",
+    "wishlistAdd": "Add to wishlist",
+    "wishlistRemove": "Remove from wishlist",
+    "share": "Share product",
+    "tabs": {
+      "details": "Product Details",
+      "specs": "Specifications"
+    },
+    "shippingAlert": "Free shipping on all orders above BD 30.",
+    "guarantee": "30-Day satisfaction guarantee returns.",
+    "related": "Related Products",
+    "stock": {
+      "inStock": "In Stock",
+      "lowStock": "Only {count} left!",
+      "outOfStock": "Out of Stock"
+    }
+  },
+  "faq": {
+    "items": {
+      "faq-1": {
+        "question": "How long does the tan last?",
+        "answer": "Our self-tanners typically last between 5 to 10 days depending on the product and your skin type. To maximise longevity, moisturise daily and avoid long hot baths or showers. Use our After Sun Recovery Lotion to extend your colour."
+      },
+      "faq-2": {
+        "question": "Will it turn me orange?",
+        "answer": "Absolutely not! Our formulas are carefully developed to deliver natural-looking, golden bronze tones across all skin types. We use premium DHA combined with colour guides to ensure the most realistic results."
+      },
+      "faq-3": {
+        "question": "How should I prepare my skin?",
+        "answer": "For the best results, exfoliate your skin 24 hours before application using our Exfoliating Glove, paying extra attention to dry areas like knees, elbows, and ankles. Shower, dry off completely, and apply your chosen product. Avoid moisturising immediately before application."
+      },
+      "faq-4": {
+        "question": "Are your products vegan and cruelty-free?",
+        "answer": "Yes! All Luxe Tan products are 100% vegan and cruelty-free. We never test on animals and use only ethically sourced, plant-based ingredients wherever possible. Our products are also free from parabens and harsh sulphates."
+      },
+      "faq-5": {
+        "question": "How quickly will my order arrive?",
+        "answer": "Standard shipping takes 3-5 business days. Express shipping (1-2 business days) is available at checkout. Orders over BD 30 qualify for free standard shipping. You'll receive a tracking number as soon as your order ships."
+      },
+      "faq-6": {
+        "question": "Can I use self-tanner on my face?",
+        "answer": "Yes! We recommend our Face Tanning Serum which is specifically formulated for facial skin. It's non-comedogenic, fragrance-free, and contains additional skin-care actives. For body products on the face, always do a patch test first."
+      },
+      "faq-7": {
+        "question": "What is your return policy?",
+        "answer": "We offer a 30-day satisfaction guarantee. If you're not happy with your purchase for any reason, contact our customer service team and we'll arrange a full refund or exchange. Products must be returned in their original packaging."
+      }
+    }
+  },
+  "products": {
+    "1": {
+      "name": "Golden Glow Self Tanner",
+      "shortDescription": "Streak-free, buildable bronze that lasts up to 7 days.",
+      "description": "Achieve a natural, sun-kissed glow from the comfort of your home with our award-winning Golden Glow Self Tanner. Infused with nourishing argan oil and hyaluronic acid, this ultra-smooth formula glides on effortlessly for an even, streak-free finish. The subtle coconut fragrance masks the typical self-tanner scent while deeply hydrating your skin. Buildable color adapts to all skin tones."
+    },
+    "2": {
+      "name": "Luxe Bronzing Mousse",
+      "shortDescription": "Ultra-light mousse for an instant luminous glow.",
+      "description": "Our feather-light bronzing mousse delivers a deep, radiant tan that looks and feels completely natural. The revolutionary aerated formula absorbs instantly with zero transfer — leaving no orange tones, just gorgeous, long-lasting bronze. Perfect for face and body."
+    },
+    "3": {
+      "name": "Sun-Kissed Tanning Oil",
+      "shortDescription": "Rich tanning oil with SPF 15 protection.",
+      "description": "Bask in the sun with our luxurious Tanning Oil, formulated with a blend of exotic oils — avocado, macadamia, and jojoba — to accelerate your natural tan while keeping skin intensely moisturised. The lightweight formula absorbs beautifully, giving skin a gorgeous bronzed sheen."
+    },
+    "4": {
+      "name": "Overnight Tan Drops",
+      "shortDescription": "Concentrated drops that work while you sleep.",
+      "description": "Wake up to a radiant, golden glow with our powerful overnight tan drops. Mix a few drops with your favourite moisturiser and apply before bed for a natural-looking tan by morning. Suitable for all skin tones — simply adjust the number of drops to control your colour intensity."
+    },
+    "5": {
+      "name": "After Sun Recovery Lotion",
+      "shortDescription": "Soothe, hydrate and extend your tan.",
+      "description": "Rescue sun-stressed skin with our intensely nourishing After Sun Recovery Lotion. Packed with aloe vera, vitamin E and hyaluronic acid, it instantly cools and soothes while locking in moisture for lasting softness. The tan-extending formula ensures your colour stays vivid for longer."
+    },
+    "6": {
+      "name": "Tanning Starter Kit",
+      "shortDescription": "Everything you need for the perfect tan — bundled.",
+      "description": "The ultimate tanning kit for beginners and pros alike. Includes our Golden Glow Self Tanner, a professional tanning mitt, an exfoliating glove, and our After Sun Lotion — everything you need for a flawless, long-lasting tan from first application."
+    },
+    "7": {
+      "name": "Face Tanning Serum",
+      "shortDescription": "Anti-aging tanning serum for a youthful, radiant complexion.",
+      "description": "Our premium face-specific tanning serum combines active tanning technology with powerful anti-aging peptides and vitamin C. The lightweight formula develops into a natural, golden glow over 8 hours while visibly reducing fine lines and unifying skin tone. Dermatologist tested."
+    },
+    "8": {
+      "name": "Professional Tanning Mitt",
+      "shortDescription": "Velvet-soft mitt for a streak-free application.",
+      "description": "Achieve salon-quality results at home with our professional-grade tanning mitt. The ultra-smooth velvet surface ensures even, streak-free application every time, while the waterproof backing protects your palms from staining. Machine washable and reusable."
+    }
+  }
+}
