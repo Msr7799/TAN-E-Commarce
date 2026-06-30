@@ -13,7 +13,7 @@ import { useTranslation } from "@/utils/i18n";
 export function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
-  
+
   // تتبع حركة التمرير لتطبيق تأثير البارالاكس
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -35,48 +35,51 @@ export function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative overflow-hidden bg-gradient-to-br from-cream via-white to-beige"
+      className="relative overflow-hidden bg-[url('/hero-bg.webp')] bg-cover bg-center bg-no-repeat"
       aria-labelledby="hero-heading"
     >
-      {/* بقع الألوان المتحركة في الخلفية — تتقلص تلقائياً على الشاشات الصغيرة */}
+      {/* 
+        طبقة التدرج (Gradient Overlay) لتحسين القراءة:
+        - على الجوال: خلفية بيضاء شبه شفافة بالكامل.
+        - على الشاشات الكبيرة: تدرج لوني أبيض كثيف يساراً (خلف النص) ويتلاشى يميناً (خلف المنتج). 
+      */}
+      <div
+        className="absolute inset-0 bg-white/40 backdrop-blur-[3px] lg:bg-gradient-to-r lg:from-white/45 lg:via-white/40 lg:to-transparent"
+        aria-hidden="true"
+      />
+
+      {/* بقع الألوان المتحركة في الخلفية */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         <motion.div
           animate={{ scale: [1, 1.1, 1], x: [0, 30, 0], y: [0, -20, 0] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -right-1/3 top-1/4 h-[300px] w-[300px] sm:h-[500px] sm:w-[500px] lg:h-[600px] lg:w-[600px] rounded-full bg-golden/10 blur-[60px] sm:blur-[80px]"
+          className="absolute top-1/4 -right-1/3 h-[300px] w-[300px] rounded-full bg-sky-300/20 blur-[60px] sm:h-[500px] sm:w-[500px] sm:blur-[80px] lg:h-[600px] lg:w-[600px]"
         />
         <motion.div
           animate={{ scale: [1, 0.9, 1], x: [0, -20, 0], y: [0, 30, 0] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute -left-1/3 bottom-1/4 h-[250px] w-[250px] sm:h-[400px] sm:w-[400px] rounded-full bg-amber-200/20 blur-[60px]"
+          className="absolute bottom-1/4 -left-1/3 h-[250px] w-[250px] rounded-full bg-indigo-200/20 blur-[60px] sm:h-[400px] sm:w-[400px]"
         />
       </div>
 
       {/* الدوائر التزيينية — تظهر على الشاشات الكبيرة فقط */}
       <motion.div
         style={{ y, opacity }}
-        className="pointer-events-none absolute inset-0 hidden sm:flex items-center justify-center"
+        className="pointer-events-none absolute inset-0 hidden items-center justify-center sm:flex"
         aria-hidden="true"
       >
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-          className="absolute h-[600px] w-[600px] lg:h-[700px] lg:w-[700px] rounded-full border border-golden/10"
-        />
-        <motion.div
-          animate={{ rotate: -360 }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute h-[400px] w-[400px] lg:h-[500px] lg:w-[500px] rounded-full border border-golden/15"
+          className="absolute h-[600px] w-[600px] rounded-full border border-golden/20 lg:h-[700px] lg:w-[700px]"
         />
       </motion.div>
 
       {/* شبكة المحتوى الرئيسية */}
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid items-center gap-8 py-12 sm:py-16 lg:grid-cols-2 lg:gap-16 lg:py-28 min-h-[100svh] lg:min-h-screen">
-
+        <div className="grid min-h-[100svh] items-center gap-8 py-12 sm:py-16 lg:min-h-screen lg:grid-cols-2 lg:gap-16 lg:py-28">
           {/* ── القسم الأيمن/الأيسر: نصوص التعريف والـ CTA ── */}
-          <div className="flex flex-col gap-6 text-center lg:text-left order-2 lg:order-1">
-
+          <div className="order-2 flex flex-col gap-6 text-center lg:order-1 lg:text-left">
             {/* شارة التعريف الصغيرة (Tag) */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -84,30 +87,30 @@ export function HeroSection() {
               transition={{ duration: 0.5 }}
               className="flex justify-center lg:justify-start"
             >
-              <span className="inline-flex items-center gap-2 rounded-full border border-golden/30 bg-golden/10 px-4 py-1.5 text-[11px] sm:text-xs font-semibold uppercase tracking-widest text-golden">
+              <span className="inline-flex items-center gap-2 rounded-full border border-golden/30 bg-white/90 px-4 py-1.5 text-[11px] font-bold tracking-widest text-golden uppercase shadow-sm sm:text-xs">
                 <span className="h-1.5 w-1.5 rounded-full bg-golden" aria-hidden="true" />
                 {t("hero.tag")}
               </span>
             </motion.div>
 
-            {/* العنوان الرئيسي للموقع — متجاوب في أحجام الخطوط */}
+            {/* العنوان الرئيسي للموقع */}
             <motion.h1
               id="hero-heading"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-3xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl"
+              className="text-4xl leading-tight font-extrabold tracking-tight text-gray-900 drop-shadow-sm sm:text-5xl lg:text-6xl xl:text-7xl"
             >
               {t("hero.title").split(" ").slice(0, -1).join(" ")}{" "}
               <span className="relative inline-block">
-                <span className="bg-gradient-to-r from-golden via-amber-500 to-golden bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-golden via-[#4ebf11] to-golden bg-clip-text text-transparent drop-shadow-md">
                   {t("hero.title").split(" ").pop()}
                 </span>
                 <motion.span
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
                   transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
-                  className="absolute -bottom-1 left-0 right-0 h-0.5 sm:h-1 origin-left rounded-full bg-gradient-to-r from-golden to-amber-400"
+                  className="absolute right-0 -bottom-1 left-0 h-0.5 origin-left rounded-full bg-gradient-to-r from-golden to-golden-light sm:h-1"
                   aria-hidden="true"
                 />
               </span>{" "}
@@ -120,7 +123,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.25 }}
-              className="text-sm sm:text-base lg:text-lg leading-relaxed text-muted-foreground max-w-lg mx-auto lg:mx-0"
+              className="mx-auto max-w-lg text-sm leading-relaxed font-semibold text-gray-800 drop-shadow-sm sm:text-base lg:mx-0 lg:text-lg"
             >
               {t("hero.description")}
             </motion.p>
@@ -132,7 +135,11 @@ export function HeroSection() {
               transition={{ duration: 0.5, delay: 0.35 }}
               className="flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start"
             >
-              <Button size="lg" className="group w-full sm:w-auto" asChild>
+              <Button
+                size="lg"
+                className="group w-full shadow-lg transition-all hover:shadow-xl sm:w-auto"
+                asChild
+              >
                 <Link href="/shop">
                   {t("hero.cta.shop")}
                   <ArrowRight
@@ -141,7 +148,12 @@ export function HeroSection() {
                   />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="w-full sm:w-auto" asChild>
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full border-gray-300 bg-white/80 font-semibold text-gray-900 shadow-sm backdrop-blur-md hover:bg-white sm:w-auto"
+                asChild
+              >
                 <Link href="/about">{t("hero.cta.learnMore")}</Link>
               </Button>
             </motion.div>
@@ -156,9 +168,9 @@ export function HeroSection() {
               {TRUST_BADGES.map(({ icon: Icon, label }) => (
                 <div
                   key={label}
-                  className="flex items-center gap-1.5 text-[11px] sm:text-xs text-muted-foreground"
+                  className="flex items-center gap-1.5 rounded-md border border-white/50 bg-white/70 px-2.5 py-1.5 text-[11px] font-bold text-gray-800 shadow-sm backdrop-blur-md sm:text-xs"
                 >
-                  <Icon className="h-3.5 w-3.5 text-golden shrink-0" aria-hidden="true" />
+                  <Icon className="h-3.5 w-3.5 shrink-0 text-golden" aria-hidden="true" />
                   <span>{label}</span>
                 </div>
               ))}
@@ -175,21 +187,17 @@ export function HeroSection() {
           >
             <div className="relative mx-auto max-w-[320px] sm:max-w-sm md:max-w-md lg:max-w-none">
               {/* بطاقة الصورة الرئيسية */}
-              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] bg-gradient-to-br from-golden/20 via-amber-100 to-beige shadow-2xl shadow-golden/20">
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                  <motion.div
-                    animate={{ rotate: [0, 5, -5, 0] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                    className="flex h-20 w-20 sm:h-28 sm:w-28 lg:h-32 lg:w-32 items-center justify-center rounded-full bg-gradient-to-br from-golden/30 to-amber-200/50 shadow-lg"
-                  >
-                    <span className="text-4xl sm:text-5xl lg:text-6xl">☀️</span>
-                  </motion.div>
-                  <div className="text-center px-8">
-                    <p className="text-sm sm:text-base font-semibold text-golden/70">Hero Image Placeholder</p>
-                    <p className="mt-1 text-xs text-golden/50">Replace with your product photo</p>
-                  </div>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" aria-hidden="true" />
+              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[2rem] border border-white/20 bg-[#f2f0ed] shadow-2xl shadow-black/20 sm:rounded-[2.5rem]">
+                <div
+                  className="h-full w-full bg-cover bg-center"
+                  style={{ backgroundImage: "url('/back3colors.webp')" }}
+                  role="img"
+                  aria-label="Marbella Tan tanning oil collection"
+                />
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"
+                  aria-hidden="true"
+                />
               </div>
 
               {/* بطاقة الإحصائيات العائمة (عدد العملاء) */}
@@ -197,13 +205,15 @@ export function HeroSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7 }}
-                className="absolute -bottom-3 left-3 sm:-bottom-4 sm:-left-4 rounded-xl sm:rounded-2xl bg-white p-3 sm:p-4 shadow-xl ring-1 ring-black/5"
+                className="absolute -bottom-3 left-3 rounded-xl bg-white p-3 shadow-xl ring-1 ring-black/5 sm:-bottom-4 sm:-left-4 sm:rounded-2xl sm:p-4"
               >
-                <p className="text-lg sm:text-2xl font-bold text-golden">
+                <p className="text-lg font-bold text-golden sm:text-2xl">
                   {t("hero.stats.number") !== "hero.stats.number" ? t("hero.stats.number") : "50K+"}
                 </p>
-                <p className="text-[10px] sm:text-xs text-muted-foreground">
-                  {t("hero.stats.label") !== "hero.stats.label" ? t("hero.stats.label") : "Happy customers"}
+                <p className="text-[10px] font-semibold text-gray-600 sm:text-xs">
+                  {t("hero.stats.label") !== "hero.stats.label"
+                    ? t("hero.stats.label")
+                    : "Happy customers"}
                 </p>
               </motion.div>
 
@@ -212,14 +222,18 @@ export function HeroSection() {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
-                className="absolute right-3 top-4 sm:-right-4 sm:top-8 rounded-xl sm:rounded-2xl bg-black p-3 sm:p-4 shadow-xl"
+                className="absolute top-4 right-3 rounded-xl border border-white/10 bg-black/90 p-3 shadow-xl backdrop-blur-md sm:top-8 sm:-right-4 sm:rounded-2xl sm:p-4"
               >
-                <div className="flex items-center gap-0.5 sm:gap-1 text-golden">
+                <div className="flex items-center gap-0.5 text-golden sm:gap-1">
                   {[1, 2, 3, 4, 5].map((i) => (
-                    <Star key={i} className="h-2.5 w-2.5 sm:h-3 sm:w-3 fill-current" aria-hidden="true" />
+                    <Star
+                      key={i}
+                      className="h-2.5 w-2.5 fill-current sm:h-3 sm:w-3"
+                      aria-hidden="true"
+                    />
                   ))}
                 </div>
-                <p className="mt-1 text-[10px] sm:text-xs text-white/70">
+                <p className="mt-1 text-[10px] font-medium text-white/90 sm:text-xs">
                   {t("hero.badges.rated")}
                 </p>
               </motion.div>
@@ -228,21 +242,23 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* مؤشر التمرير للأسفل (مخفي على الشاشات الصغيرة جداً) */}
+      {/* مؤشر التمرير للأسفل */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1, duration: 0.5 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2"
+        className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 sm:flex"
         aria-hidden="true"
       >
-        <span className="text-xs text-muted-foreground">{t("hero.scroll")}</span>
+        <span className="rounded-md border border-white/50 bg-white/70 px-2.5 py-1 text-xs font-bold text-gray-800 shadow-sm backdrop-blur-md">
+          {t("hero.scroll")}
+        </span>
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 1.5, repeat: Infinity }}
-          className="h-8 w-5 rounded-full border-2 border-golden/30 flex items-start justify-center pt-1"
+          className="flex h-8 w-5 items-start justify-center rounded-full border-2 border-gray-800/50 bg-white/30 pt-1 backdrop-blur-sm"
         >
-          <div className="h-2 w-0.5 rounded-full bg-golden" />
+          <div className="h-2 w-0.5 rounded-full bg-gray-800" />
         </motion.div>
       </motion.div>
     </section>

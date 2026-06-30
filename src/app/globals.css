@@ -1,33 +1,40 @@
 @import "tailwindcss";
 
+/* ============================================================
+   نظام الألوان — Baby Blue Color System
+   لون السماء الصافية والبحر الهادئ: أزرق طفولي ناعم ومنعش
+   ============================================================ */
+
 :root {
   --background: #ffffff;
-  --foreground: #0a0a0a;
-  
-  --cream: #fdf8f3;
-  --beige: #f5edd8;
-  --golden: #c9a84c;
-  --golden-light: #e6c97a;
-  --golden-dark: #a68433;
-  --black-rich: #0a0a0a;
+  --foreground: #0f1a2e;
 
+  /* ألوان العلامة التجارية — Baby Blue */
+  --cream: #eff7ff; /* أبيض سماوي ناصع */
+  --beige: #bdf100; /* أزرق طفولي فاتح */
+  --golden: #67bb21; /* Baby Blue رئيسي */
+  --golden-light: #21250f; /* Baby Blue فاتح */
+  --golden-dark: #0000005d; /* أزرق عميق */
+  --black-rich: #0f1a2e; /* أزرق ليلي */
+
+  /* ألوان shadcn-ui المحوّلة */
   --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
+  --card-foreground: 215 50% 10%;
   --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --primary: 38 52% 54%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 30 25% 97%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --muted: 30 10% 94%;
-  --muted-foreground: 25 5% 45%;
-  --accent: 38 52% 54%;
-  --accent-foreground: 222.2 47.4% 11.2%;
+  --popover-foreground: 215 50% 10%;
+  --primary: 205 88% 65%; /* Baby Blue رئيسي */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 205 80% 95%; /* أزرق سماوي فاتح جداً */
+  --secondary-foreground: 205 60% 30%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 20% 50%;
+  --accent: 205 88% 65%;
+  --accent-foreground: 0 0% 100%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 210 40% 98%;
-  --border: 30 15% 90%;
-  --input: 30 15% 90%;
-  --ring: 38 52% 54%;
+  --border: 205 50% 82%;
+  --input: 205 50% 82%;
+  --ring: 205 88% 65%;
   --radius: 1.5rem;
 }
 
@@ -38,14 +45,18 @@
   --color-golden-light: var(--golden-light);
   --color-golden-dark: var(--golden-dark);
   --color-black-rich: var(--black-rich);
-  
+
   --font-sans: "Outfit", var(--font-geist-sans), sans-serif;
-  
+
   --animate-infinite-scroll: infinite-scroll 25s linear infinite;
 
   @keyframes infinite-scroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
   }
 }
 
@@ -57,7 +68,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom scrollbar */
+/* شريط التمرير بألوان Baby Blue */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -72,13 +83,13 @@ body {
   background: var(--golden);
 }
 
-/* Modern focus ring style */
+/* حلقة التركيز */
 :focus-visible {
   outline: 2px solid var(--golden);
   outline-offset: 2px;
 }
 
-/* Custom Selection style */
+/* تحديد النص */
 ::selection {
   background-color: var(--beige);
   color: var(--golden-dark);

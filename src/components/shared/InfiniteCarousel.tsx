@@ -1,111 +1,91 @@
 "use client";
 
-// ============================================================
-// Infinite Carousel — auto-scroll, loop, pause on hover, touch
-// ============================================================
-import { useRef, useState } from "react";
-import { motion } from "motion/react";
-import { MOCK_PRODUCTS } from "@/lib/mockData";
-import { formatPriceSimple } from "@/utils";
-
-const ITEMS = [...MOCK_PRODUCTS, ...MOCK_PRODUCTS]; // duplicate for seamless loop
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useState } from "react";
+import { useTranslation } from "@/utils/i18n";
 
 export function InfiniteCarousel() {
-  const [isPaused, setIsPaused] = useState(false);
-  const trackRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
+  const carouselItems = [
+    {
+      image: "/brown-removebg.png",
+      alt: t("carousel.altCoco"),
+      text: t("carousel.paragraph1"),
+    },
+    {
+      image: "/red-front-removebg.png",
+      alt: t("carousel.altDeerBlood"),
+      text: t("carousel.paragraph2"),
+    },
+    {
+      image: "/orange-removebg.png",
+      alt: t("carousel.altBronze"),
+      text: t("carousel.paragraph3"),
+    },
+  ];
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % carouselItems.length);
+    }, 4200);
+
+    return () => window.clearInterval(timer);
+  }, [carouselItems.length]);
 
   return (
-    <section
-      className="overflow-hidden bg-black py-10"
-      aria-label="Featured products carousel"
-      aria-roledescription="carousel"
-    >
-      {/* Headline strip */}
-      <div className="mb-8 flex items-center justify-center gap-4 px-4">
-        <span className="h-px flex-1 bg-white/10 max-w-xs" aria-hidden="true" />
-        <h2 className="text-center text-sm font-semibold uppercase tracking-[0.3em] text-golden">
-          Our Bestsellers
-        </h2>
-        <span className="h-px flex-1 bg-white/10 max-w-xs" aria-hidden="true" />
+    <section className="bg-black py-12">
+      {/* Headline */}
+      <div className="mb-10 flex items-center justify-center gap-4 px-4">
+        <span className="h-px max-w-xs flex-1 bg-white/10" aria-hidden="true" />
+        <span className="text-center text-sm tracking-[0.35em] text-white/70 uppercase sm:text-base">
+          {t("carousel.headline")}
+        </span>
+        <span className="h-px max-w-xs flex-1 bg-white/10" aria-hidden="true" />
       </div>
 
-      {/* Carousel track wrapper — gradient fade edges */}
-      <div
-        className="relative"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-      >
-        {/* Left fade */}
-        <div
-          className="pointer-events-none absolute left-0 top-0 bottom-0 z-10 w-24 bg-gradient-to-r from-black to-transparent"
-          aria-hidden="true"
+      <div className="relative mx-auto max-h-[640px] overflow-hidden border border-white/10 shadow-xl sm:max-h-[560px]">
+        <video
+          src="/beach.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="h-full w-full object-cover"
+          style={{ minHeight: "320px" }}
         />
-        {/* Right fade */}
+
         <div
-          className="pointer-events-none absolute right-0 top-0 bottom-0 z-10 w-24 bg-gradient-to-l from-black to-transparent"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"
           aria-hidden="true"
         />
 
-        {/* Scrolling track */}
-        <motion.div
-          ref={trackRef}
-          className="flex gap-4"
-          animate={{ x: isPaused ? undefined : [0, "-50%"] }}
-          transition={{
-            duration: 30,
-            ease: "linear",
-            repeat: Infinity,
-            repeatType: "loop",
-          }}
-          // When paused, maintain current position gracefully
-          {...(isPaused ? { style: { animationPlayState: "paused" } } : {})}
-          aria-live="off"
-        >
-          {ITEMS.map((product, i) => (
-            <CarouselCard key={`${product.id}-${i}`} product={product} />
-          ))}
-        </motion.div>
-      </div>
-    </section>
-  );
-}
+        <div className="absolute inset-x-0 top-4 z-20 mx-auto flex w-full max-w-7xl flex-col items-center justify-center gap-6 px-4 pb-6 sm:top-8 sm:px-6 lg:flex-row lg:items-center lg:justify-center lg:gap-8">
+          <div className="hidden w-full max-w-full flex-col items-center justify-center rounded-[1.75rem] border border-white/20 bg-black/60 p-5 shadow-2xl backdrop-blur-2xl sm:p-6 lg:flex lg:w-[44%]">
+            <img
+              src={carouselItems[activeIndex].image}
+              alt={carouselItems[activeIndex].alt}
+              className="h-56 w-auto object-contain sm:h-64 lg:h-72"
+            />
+          </div>
 
-// ——— Individual carousel card ————————————————
-interface CarouselCardProps {
-  product: (typeof MOCK_PRODUCTS)[0];
-}
-
-function CarouselCard({ product }: CarouselCardProps) {
-  return (
-    <motion.div
-      whileHover={{ scale: 1.03, y: -4 }}
-      className="relative flex w-52 shrink-0 cursor-pointer flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm transition-colors hover:border-golden/30"
-      role="group"
-      aria-label={product.name}
-    >
-      {/* Image placeholder */}
-      <div className="flex aspect-square items-center justify-center bg-gradient-to-br from-golden/20 to-amber-900/20">
-        <div className="flex flex-col items-center gap-2">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-golden/20">
-            <span className="text-xl font-bold text-golden">
-              {product.name.charAt(0)}
-            </span>
+          <div className="flex w-full max-w-full flex-col justify-center rounded-[1.75rem] border border-white/15 bg-black/55 p-5 text-center text-white shadow-2xl backdrop-blur-2xl sm:p-6 lg:w-[52%] lg:text-center">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={activeIndex}
+                initial={{ opacity: 0, filter: "blur(12px)", y: 16 }}
+                animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+                exit={{ opacity: 0, filter: "blur(12px)", y: -16 }}
+                transition={{ duration: 0.8 }}
+                className="text-sm leading-7 whitespace-pre-line text-white/90 sm:text-base lg:text-lg"
+              >
+                {carouselItems[activeIndex].text}
+              </motion.p>
+            </AnimatePresence>
           </div>
         </div>
       </div>
-
-      {/* Info */}
-      <div className="flex flex-col gap-1 p-4">
-        <p className="line-clamp-1 text-sm font-semibold text-white">
-          {product.name}
-        </p>
-        <p className="text-xs text-white/50 capitalize">
-          {product.category.replace(/-/g, " ")}
-        </p>
-        <p className="text-sm font-bold text-golden">
-          {formatPriceSimple(product.price)}
-        </p>
-      </div>
-    </motion.div>
+    </section>
   );
 }

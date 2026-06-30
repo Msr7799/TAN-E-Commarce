@@ -9,7 +9,7 @@ import { PRODUCT_CATEGORIES, SORT_OPTIONS } from "@/constants";
 import { MOCK_PRODUCTS } from "@/lib/mockData";
 import type { ProductCategory, SortOption } from "@/types";
 import { useTranslation } from "@/utils/i18n";
-import { formatPriceSimple } from "@/utils";
+import { useCurrency } from "@/utils";
 
 /**
  * صفحة المتجر (ShopPage)
@@ -24,6 +24,7 @@ export default function ShopPage() {
   const [minRating, setMinRating] = useState<number>(0);
   const [showFiltersMobile, setShowFiltersMobile] = useState(false); // إظهار فلاتر الموبايل
   const { t } = useTranslation();
+  const { formatPrice } = useCurrency();
 
   // معالجة تصفية وترتيب المنتجات ديناميكياً لتجنب العمليات الحسابية المكررة
   const filteredProducts = useMemo(() => {
@@ -54,9 +55,7 @@ export default function ShopPage() {
         result.sort((a, b) => b.rating - a.rating);
         break;
       case "newest":
-        result.sort(
-          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
+        result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         break;
       default:
         // الترتيب الافتراضي (المنتجات المميزة أولاً)
@@ -91,29 +90,26 @@ export default function ShopPage() {
   };
 
   return (
-    <div className="bg-cream/40 min-h-screen py-12">
+    <div className="min-h-screen bg-cream/40 py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        
         {/* ترويسة الصفحة */}
         <div className="mb-10 text-center md:text-left">
           <h1 className="text-4xl font-bold tracking-tight text-black">{t("shop.title")}</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            {t("shop.description")}
-          </p>
+          <p className="text-muted-foreground mt-2 text-sm">{t("shop.description")}</p>
         </div>
 
         <div className="grid gap-8 lg:grid-cols-4">
           {/* الشريط الجانبي للفلاتر — يظهر فقط على الشاشات الكبيرة */}
-          <aside className="hidden lg:block space-y-6">
+          <aside className="hidden space-y-6 lg:block">
             <div className="rounded-3xl border border-beige bg-white p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-6 border-b border-beige pb-4">
-                <h2 className="font-semibold text-lg flex items-center gap-2">
+              <div className="mb-6 flex items-center justify-between border-b border-beige pb-4">
+                <h2 className="flex items-center gap-2 text-lg font-semibold">
                   <SlidersHorizontal className="h-4 w-4 text-golden" />
                   {t("shop.filters.title")}
                 </h2>
                 <button
                   onClick={resetFilters}
-                  className="text-xs text-muted-foreground hover:text-golden transition-colors"
+                  className="text-muted-foreground text-xs transition-colors hover:text-golden"
                 >
                   {t("shop.filters.reset")}
                 </button>
@@ -121,13 +117,13 @@ export default function ShopPage() {
 
               {/* قسم تصفية الفئات */}
               <div className="mb-6">
-                <h3 className="text-sm font-semibold mb-3">{t("shop.filters.categories")}</h3>
+                <h3 className="mb-3 text-sm font-semibold">{t("shop.filters.categories")}</h3>
                 <div className="space-y-2">
                   <button
                     onClick={() => setSelectedCategory("all")}
-                    className={`block w-full text-left px-3 py-1.5 rounded-xl text-sm transition-all ${
+                    className={`block w-full rounded-xl px-3 py-1.5 text-left text-sm transition-all ${
                       selectedCategory === "all"
-                        ? "bg-golden text-black font-semibold"
+                        ? "bg-golden font-semibold text-black"
                         : "hover:bg-cream hover:text-golden"
                     }`}
                   >
@@ -137,9 +133,9 @@ export default function ShopPage() {
                     <button
                       key={cat.value}
                       onClick={() => setSelectedCategory(cat.value)}
-                      className={`block w-full text-left px-3 py-1.5 rounded-xl text-sm transition-all ${
+                      className={`block w-full rounded-xl px-3 py-1.5 text-left text-sm transition-all ${
                         selectedCategory === cat.value
-                          ? "bg-golden text-black font-semibold"
+                          ? "bg-golden font-semibold text-black"
                           : "hover:bg-cream hover:text-golden"
                       }`}
                     >
@@ -151,9 +147,9 @@ export default function ShopPage() {
 
               {/* قسم شريط تصفية السعر */}
               <div className="mb-6">
-                <div className="flex justify-between text-sm font-semibold mb-3">
+                <div className="mb-3 flex justify-between text-sm font-semibold">
                   <h3>{t("shop.filters.maxPrice")}</h3>
-                  <span className="text-golden">{formatPriceSimple(priceRange)}</span>
+                  <span className="text-golden">{formatPrice(priceRange)}</span>
                 </div>
                 <input
                   type="range"
@@ -162,29 +158,31 @@ export default function ShopPage() {
                   step="5"
                   value={priceRange}
                   onChange={(e) => setPriceRange(Number(e.target.value))}
-                  className="w-full accent-golden cursor-pointer"
+                  className="w-full cursor-pointer accent-golden"
                 />
-                <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                  <span>{formatPriceSimple(10)}</span>
-                  <span>{formatPriceSimple(150)}</span>
+                <div className="text-muted-foreground mt-1 flex justify-between text-xs">
+                  <span>{formatPrice(10)}</span>
+                  <span>{formatPrice(150)}</span>
                 </div>
               </div>
 
               {/* قسم تصفية التقييمات بالنجوم */}
               <div>
-                <h3 className="text-sm font-semibold mb-3">{t("shop.filters.minRating")}</h3>
+                <h3 className="mb-3 text-sm font-semibold">{t("shop.filters.minRating")}</h3>
                 <div className="space-y-1.5">
                   {[4.8, 4.5, 4.0].map((rating) => (
                     <button
                       key={rating}
                       onClick={() => setMinRating(minRating === rating ? 0 : rating)}
-                      className={`flex w-full items-center gap-2 px-3 py-1.5 rounded-xl text-sm transition-all ${
+                      className={`flex w-full items-center gap-2 rounded-xl px-3 py-1.5 text-sm transition-all ${
                         minRating === rating
-                          ? "bg-cream border border-golden text-golden font-semibold"
-                          : "hover:bg-cream border border-transparent"
+                          ? "border border-golden bg-cream font-semibold text-golden"
+                          : "border border-transparent hover:bg-cream"
                       }`}
                     >
-                      <span>{t("shop.filters.ratingUp").replace("{rating}", rating.toFixed(1))}</span>
+                      <span>
+                        {t("shop.filters.ratingUp").replace("{rating}", rating.toFixed(1))}
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -193,9 +191,9 @@ export default function ShopPage() {
           </aside>
 
           {/* الكتالوج الرئيسي وقائمة المنتجات */}
-          <main className="lg:col-span-3 space-y-6">
+          <main className="space-y-6 lg:col-span-3">
             <div className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-beige bg-white px-6 py-4 shadow-sm">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 {t("shop.showing").replace("{count}", String(filteredProducts.length))}
               </p>
 
@@ -204,7 +202,7 @@ export default function ShopPage() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="lg:hidden flex items-center gap-2"
+                  className="flex items-center gap-2 lg:hidden"
                   onClick={() => setShowFiltersMobile(true)}
                 >
                   <SlidersHorizontal className="h-4 w-4" />
@@ -215,7 +213,7 @@ export default function ShopPage() {
                 <select
                   value={selectedSort}
                   onChange={(e) => setSelectedSort(e.target.value as SortOption)}
-                  className="rounded-xl border border-beige bg-white px-3 py-1.5 text-sm font-medium outline-none focus:border-golden cursor-pointer"
+                  className="cursor-pointer rounded-xl border border-beige bg-white px-3 py-1.5 text-sm font-medium outline-none focus:border-golden"
                 >
                   {SORT_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -247,12 +245,10 @@ export default function ShopPage() {
             ) : (
               /* واجهة عدم العثور على أي منتج يطابق الفلاتر */
               <div className="rounded-3xl border border-dashed border-beige bg-white py-20 text-center">
-                <p className="font-semibold text-lg">{t("shop.noProducts")}</p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {t("shop.noProductsDesc")}
-                </p>
+                <p className="text-lg font-semibold">{t("shop.noProducts")}</p>
+                <p className="text-muted-foreground mt-1 text-sm">{t("shop.noProductsDesc")}</p>
                 <Button variant="outline" className="mt-4" onClick={resetFilters}>
-                  <RefreshCw className="h-4 w-4 mr-2" />
+                  <RefreshCw className="mr-2 h-4 w-4" />
                   {t("shop.resetButton")}
                 </Button>
               </div>
@@ -279,16 +275,16 @@ export default function ShopPage() {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="fixed left-0 top-0 bottom-0 z-50 w-full max-w-xs bg-white p-6 shadow-2xl overflow-y-auto lg:hidden"
+              className="fixed top-0 bottom-0 left-0 z-50 w-full max-w-xs overflow-y-auto bg-white p-6 shadow-2xl lg:hidden"
             >
-              <div className="flex items-center justify-between mb-6 pb-4 border-b border-beige">
-                <h2 className="font-semibold text-lg flex items-center gap-2">
+              <div className="mb-6 flex items-center justify-between border-b border-beige pb-4">
+                <h2 className="flex items-center gap-2 text-lg font-semibold">
                   <SlidersHorizontal className="h-4 w-4 text-golden" />
                   {t("shop.filters.title")}
                 </h2>
                 <button
                   onClick={() => setShowFiltersMobile(false)}
-                  className="p-1 rounded-full hover:bg-cream"
+                  className="rounded-full p-1 hover:bg-cream"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -297,12 +293,14 @@ export default function ShopPage() {
               {/* عناصر التصفية للهواتف */}
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-sm font-semibold mb-3">{t("shop.filters.categories")}</h3>
+                  <h3 className="mb-3 text-sm font-semibold">{t("shop.filters.categories")}</h3>
                   <div className="space-y-1">
                     <button
                       onClick={() => setSelectedCategory("all")}
-                      className={`block w-full text-left px-3 py-2 rounded-xl text-sm transition-all ${
-                        selectedCategory === "all" ? "bg-golden text-black font-semibold" : "hover:bg-cream"
+                      className={`block w-full rounded-xl px-3 py-2 text-left text-sm transition-all ${
+                        selectedCategory === "all"
+                          ? "bg-golden font-semibold text-black"
+                          : "hover:bg-cream"
                       }`}
                     >
                       {t("shop.filters.all")}
@@ -311,8 +309,10 @@ export default function ShopPage() {
                       <button
                         key={cat.value}
                         onClick={() => setSelectedCategory(cat.value)}
-                        className={`block w-full text-left px-3 py-2 rounded-xl text-sm transition-all ${
-                          selectedCategory === cat.value ? "bg-golden text-black font-semibold" : "hover:bg-cream"
+                        className={`block w-full rounded-xl px-3 py-2 text-left text-sm transition-all ${
+                          selectedCategory === cat.value
+                            ? "bg-golden font-semibold text-black"
+                            : "hover:bg-cream"
                         }`}
                       >
                         {getTranslatedCategory(cat.value, cat.label)}
@@ -322,9 +322,9 @@ export default function ShopPage() {
                 </div>
 
                 <div>
-                  <div className="flex justify-between text-sm font-semibold mb-3">
+                  <div className="mb-3 flex justify-between text-sm font-semibold">
                     <h3>{t("shop.filters.maxPrice")}</h3>
-                    <span className="text-golden">{formatPriceSimple(priceRange)}</span>
+                    <span className="text-golden">{formatPrice(priceRange)}</span>
                   </div>
                   <input
                     type="range"
@@ -333,12 +333,12 @@ export default function ShopPage() {
                     step="5"
                     value={priceRange}
                     onChange={(e) => setPriceRange(Number(e.target.value))}
-                    className="w-full accent-golden cursor-pointer"
+                    className="w-full cursor-pointer accent-golden"
                   />
                 </div>
 
                 <div className="pt-4">
-                  <Button variant="outline" className="w-full mb-2" onClick={resetFilters}>
+                  <Button variant="outline" className="mb-2 w-full" onClick={resetFilters}>
                     {t("shop.filters.reset")}
                   </Button>
                   <Button className="w-full" onClick={() => setShowFiltersMobile(false)}>

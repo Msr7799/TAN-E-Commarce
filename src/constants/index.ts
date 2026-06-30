@@ -3,13 +3,12 @@
 // ============================================================
 
 // ——— Site Info ——————————————————————————————
-export const SITE_NAME = process.env.NEXT_PUBLIC_APP_NAME ?? "Luxe Tan";
-export const SITE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://luxetan.com";
+export const SITE_NAME = process.env.NEXT_PUBLIC_APP_NAME ?? "Marbella Tan";
+export const SITE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://marbellatan.com";
 export const SITE_DESCRIPTION =
-  process.env.NEXT_PUBLIC_APP_DESCRIPTION ??
-  "Premium Tanning Products for Radiant, Sun-Kissed Skin";
+  process.env.NEXT_PUBLIC_APP_DESCRIPTION ?? "Marbella Tan - Natural & Safe Tanning Products";
 export const SITE_LOCALE = process.env.NEXT_PUBLIC_SITE_LOCALE ?? "en_US";
-export const TWITTER_HANDLE = process.env.NEXT_PUBLIC_TWITTER_HANDLE ?? "@luxetan";
+export const TWITTER_HANDLE = process.env.NEXT_PUBLIC_TWITTER_HANDLE ?? "@marbellatan";
 
 // ——— WhatsApp ———————————————————————————————
 export const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "00000000000";
@@ -72,8 +71,8 @@ export const SORT_OPTIONS = [
 // ——— Currency ————————————————————————————————
 export const CURRENCY = "BHD";
 export const CURRENCY_SYMBOL = "BD";
-export const FREE_SHIPPING_THRESHOLD = 30;
-export const SHIPPING_COST = 3.000;
+export const FREE_SHIPPING_THRESHOLD = 0;
+export const SHIPPING_COST = 0.0;
 
 // ——— Pagination ——————————————————————————————
 export const PRODUCTS_PER_PAGE = 12;

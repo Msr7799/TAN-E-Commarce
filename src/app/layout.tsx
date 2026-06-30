@@ -17,7 +17,7 @@ const outfit = Outfit({
 export const metadata: Metadata = defaultMetadata;
 
 export const viewport: Viewport = {
-  themeColor: "#c9a84c",
+  themeColor: "#5BB8F5",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -32,9 +32,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${outfit.variable} h-full scroll-smooth antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-white text-foreground">
+      <body className="text-foreground flex min-h-full flex-col bg-white">
         {/* Schema markup for SEO */}
         <script
           type="application/ld+json"
@@ -42,15 +43,13 @@ export default function RootLayout({
             __html: JSON.stringify(organizationSchema()),
           }}
         />
-        
+
         <Providers>
           {/* Main header navbar */}
           <Navbar />
 
           {/* Main page content area */}
-          <main className="flex-1 pt-16">
-            {children}
-          </main>
+          <main className="flex-1 pt-16">{children}</main>
 
           {/* Sticky footer */}
           <Footer />

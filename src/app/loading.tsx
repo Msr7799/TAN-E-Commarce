@@ -12,8 +12,8 @@ export default function Loading() {
           <Loader2 className="h-10 w-10 animate-spin text-golden" aria-hidden="true" />
           <div className="absolute inset-0 h-10 w-10 animate-ping rounded-full border border-golden/30 opacity-50" />
         </div>
-        <p className="text-sm font-semibold tracking-wider text-golden uppercase animate-pulse">
-          Luxe Tan
+        <p className="animate-pulse text-sm font-semibold tracking-wider text-golden uppercase">
+          Marbella Tan
         </p>
       </div>
     </div>

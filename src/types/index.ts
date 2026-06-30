@@ -13,6 +13,7 @@ export interface Product {
   compareAtPrice?: number;
   currency: string;
   images: ProductImage[];
+  hoverImage?: ProductImage;
   category: ProductCategory;
   tags: string[];
   rating: number;
@@ -47,6 +48,7 @@ export type StockStatus = "in_stock" | "low_stock" | "out_of_stock";
 export type ProductCategory =
   | "self-tanner"
   | "tanning-lotion"
+  | "tanning-oil"
   | "bronzer"
   | "after-sun"
   | "accessories"
@@ -95,12 +97,7 @@ export interface SearchFilters {
   sortBy?: SortOption;
 }
 
-export type SortOption =
-  | "featured"
-  | "price_asc"
-  | "price_desc"
-  | "rating"
-  | "newest";
+export type SortOption = "featured" | "price_asc" | "price_desc" | "rating" | "newest";
 
 // ——— FAQ ————————————————————————————————————
 export interface FAQItem {

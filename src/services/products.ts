@@ -49,9 +49,7 @@ export async function getProducts(
         products.sort((a, b) => b.rating - a.rating);
         break;
       case "newest":
-        products.sort(
-          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
+        products.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         break;
       default:
         // Featured first
@@ -87,6 +85,11 @@ export async function getFeaturedProducts(limit = 4): Promise<Product[]> {
   return MOCK_PRODUCTS.filter((p) => p.isFeatured).slice(0, limit);
 }
 
+export async function getProductsByIds(ids: string[]): Promise<Product[]> {
+  await wait(SIMULATED_DELAY_MS);
+  return MOCK_PRODUCTS.filter((product) => ids.includes(product.id));
+}
+
 // ——— Get related products ——————————————————————————
 export async function getRelatedProducts(
   productId: string,
@@ -94,9 +97,7 @@ export async function getRelatedProducts(
   limit = 4
 ): Promise<Product[]> {
   await wait(SIMULATED_DELAY_MS);
-  return MOCK_PRODUCTS.filter(
-    (p) => p.id !== productId && p.category === category
-  ).slice(0, limit);
+  return MOCK_PRODUCTS.filter((p) => p.id !== productId && p.category === category).slice(0, limit);
 }
 
 // ——— Search products ————————————————————————————
@@ -128,12 +129,10 @@ export async function getAllProductSlugs(): Promise<string[]> {
 export const productKeys = {
   all: ["products"] as const,
   lists: () => [...productKeys.all, "list"] as const,
-  list: (filters: SearchFilters, page: number) =>
-    [...productKeys.lists(), filters, page] as const,
+  list: (filters: SearchFilters, page: number) => [...productKeys.lists(), filters, page] as const,
   details: () => [...productKeys.all, "detail"] as const,
   detail: (slug: string) => [...productKeys.details(), slug] as const,
   featured: (limit: number) => [...productKeys.all, "featured", limit] as const,
-  related: (id: string, category: string) =>
-    [...productKeys.all, "related", id, category] as const,
+  related: (id: string, category: string) => [...productKeys.all, "related", id, category] as const,
   search: (query: string) => [...productKeys.all, "search", query] as const,
 };

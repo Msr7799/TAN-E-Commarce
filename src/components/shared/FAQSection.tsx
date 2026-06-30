@@ -19,10 +19,7 @@ export function FAQSection() {
   };
 
   return (
-    <section
-      className="bg-cream py-20 sm:py-28"
-      aria-labelledby="faq-heading"
-    >
+    <section className="bg-black py-20 sm:py-28" aria-labelledby="faq-heading">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -32,18 +29,13 @@ export function FAQSection() {
           transition={{ duration: 0.5 }}
           className="mb-16 text-center"
         >
-          <span className="mb-4 inline-block text-xs font-semibold uppercase tracking-widest text-golden">
+          <span className="mb-4 inline-block text-lg font-semibold tracking-widest text-golden uppercase">
             {t("faqSection.tag")}
           </span>
-          <h2
-            id="faq-heading"
-            className="text-3xl font-bold tracking-tight sm:text-4xl"
-          >
+          <h2 id="faq-heading" className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
             {t("faqSection.title")}
           </h2>
-          <p className="mt-4 text-muted-foreground">
-            {t("faqSection.description")}
-          </p>
+          <p className="mt-4 text-white/80">{t("faqSection.description")}</p>
         </motion.div>
 
         {/* FAQ Accordion List */}
@@ -52,8 +44,10 @@ export function FAQSection() {
             const isOpen = openId === item.id;
             const itemQuestion = t(`faq.items.${item.id}.question`);
             const itemAnswer = t(`faq.items.${item.id}.answer`);
-            const questionText = itemQuestion !== `faq.items.${item.id}.question` ? itemQuestion : item.question;
-            const answerText = itemAnswer !== `faq.items.${item.id}.answer` ? itemAnswer : item.answer;
+            const questionText =
+              itemQuestion !== `faq.items.${item.id}.question` ? itemQuestion : item.question;
+            const answerText =
+              itemAnswer !== `faq.items.${item.id}.answer` ? itemAnswer : item.answer;
 
             return (
               <motion.div
@@ -66,22 +60,28 @@ export function FAQSection() {
                   "overflow-hidden rounded-3xl border transition-all duration-300",
                   isOpen
                     ? "border-golden/30 bg-white shadow-lg shadow-golden/5"
-                    : "border-beige bg-white/60 hover:bg-white hover:border-golden/20"
+                    : "border-beige bg-white/60 hover:border-golden/20 hover:bg-white"
                 )}
               >
                 <button
                   onClick={() => toggleFaq(item.id)}
-                  className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left font-semibold text-foreground sm:px-8"
+                  className="text-foreground flex w-full items-center justify-between gap-4 px-6 py-5 text-left font-semibold sm:px-8"
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${item.id}`}
                 >
                   <span className="flex items-center gap-3">
-                    <HelpCircle className={cn("h-5 w-5 shrink-0 transition-colors", isOpen ? "text-golden" : "text-muted-foreground")} aria-hidden="true" />
+                    <HelpCircle
+                      className={cn(
+                        "h-5 w-5 shrink-0 transition-colors",
+                        isOpen ? "text-golden" : "text-muted-foreground"
+                      )}
+                      aria-hidden="true"
+                    />
                     <span>{questionText}</span>
                   </span>
                   <ChevronDown
                     className={cn(
-                      "h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-300",
+                      "text-muted-foreground h-5 w-5 shrink-0 transition-transform duration-300",
                       isOpen && "rotate-180 text-golden"
                     )}
                     aria-hidden="true"
@@ -97,7 +97,7 @@ export function FAQSection() {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.3, ease: "easeInOut" }}
                     >
-                      <div className="border-t border-beige px-6 pb-6 pt-4 text-sm leading-relaxed text-muted-foreground sm:px-8">
+                      <div className="text-muted-foreground border-t border-beige px-6 pt-4 pb-6 text-sm leading-relaxed whitespace-pre-line sm:px-8">
                         {answerText}
                       </div>
                     </motion.div>

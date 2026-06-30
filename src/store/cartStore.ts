@@ -8,25 +8,25 @@ import { logger } from "@/lib/logger";
 
 // تعريف واجهة الحالة والعمليات لمتجر السلة (Cart State)
 interface CartState {
-  items: CartItem[];            // قائمة المنتجات المضافة في السلة
-  coupon: Coupon | undefined;   // كوبون الخصم النشط إن وجد
-  isOpen: boolean;              // حالة فتح/إغلاق القائمة الجانبية للسلة
+  items: CartItem[]; // قائمة المنتجات المضافة في السلة
+  coupon: Coupon | undefined; // كوبون الخصم النشط إن وجد
+  isOpen: boolean; // حالة فتح/إغلاق القائمة الجانبية للسلة
 
   // العمليات (Actions)
-  addItem: (product: Product, quantity?: number) => void;         // إضافة منتج للسلة
-  removeItem: (productId: string) => void;                        // إزالة منتج من السلة
-  updateQuantity: (productId: string, quantity: number) => void;  // تحديث كمية منتج معين
-  clearCart: () => void;                                          // إفراغ السلة بالكامل
-  applyCoupon: (coupon: Coupon) => void;                          // تطبيق كوبون خصم
-  removeCoupon: () => void;                                       // إزالة كوبون الخصم
-  openCart: () => void;                                           // فتح قائمة السلة الجانبية
-  closeCart: () => void;                                          // إغلاق قائمة السلة الجانبية
-  toggleCart: () => void;                                         // تبديل حالة فتح/إغلاق السلة
+  addItem: (product: Product, quantity?: number) => void; // إضافة منتج للسلة
+  removeItem: (productId: string) => void; // إزالة منتج من السلة
+  updateQuantity: (productId: string, quantity: number) => void; // تحديث كمية منتج معين
+  clearCart: () => void; // إفراغ السلة بالكامل
+  applyCoupon: (coupon: Coupon) => void; // تطبيق كوبون خصم
+  removeCoupon: () => void; // إزالة كوبون الخصم
+  openCart: () => void; // فتح قائمة السلة الجانبية
+  closeCart: () => void; // إغلاق قائمة السلة الجانبية
+  toggleCart: () => void; // تبديل حالة فتح/إغلاق السلة
 
   // المحددات والدوال الحسابية (Selectors)
-  getItemCount: () => number;                                                  // الحصول على عدد المنتجات الإجمالي
-  getSummary: () => ReturnType<typeof calculateCartSummary>;                  // حساب وتلخيص المجموع والخصم والشحن
-  getItemQuantity: (productId: string) => number;                              // الحصول على كمية منتج محدد في السلة
+  getItemCount: () => number; // الحصول على عدد المنتجات الإجمالي
+  getSummary: () => ReturnType<typeof calculateCartSummary>; // حساب وتلخيص المجموع والخصم والشحن
+  getItemQuantity: (productId: string) => number; // الحصول على كمية منتج محدد في السلة
 }
 
 /**
@@ -42,9 +42,7 @@ export const useCartStore = create<CartState>()(
       // دالة إضافة منتج أو زيادة كميته إن كان موجوداً مسبقاً
       addItem: (product, quantity = 1) => {
         set((state) => {
-          const existingItem = state.items.find(
-            (item) => item.product.id === product.id
-          );
+          const existingItem = state.items.find((item) => item.product.id === product.id);
 
           if (existingItem) {
             // تحديث الكمية للمنتج الموجود مسبقاً (الحد الأقصى 99 قطعة)
@@ -89,9 +87,7 @@ export const useCartStore = create<CartState>()(
         }
         set((state) => ({
           items: state.items.map((item) =>
-            item.product.id === productId
-              ? { ...item, quantity: Math.min(quantity, 99) }
-              : item
+            item.product.id === productId ? { ...item, quantity: Math.min(quantity, 99) } : item
           ),
         }));
       },
@@ -119,8 +115,7 @@ export const useCartStore = create<CartState>()(
       toggleCart: () => set((state) => ({ isOpen: !state.isOpen })),
 
       // الحصول على عدد القطع الإجمالي المضافة للسلة
-      getItemCount: () =>
-        get().items.reduce((sum, item) => sum + item.quantity, 0),
+      getItemCount: () => get().items.reduce((sum, item) => sum + item.quantity, 0),
 
       // حساب وعرض ملخص مبالغ السلة الإجمالية
       getSummary: () => {
@@ -135,7 +130,7 @@ export const useCartStore = create<CartState>()(
       },
     }),
     {
-      name: "luxetan-cart", // اسم المفتاح في localStorage
+      name: "MarbellaTan-cart", // اسم المفتاح في localStorage
       storage: createJSONStorage(() => localStorage),
       // حفظ عناصر السلة والكوبون فقط وتجاهل حالة فتح/إغلاق النافذة الجانبية لتفادي إزعاج المستخدم عند إعادة تحميل الصفحة
       partialize: (state) => ({

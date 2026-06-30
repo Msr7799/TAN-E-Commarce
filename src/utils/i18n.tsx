@@ -5,16 +5,22 @@ import en from "@/locales/en.json";
 import ar from "@/locales/ar.json";
 
 // نوع البيانات الخاص بملفات الترجمة (القاموس)
-type Messages = Record<string, any>;
+type MessageValue = string | { [key: string]: MessageValue };
+type Messages = Record<string, MessageValue>;
+type Locale = "en" | "ar";
 
 // القواميس المتوفرة للغات
-const LOCALES: Record<string, Messages> = { en, ar };
+const LOCALES: Record<Locale, Messages> = { en, ar };
+
+function isMessages(value: MessageValue | undefined): value is Messages {
+  return typeof value === "object" && value !== null;
+}
 
 // واجهة القيم التي سيوفرها سياق الترجمة (Context)
 interface I18nContextValue {
-  locale: string;                                          // اللغة النشطة حالياً (en أو ar)
-  setLocale: (l: string) => void;                          // دالة لتغيير اللغة
-  t: (key: string, vars?: Record<string, any>) => string;  // دالة جلب النص المترجم
+  locale: Locale; // اللغة النشطة حالياً (en أو ar)
+  setLocale: (l: string) => void; // دالة لتغيير اللغة
+  t: (key: string, vars?: Record<string, string | number>) => string; // دالة جلب النص المترجم
 }
 
 // إنشاء سياق الترجمة (Context) بقيمة افتراضية فارغة
@@ -25,10 +31,10 @@ const I18nContext = createContext<I18nContextValue | undefined>(undefined);
  * وإدارة اتجاه الصفحة (RTL/LTR) والاحتفاظ باختيار المستخدم.
  */
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocaleState] = useState<string>("en");
+  const [locale, setLocaleState] = useState<Locale>("en");
 
-  // مزامنة اللغة المفضلة المخزنة في localStorage بمجرد بدء تشغيل التطبيق في المتصفح
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const saved = localStorage.getItem("locale");
     if (saved === "en" || saved === "ar") {
       setLocaleState(saved);
@@ -56,33 +62,31 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
    * دالة الترجمة الرئيسية (t) لجلب النصوص المترجمة بناءً على مسار المفتاح (مثل "hero.title")
    * وتدعم استبدال المتغيرات الديناميكية (Interpolation) داخل النصوص.
    */
-  const t = (key: string, vars?: Record<string, any>) => {
+  const t = (key: string, vars?: Record<string, string | number>) => {
     const parts = key.split(".");
-    let value: any = messages;
-    
+    let value: MessageValue | undefined = messages;
+
     // التغلغل في شجرة القاموس للوصول للمفتاح المطلوب
     for (const p of parts) {
-      value = value?.[p];
+      value = isMessages(value) ? value[p] : undefined;
       if (value === undefined) break;
     }
-    
+
     // إذا لم يتم العثور على المفتاح، يتم إرجاع المفتاح نفسه كقيمة احتياطية لتفادي انهيار الواجهة
     if (value === undefined) return key;
-    
+
     // معالجة المتغيرات وصيغ الجمع إن وجدت داخل النص المترجم
     if (typeof value === "string" && vars) {
       return value.replace(/\{(\w+)\}/g, (_, k) => {
         const v = vars[k];
-        if (k === "plural") return v && v > 1 ? "s" : "";
-        return v ?? "";
+        if (k === "plural") return Number(v) > 1 ? "s" : "";
+        return String(v ?? "");
       });
     }
     return String(value);
   };
 
-  return (
-    <I18nContext.Provider value={{ locale, setLocale, t }}>{children}</I18nContext.Provider>
-  );
+  return <I18nContext.Provider value={{ locale, setLocale, t }}>{children}</I18nContext.Provider>;
 }
 
 /**

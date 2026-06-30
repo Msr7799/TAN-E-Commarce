@@ -1,5 +1,5 @@
 // ============================================================
-// Home Page — Luxury E-Commerce Landing Page
+// Home Page —merbE-Commerce Landing Page
 // ============================================================
 import { HeroSection } from "@/components/shared/HeroSection";
 import { InfiniteCarousel } from "@/components/shared/InfiniteCarousel";

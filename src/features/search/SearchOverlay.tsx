@@ -9,13 +9,14 @@ import { motion, AnimatePresence } from "motion/react";
 import { Search, X, ArrowRight, Loader2 } from "lucide-react";
 import { useUIStore } from "@/store/uiStore";
 import { searchProducts } from "@/services/products";
-import { formatPriceSimple, cn } from "@/utils";
+import { cn, useCurrency } from "@/utils";
 import { SEARCH_DEBOUNCE_MS } from "@/constants";
 import type { Product } from "@/types";
 
 export function SearchOverlay() {
   const { isSearchOpen, closeSearch, searchQuery, setSearchQuery } = useUIStore();
   const [results, setResults] = useState<Product[]>([]);
+  const { formatPrice } = useCurrency();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -38,23 +39,26 @@ export function SearchOverlay() {
   }, [isSearchOpen]);
 
   // Debounced search
-  const handleSearch = useCallback((query: string) => {
-    setSearchQuery(query);
-    clearTimeout(debounceTimer.current);
+  const handleSearch = useCallback(
+    (query: string) => {
+      setSearchQuery(query);
+      clearTimeout(debounceTimer.current);
 
-    if (!query.trim()) {
-      setResults([]);
-      setIsLoading(false);
-      return;
-    }
+      if (!query.trim()) {
+        setResults([]);
+        setIsLoading(false);
+        return;
+      }
 
-    setIsLoading(true);
-    debounceTimer.current = setTimeout(async () => {
-      const found = await searchProducts(query);
-      setResults(found.slice(0, 6));
-      setIsLoading(false);
-    }, SEARCH_DEBOUNCE_MS);
-  }, [setSearchQuery]);
+      setIsLoading(true);
+      debounceTimer.current = setTimeout(async () => {
+        const found = await searchProducts(query);
+        setResults(found.slice(0, 6));
+        setIsLoading(false);
+      }, SEARCH_DEBOUNCE_MS);
+    },
+    [setSearchQuery]
+  );
 
   // Keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -88,7 +92,7 @@ export function SearchOverlay() {
       <>
         {parts.map((part, i) =>
           part.toLowerCase() === query.toLowerCase() ? (
-            <mark key={i} className="bg-golden/20 text-golden not-italic font-semibold">
+            <mark key={i} className="bg-golden/20 font-semibold text-golden not-italic">
               {part}
             </mark>
           ) : (
@@ -119,7 +123,7 @@ export function SearchOverlay() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            className="fixed left-1/2 top-6 z-50 w-full max-w-2xl -translate-x-1/2 px-4"
+            className="fixed top-6 left-1/2 z-50 w-full max-w-2xl -translate-x-1/2 px-4"
             role="dialog"
             aria-label="Search products"
             aria-modal="true"
@@ -135,20 +139,21 @@ export function SearchOverlay() {
                   value={searchQuery}
                   onChange={(e) => handleSearch(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  className="flex-1 bg-transparent text-base outline-none placeholder:text-muted-foreground"
+                  className="placeholder:text-muted-foreground flex-1 bg-transparent text-base outline-none"
                   aria-label="Search products"
                   aria-autocomplete="list"
                   aria-controls="search-results"
-                  aria-activedescendant={
-                    selectedIndex >= 0 ? `result-${selectedIndex}` : undefined
-                  }
+                  aria-activedescendant={selectedIndex >= 0 ? `result-${selectedIndex}` : undefined}
                 />
                 {isLoading && (
-                  <Loader2 className="h-4 w-4 shrink-0 animate-spin text-golden" aria-hidden="true" />
+                  <Loader2
+                    className="h-4 w-4 shrink-0 animate-spin text-golden"
+                    aria-hidden="true"
+                  />
                 )}
                 <button
                   onClick={closeSearch}
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-cream text-muted-foreground hover:text-foreground"
+                  className="text-muted-foreground hover:text-foreground flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-cream"
                   aria-label="Close search"
                 >
                   <X className="h-4 w-4" />
@@ -188,9 +193,7 @@ export function SearchOverlay() {
                                   onClick={closeSearch}
                                   className={cn(
                                     "flex items-center gap-4 px-5 py-3 transition-colors",
-                                    i === selectedIndex
-                                      ? "bg-cream"
-                                      : "hover:bg-cream/50"
+                                    i === selectedIndex ? "bg-cream" : "hover:bg-cream/50"
                                   )}
                                 >
                                   {/* Placeholder image */}
@@ -199,16 +202,16 @@ export function SearchOverlay() {
                                       {product.name.charAt(0)}
                                     </span>
                                   </div>
-                                  <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-medium truncate">
+                                  <div className="min-w-0 flex-1">
+                                    <p className="truncate text-sm font-medium">
                                       {getHighlightedText(product.name, searchQuery)}
                                     </p>
-                                    <p className="text-xs text-muted-foreground truncate">
+                                    <p className="text-muted-foreground truncate text-xs">
                                       {product.category.replace("-", " ")}
                                     </p>
                                   </div>
                                   <span className="text-sm font-bold text-golden">
-                                    {formatPriceSimple(product.price)}
+                                    {formatPrice(product.price)}
                                   </span>
                                 </Link>
                               </motion.li>
@@ -230,10 +233,10 @@ export function SearchOverlay() {
                       ) : (
                         !isLoading && (
                           <div className="px-5 py-8 text-center">
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-muted-foreground text-sm">
                               No products found for &ldquo;{searchQuery}&rdquo;
                             </p>
-                            <p className="mt-1 text-xs text-muted-foreground">
+                            <p className="text-muted-foreground mt-1 text-xs">
                               Try a different search term
                             </p>
                           </div>
