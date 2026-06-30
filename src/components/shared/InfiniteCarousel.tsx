@@ -46,7 +46,7 @@ export function InfiniteCarousel() {
 
       <div className="relative mx-auto max-h-[640px] overflow-hidden border border-white/10 shadow-xl sm:max-h-[560px]">
         <video
-          src="/beach.mp4"
+          src="/beach-pannel.mp4"
           autoPlay
           muted
           loop

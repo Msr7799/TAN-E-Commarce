@@ -8,7 +8,7 @@ import { getAllProductSlugs } from "@/services/products";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static routes
-  const routes = ["", "/shop", "/about", "/faq", "/contact", "/cart"].map((route) => ({
+  const routes = ["", "/shop", "/about", "/faq", "/contact", "/cart", "/profile"].map((route) => ({
     url: `${SITE_URL}${route}`,
     lastModified: new Date().toISOString(),
     changeFrequency: "weekly" as const,

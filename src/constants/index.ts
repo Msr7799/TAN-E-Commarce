@@ -4,7 +4,7 @@
 
 // ——— Site Info ——————————————————————————————
 export const SITE_NAME = process.env.NEXT_PUBLIC_APP_NAME ?? "Marbella Tan";
-export const SITE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://marbellatan.com";
+export const SITE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://marbella-tan.vercel.app";
 export const SITE_DESCRIPTION =
   process.env.NEXT_PUBLIC_APP_DESCRIPTION ?? "Marbella Tan - Natural & Safe Tanning Products";
 export const SITE_LOCALE = process.env.NEXT_PUBLIC_SITE_LOCALE ?? "en_US";
