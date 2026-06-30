@@ -103,7 +103,7 @@ export function HeroSection() {
             >
               {t("hero.title").split(" ").slice(0, -1).join(" ")}{" "}
               <span className="relative inline-block">
-                <span className="bg-gradient-to-r from-golden via-[#4ebf11] to-golden bg-clip-text text-transparent drop-shadow-md">
+                <span className="bg-gradient-to-r from-golden/80 via-[#ff7119] to-golden bg-clip-text text-transparent drop-shadow-md">
                   {t("hero.title").split(" ").pop()}
                 </span>
                 <motion.span

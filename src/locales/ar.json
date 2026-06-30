@@ -63,7 +63,8 @@
     "headers": {
       "shop": "تسوق",
       "support": "الدعم",
-      "policies": "السياسات"
+      "policies": "السياسات",
+      "builtBy": "تم الإنشاء بـ ❤️ بواسطة"
     },
     "shop": {
       "allProducts": "جميع المنتجات",

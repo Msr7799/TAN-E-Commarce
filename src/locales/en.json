@@ -63,7 +63,8 @@
     "headers": {
       "shop": "Shop",
       "support": "Support",
-      "policies": "Policies"
+      "policies": "Policies",
+      "builtBy": "Built with ❤️ by"
     },
     "shop": {
       "allProducts": "All Products",

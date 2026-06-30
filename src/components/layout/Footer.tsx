@@ -83,14 +83,14 @@ export function Footer() {
               >
                 <div className="flex items-center justify-center">
                   <Image
-                    src="/logo-green.png"
+                    src="/logo-orange.png"
                     alt={t("siteName")}
                     width={300}
                     height={300}
                     className="h-30 w-35 object-contain"
                   />
                 </div>
-                <span className="bg-gradient-to-r from-golden to-[#4ebf11] bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-golden to-[#ff7119] bg-clip-text text-transparent">
                   {t("siteName")}
                 </span>
               </Link>
@@ -102,8 +102,35 @@ export function Footer() {
         {/* Bottom bar (simplified to avoid duplicate links) */}
         <div className="border-t border-white/10">
           <div className="mx-auto flex max-w-7xl items-center justify-center px-4 py-6 text-center sm:px-6 lg:px-8">
-            <p className="text-sm text-white/40">
-              © {CURRENT_YEAR} {t("siteName")}. {t("footer.rights")}
+            <p className="flex flex-wrap items-center justify-center gap-1 text-sm text-white/40">
+              <span>
+                © {CURRENT_YEAR} {t("siteName")}. {t("footer.rights")} {t("builtBy")}
+              </span>
+              <a
+                href="https://github.com/Msr7799/TAN-E-Commarce"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 font-medium text-golden transition-colors hover:text-white"
+                aria-label="MSR GitHub repository"
+              >
+                MSR
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </a>
             </p>
           </div>
         </div>

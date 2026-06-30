@@ -64,8 +64,8 @@ export function Navbar() {
       >
         <nav
           className={cn(
-            "mx-auto flex max-w-7xl items-center justify-between px-4 transition-all duration-300 sm:px-6 lg:px-8",
-            isScrolled ? "h-16" : "h-24"
+            "mx-auto flex max-w-7xl items-center justify-between px-4 py-4 transition-all duration-300 sm:px-6 sm:py-4 lg:px-8 lg:py-6",
+            isScrolled ? "h-22" : "h-16"
           )}
           aria-label="Main navigation"
         >
@@ -92,7 +92,7 @@ export function Navbar() {
                 )}
               />
             </motion.div>
-            <span className="bg-gradient-to-r from-golden to-[#4ebf11] bg-clip-text font-extrabold text-transparent">
+            <span className="bg-gradient-to-r from-golden to-[#ff7119] bg-clip-text font-extrabold text-transparent">
               {t("siteName")}
             </span>
           </Link>
