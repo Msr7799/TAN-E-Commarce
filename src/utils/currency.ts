@@ -82,8 +82,8 @@ export interface ExchangeRates {
   timestamp: number;
 }
 
-const CURRENCY_STORAGE_KEY = "luxetan-selected-currency";
-const EXCHANGE_RATES_STORAGE_KEY = "luxetan-exchange-rates";
+const CURRENCY_STORAGE_KEY = "merbella-selected-currency";
+const EXCHANGE_RATES_STORAGE_KEY = "merbella-exchange-rates";
 const EXCHANGE_RATES_TTL = 1000 * 60 * 60 * 12; // 12 hours
 
 const TIMEZONE_CURRENCY_MAP: Record<string, CurrencyCode> = {

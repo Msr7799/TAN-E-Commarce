@@ -21,8 +21,23 @@ export const defaultMetadata: Metadata = {
     "fake tan",
     "gradual tan",
     "tanning drops",
-    "luxury beauty",
+    "Merbella Tan",
     "after sun",
+    "tanning accessories",
+    "tanning products",
+    "tanning solutions",
+    "tanning oils",
+    "tanning sprays",
+    "tanning mousse",
+    "tanning cream",
+    "tanning gel",
+    "tanning serum",
+    "tanning butter",
+    "tanning foam",
+    "coco",
+    "Deer blood",
+    "tanning",
+    "bronze",
   ],
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
@@ -149,9 +164,7 @@ export function productSchema(product: {
   };
 }
 
-export function breadcrumbSchema(
-  items: Array<{ name: string; url: string }>
-) {
+export function breadcrumbSchema(items: Array<{ name: string; url: string }>) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
