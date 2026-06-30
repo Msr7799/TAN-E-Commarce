@@ -23,31 +23,26 @@ export class SessionDataManager {
 
   trackProductView(productId: string): void {
     if (!this.data.viewedProducts.includes(productId)) {
-      this.data.viewedProducts = [
-        productId,
-        ...this.data.viewedProducts,
-      ].slice(0, AI_MAX_CONTEXT_ITEMS);
-    }
-  }
-
-  trackSearch(query: string): void {
-    const clean = query.trim().toLowerCase();
-    if (clean && !this.data.searchQueries.includes(clean)) {
-      this.data.searchQueries = [clean, ...this.data.searchQueries].slice(
+      this.data.viewedProducts = [productId, ...this.data.viewedProducts].slice(
         0,
         AI_MAX_CONTEXT_ITEMS
       );
     }
   }
 
-  trackCategoryInterest(
-    category: SessionData["categoryInterests"][number]
-  ): void {
+  trackSearch(query: string): void {
+    const clean = query.trim().toLowerCase();
+    if (clean && !this.data.searchQueries.includes(clean)) {
+      this.data.searchQueries = [clean, ...this.data.searchQueries].slice(0, AI_MAX_CONTEXT_ITEMS);
+    }
+  }
+
+  trackCategoryInterest(category: SessionData["categoryInterests"][number]): void {
     if (!this.data.categoryInterests.includes(category)) {
-      this.data.categoryInterests = [
-        category,
-        ...this.data.categoryInterests,
-      ].slice(0, AI_MAX_CONTEXT_ITEMS);
+      this.data.categoryInterests = [category, ...this.data.categoryInterests].slice(
+        0,
+        AI_MAX_CONTEXT_ITEMS
+      );
     }
   }
 
@@ -108,10 +103,7 @@ export class AIService {
   }
 
   // Answer customer questions via chat
-  async chat(
-    message: string,
-    hasConsent: boolean
-  ): Promise<string> {
+  async chat(message: string, hasConsent: boolean): Promise<string> {
     requireConsent(hasConsent);
 
     if (!this.isEnabled || !this.apiKey) {
@@ -130,10 +122,7 @@ export class AIService {
   }
 
   // ——— Private helpers ——————————————————————————
-  private buildRecommendationPrompt(
-    sessionData: SessionData,
-    products: Product[]
-  ): string {
+  private buildRecommendationPrompt(sessionData: SessionData, products: Product[]): string {
     return `You are a product recommendation assistant for a premium tanning products store.
 Based ONLY on the following anonymous session data (no personal information), recommend up to 4 products.
 
@@ -154,9 +143,7 @@ Only recommend products the user hasn't seen. Max 4 recommendations.`;
   ): AIRecommendation[] {
     // Simple rule-based fallback — recommend featured products not yet viewed
     return products
-      .filter(
-        (p) => p.isFeatured && !sessionData.viewedProducts.includes(p.id)
-      )
+      .filter((p) => p.isFeatured && !sessionData.viewedProducts.includes(p.id))
       .slice(0, 4)
       .map((p) => ({
         productId: p.id,

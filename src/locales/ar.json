@@ -58,12 +58,12 @@
     "currency": "العملة"
   },
   "footer": {
-    "description": "منتجات تسمير فاخرة مصنوعة بعناية لبشرة مشرقة وذهبية. نباتية وخالية من القسوة، وصُنعت بكل حب.",
+    "description": "منتجات تسمير فاخرة مصنوعة بعناية لجميع انواع البشرات وبدرجات تسمير مختلفة , وتغني عن مستحضرات  الوقاية من الشمس .",
     "rights": "جميع الحقوق محفوظة.",
     "headers": {
       "shop": "تسوق",
       "support": "الدعم",
-      "company": "الشركة"
+      "policies": "السياسات"
     },
     "shop": {
       "allProducts": "جميع المنتجات",
@@ -77,12 +77,14 @@
       "faq": "الأسئلة الشائعة",
       "contactUs": "اتصل بنا",
       "shippingPolicy": "سياسة الشحن",
-      "returns": "المرتجعات"
+      "returns": "سياسة الإسترجاع"
     },
     "company": {
       "aboutUs": "من نحن",
       "privacyPolicy": "سياسة الخصوصية",
-      "termsOfService": "شروط الخدمة"
+      "termsOfService": "شروط الخدمة",
+      "legalNotice": "الإشعارات القانونية",
+      "refundPolicy": "سياسة الاسترجاع"
     }
   },
   "hero": {
@@ -265,6 +267,7 @@
   "productDetail": {
     "breadcrumbHome": "الرئيسية",
     "breadcrumbShop": "المتجر",
+    "viewProduct": "عرض المنتج",
     "sku": "رمز المنتج (SKU)",
     "quantity": "الكمية",
     "addToCart": "إضافة إلى العربة",

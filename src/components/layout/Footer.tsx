@@ -17,7 +17,64 @@ export function Footer() {
         {/* Main footer content */}
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
-            {/* Brand */}
+            {/* Policies / Company links (first column) */}
+            <div>
+              <h3 className="mb-4 text-sm font-semibold tracking-widest text-golden uppercase">
+                {t("footer.headers.policies")}
+              </h3>
+              <ul className="flex flex-col gap-2" role="list">
+                {FOOTER_LINKS.company.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-white/60 transition-colors hover:text-golden"
+                    >
+                      {t(link.label)}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Support links (second) */}
+            <div>
+              <h3 className="mb-4 text-sm font-semibold tracking-widest text-golden uppercase">
+                {t("footer.headers.support")}
+              </h3>
+              <ul className="flex flex-col gap-2" role="list">
+                {FOOTER_LINKS.support.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-white/60 transition-colors hover:text-golden"
+                    >
+                      {t(link.label)}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Shop links (third) */}
+            <div>
+              <h3 className="mb-4 text-sm font-semibold tracking-widest text-golden uppercase">
+                {t("footer.headers.shop")}
+              </h3>
+              <ul className="flex flex-col gap-2" role="list">
+                {FOOTER_LINKS.shop.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-white/60 transition-colors hover:text-golden"
+                    >
+                      {t(link.label)}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Brand (last column) */}
             <div className="lg:col-span-1">
               <Link
                 href="/"
@@ -39,85 +96,15 @@ export function Footer() {
               </Link>
               <p className="text-sm leading-relaxed text-white/60">{t("footer.description")}</p>
             </div>
-
-            {/* Shop links */}
-            <div>
-              <h3 className="mb-4 text-sm font-semibold tracking-widest text-golden uppercase">
-                {t("footer.headers.shop")}
-              </h3>
-              <ul className="flex flex-col gap-2" role="list">
-                {FOOTER_LINKS.shop.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-white/60 transition-colors hover:text-golden"
-                    >
-                      {t(link.label)}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Support links */}
-            <div>
-              <h3 className="mb-4 text-sm font-semibold tracking-widest text-golden uppercase">
-                {t("footer.headers.support")}
-              </h3>
-              <ul className="flex flex-col gap-2" role="list">
-                {FOOTER_LINKS.support.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-white/60 transition-colors hover:text-golden"
-                    >
-                      {t(link.label)}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Company links */}
-            <div>
-              <h3 className="mb-4 text-sm font-semibold tracking-widest text-golden uppercase">
-                {t("footer.headers.company")}
-              </h3>
-              <ul className="flex flex-col gap-2" role="list">
-                {FOOTER_LINKS.company.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-white/60 transition-colors hover:text-golden"
-                    >
-                      {t(link.label)}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
           </div>
         </div>
 
-        {/* Bottom bar */}
+        {/* Bottom bar (simplified to avoid duplicate links) */}
         <div className="border-t border-white/10">
-          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-6 text-center sm:flex-row sm:px-6 lg:px-8">
+          <div className="mx-auto flex max-w-7xl items-center justify-center px-4 py-6 text-center sm:px-6 lg:px-8">
             <p className="text-sm text-white/40">
               © {CURRENT_YEAR} {t("siteName")}. {t("footer.rights")}
             </p>
-            <div className="flex items-center gap-4 text-sm text-white/40">
-              <Link href="/privacy" className="transition-colors hover:text-golden">
-                {t("footer.company.privacyPolicy")}
-              </Link>
-              <span aria-hidden="true">·</span>
-              <Link href="/terms" className="transition-colors hover:text-golden">
-                {t("footer.company.termsOfService")}
-              </Link>
-              <span aria-hidden="true">·</span>
-              <Link href="/shipping" className="transition-colors hover:text-golden">
-                {t("footer.support.shippingPolicy")}
-              </Link>
-            </div>
           </div>
         </div>
       </footer>

@@ -58,12 +58,12 @@
     "currency": "Currency"
   },
   "footer": {
-    "description": "Premium tanning products crafted for radiant, sun-kissed skin. Vegan, cruelty-free, and made with love.",
+    "description": "Luxury tanning products, carefully crafted for all skin types and in various tanning shades, eliminating the need for sunscreen products.",
     "rights": "All Rights Reserved.",
     "headers": {
       "shop": "Shop",
       "support": "Support",
-      "company": "Company"
+      "policies": "Policies"
     },
     "shop": {
       "allProducts": "All Products",
@@ -82,7 +82,9 @@
     "company": {
       "aboutUs": "About Us",
       "privacyPolicy": "Privacy Policy",
-      "termsOfService": "Terms of Service"
+      "termsOfService": "Terms of Service",
+      "legalNotice": "Legal Notices & Disclaimers",
+      "refundPolicy": "Refund & Return Policy"
     }
   },
   "hero": {
@@ -250,6 +252,7 @@
   "productDetail": {
     "breadcrumbHome": "Home",
     "breadcrumbShop": "Shop",
+    "viewProduct": "View Product",
     "sku": "SKU",
     "quantity": "Quantity",
     "addToCart": "Add to Cart",

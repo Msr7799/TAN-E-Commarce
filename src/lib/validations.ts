@@ -31,22 +31,13 @@ export const searchQuerySchema = z.object({
     .transform((val) => val.trim())
     .optional(),
   category: z
-    .enum([
-      "self-tanner",
-      "tanning-lotion",
-      "bronzer",
-      "after-sun",
-      "accessories",
-      "bundles",
-    ])
+    .enum(["self-tanner", "tanning-lotion", "bronzer", "after-sun", "accessories", "bundles"])
     .optional(),
   minPrice: z.coerce.number().min(0).max(10000).optional(),
   maxPrice: z.coerce.number().min(0).max(10000).optional(),
   rating: z.coerce.number().min(1).max(5).optional(),
   inStock: z.coerce.boolean().optional(),
-  sortBy: z
-    .enum(["featured", "price_asc", "price_desc", "rating", "newest"])
-    .optional(),
+  sortBy: z.enum(["featured", "price_asc", "price_desc", "rating", "newest"]).optional(),
   page: z.coerce.number().min(1).default(1),
 });
 

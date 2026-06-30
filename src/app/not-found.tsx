@@ -12,17 +12,16 @@ export default function NotFound() {
       <div className="space-y-4">
         {/* Large visual */}
         <div className="text-8xl font-black text-golden/30 select-none">404</div>
-        
-        <h1 className="text-3xl font-bold tracking-tight text-black sm:text-4xl">
-          Page Not Found
-        </h1>
-        
-        <p className="mx-auto max-w-md text-muted-foreground text-sm leading-relaxed">
-          Sorry, we couldn&apos;t find the page you are looking for. It might have been moved, deleted, or the URL might be incorrect.
+
+        <h1 className="text-3xl font-bold tracking-tight text-black sm:text-4xl">Page Not Found</h1>
+
+        <p className="text-muted-foreground mx-auto max-w-md text-sm leading-relaxed">
+          Sorry, we couldn&apos;t find the page you are looking for. It might have been moved,
+          deleted, or the URL might be incorrect.
         </p>
 
         {/* Action CTAs */}
-        <div className="flex flex-col sm:flex-row justify-center gap-3 pt-6">
+        <div className="flex flex-col justify-center gap-3 pt-6 sm:flex-row">
           <Button size="lg" asChild>
             <Link href="/">
               <Home className="mr-2 h-4 w-4" />

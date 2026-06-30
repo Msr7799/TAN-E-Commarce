@@ -34,12 +34,13 @@ export default function ErrorBoundary({ error, reset }: ErrorProps) {
           Something went wrong!
         </h1>
 
-        <p className="mx-auto max-w-md text-muted-foreground text-sm leading-relaxed">
-          An unexpected error occurred while loading this page. We have logged the issue and are looking into it.
+        <p className="text-muted-foreground mx-auto max-w-md text-sm leading-relaxed">
+          An unexpected error occurred while loading this page. We have logged the issue and are
+          looking into it.
         </p>
 
         {/* Dynamic actions */}
-        <div className="flex flex-col sm:flex-row justify-center gap-3 pt-4">
+        <div className="flex flex-col justify-center gap-3 pt-4 sm:flex-row">
           <Button size="lg" onClick={() => reset()}>
             <RotateCcw className="mr-2 h-4 w-4" />
             Try Again

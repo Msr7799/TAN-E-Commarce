@@ -42,10 +42,21 @@ export const FOOTER_LINKS = {
     { label: "footer.support.shippingPolicy", href: "/shipping" },
     { label: "footer.support.returns", href: "/returns" },
   ],
+  // company alias used by Footer component
   company: [
     { label: "footer.company.aboutUs", href: "/about" },
     { label: "footer.company.privacyPolicy", href: "/privacy" },
     { label: "footer.company.termsOfService", href: "/terms" },
+    { label: "footer.company.legalNotice", href: "/legal-notice" },
+    { label: "footer.company.refundPolicy", href: "/refund-policy" },
+  ],
+  // alias policies group for footer layout (keeps translations simple)
+  policies: [
+    { label: "footer.company.aboutUs", href: "/about" },
+    { label: "footer.company.privacyPolicy", href: "/privacy" },
+    { label: "footer.company.termsOfService", href: "/terms" },
+    { label: "footer.company.legalNotice", href: "/legal-notice" },
+    { label: "footer.company.refundPolicy", href: "/refund-policy" },
   ],
 } as const;
 

@@ -43,10 +43,7 @@ export function StarRating({
           />
         ))}
         {half && (
-          <StarHalf
-            className={cn(starSize, "fill-golden text-golden")}
-            aria-hidden="true"
-          />
+          <StarHalf className={cn(starSize, "fill-golden text-golden")} aria-hidden="true" />
         )}
         {Array.from({ length: empty }).map((_, i) => (
           <Star
@@ -58,7 +55,7 @@ export function StarRating({
       </div>
 
       {showCount && reviewCount !== undefined && (
-        <span className="text-xs text-muted-foreground">
+        <span className="text-muted-foreground text-xs">
           {rating.toFixed(1)} ({reviewCount.toLocaleString()})
         </span>
       )}
