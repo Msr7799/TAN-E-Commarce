@@ -68,24 +68,20 @@
     },
     "shop": {
       "allProducts": "All Products",
-      "selfTanners": "Self Tanners",
-      "tanningLotions": "Tanning Lotions",
       "bronzers": "Bronzers",
-      "accessories": "Accessories",
       "bundles": "Bundles"
     },
     "support": {
       "faq": "FAQ",
-      "contactUs": "Contact Us",
-      "shippingPolicy": "Shipping Policy",
-      "returns": "Returns"
+      "aboutUs": "About Us",
+      "contactUs": "Contact Us"
     },
     "company": {
-      "aboutUs": "About Us",
       "privacyPolicy": "Privacy Policy",
       "termsOfService": "Terms of Service",
-      "legalNotice": "Legal Notices & Disclaimers",
-      "refundPolicy": "Refund & Return Policy"
+      "refundPolicy": "Refund & Return Policy",
+      "shippingPolicy": "Shipping Policy",
+      "legalNotice": "Legal Notices & Disclaimers"
     }
   },
   "hero": {

@@ -19,7 +19,7 @@ export function Footer() {
   const { t } = useTranslation();
   return (
     <>
-      <footer className="bg-black text-white">
+      <footer className="bg-black/80 text-white">
         {/* Main footer content */}
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
@@ -66,7 +66,7 @@ export function Footer() {
               <h3 className="mb-4 text-sm font-semibold tracking-widest text-golden uppercase">
                 {t("footer.headers.shop")}
               </h3>
-              <ul className="flex flex-col gap-2" role="list">
+              <ul className="flex flex-col gap-1" role="list">
                 {FOOTER_LINKS.shop.map((link) => (
                   <li key={link.href}>
                     <Link

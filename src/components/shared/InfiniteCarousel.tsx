@@ -66,11 +66,11 @@ export function InfiniteCarousel() {
             <img
               src={carouselItems[activeIndex].image}
               alt={carouselItems[activeIndex].alt}
-              className="h-56 w-auto object-contain sm:h-64 lg:h-72"
+              className="mt-30 h-97 w-auto object-cover sm:h-64 lg:h-82"
             />
           </div>
 
-          <div className="flex w-full max-w-full flex-col justify-center rounded-[1.75rem] border border-white/15 bg-black/55 p-5 text-center text-white shadow-2xl backdrop-blur-2xl sm:p-6 lg:w-[52%] lg:text-center">
+          <div className="mt-10 flex w-full max-w-full flex-col justify-center rounded-[1.75rem] border border-white/15 bg-black/55 p-15 text-center text-white shadow-2xl backdrop-blur-2xl sm:p-6 lg:w-[52%] lg:text-center">
             <AnimatePresence mode="wait">
               <motion.p
                 key={activeIndex}
@@ -78,7 +78,7 @@ export function InfiniteCarousel() {
                 animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
                 exit={{ opacity: 0, filter: "blur(12px)", y: -16 }}
                 transition={{ duration: 0.8 }}
-                className="text-sm leading-7 whitespace-pre-line text-white/90 sm:text-base lg:text-lg"
+                className="text-sm leading-7 whitespace-pre-line text-white/90 sm:text-base lg:text-xl"
               >
                 {carouselItems[activeIndex].text}
               </motion.p>

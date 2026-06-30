@@ -26,11 +26,11 @@ export function HeroSection() {
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.05]);
 
   // قائمة شارات الثقة المعروضة أسفل أزرار اتخاذ القرار (CTAs)
-  const TRUST_BADGES = [
-    { icon: Star, label: t("hero.badges.customers") },
-    { icon: Leaf, label: t("hero.badges.vegan") },
-    { icon: Shield, label: t("hero.badges.moneyback") },
-  ];
+  // const TRUST_BADGES = [
+  //   { icon: Star, label: t("hero.badges.customers") },
+  //   { icon: Leaf, label: t("hero.badges.vegan") },
+  //   { icon: Shield, label: t("hero.badges.moneyback") },
+  // ];
 
   return (
     <section
@@ -165,7 +165,7 @@ export function HeroSection() {
               transition={{ duration: 0.5, delay: 0.45 }}
               className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 lg:justify-start"
             >
-              {TRUST_BADGES.map(({ icon: Icon, label }) => (
+              {/* {TRUST_BADGES.map(({ icon: Icon, label }) => (
                 <div
                   key={label}
                   className="flex items-center gap-1.5 rounded-md border border-white/50 bg-white/70 px-2.5 py-1.5 text-[11px] font-bold text-gray-800 shadow-sm backdrop-blur-md sm:text-xs"
@@ -173,7 +173,7 @@ export function HeroSection() {
                   <Icon className="h-3.5 w-3.5 shrink-0 text-golden" aria-hidden="true" />
                   <span>{label}</span>
                 </div>
-              ))}
+              ))} */}
             </motion.div>
           </div>
 
@@ -199,23 +199,6 @@ export function HeroSection() {
                   aria-hidden="true"
                 />
               </div>
-
-              {/* بطاقة الإحصائيات العائمة (عدد العملاء) */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7 }}
-                className="absolute -bottom-3 left-3 rounded-xl bg-white p-3 shadow-xl ring-1 ring-black/5 sm:-bottom-4 sm:-left-4 sm:rounded-2xl sm:p-4"
-              >
-                <p className="text-lg font-bold text-golden sm:text-2xl">
-                  {t("hero.stats.number") !== "hero.stats.number" ? t("hero.stats.number") : "50K+"}
-                </p>
-                <p className="text-[10px] font-semibold text-gray-600 sm:text-xs">
-                  {t("hero.stats.label") !== "hero.stats.label"
-                    ? t("hero.stats.label")
-                    : "Happy customers"}
-                </p>
-              </motion.div>
 
               {/* بطاقة التقييم بالنجوم العائمة */}
               <motion.div

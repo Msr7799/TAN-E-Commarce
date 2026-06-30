@@ -30,34 +30,30 @@ export const NAV_LINKS = [
 export const FOOTER_LINKS = {
   shop: [
     { label: "footer.shop.allProducts", href: "/shop" },
-    { label: "footer.shop.selfTanners", href: "/shop?category=self-tanner" },
-    { label: "footer.shop.tanningLotions", href: "/shop?category=tanning-lotion" },
     { label: "footer.shop.bronzers", href: "/shop?category=bronzer" },
-    { label: "footer.shop.accessories", href: "/shop?category=accessories" },
     { label: "footer.shop.bundles", href: "/shop?category=bundles" },
   ],
   support: [
     { label: "footer.support.faq", href: "/faq" },
+    { label: "footer.support.aboutUs", href: "/about" },
     { label: "footer.support.contactUs", href: "/contact" },
-    { label: "footer.support.shippingPolicy", href: "/shipping" },
-    { label: "footer.support.returns", href: "/returns" },
   ],
   // company alias used by Footer component
   company: [
-    { label: "footer.company.aboutUs", href: "/about" },
     { label: "footer.company.privacyPolicy", href: "/privacy" },
     { label: "footer.company.termsOfService", href: "/terms" },
-    { label: "footer.company.legalNotice", href: "/legal-notice" },
+    { label: "footer.company.shippingPolicy", href: "/shipping" },
     { label: "footer.company.refundPolicy", href: "/refund-policy" },
-  ],
-  // alias policies group for footer layout (keeps translations simple)
-  policies: [
-    { label: "footer.company.aboutUs", href: "/about" },
-    { label: "footer.company.privacyPolicy", href: "/privacy" },
-    { label: "footer.company.termsOfService", href: "/terms" },
     { label: "footer.company.legalNotice", href: "/legal-notice" },
-    { label: "footer.company.refundPolicy", href: "/refund-policy" },
   ],
+  // // alias policies group for footer layout (keeps translations simple)
+  // policies: [
+  //   { label: "footer.company.aboutUs", href: "/about" },
+  //   { label: "footer.company.privacyPolicy", href: "/privacy" },
+  //   { label: "footer.company.termsOfService", href: "/terms" },
+  //   { label: "footer.company.legalNotice", href: "/legal-notice" },
+  //   { label: "footer.company.refundPolicy", href: "/refund-policy" },
+  // ],
 } as const;
 
 // ——— Product Categories ——————————————————————

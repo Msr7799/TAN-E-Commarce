@@ -68,24 +68,20 @@
     },
     "shop": {
       "allProducts": "جميع المنتجات",
-      "selfTanners": "مستحضرات التسمير الذاتية",
-      "tanningLotions": "لوشن التسمير",
       "bronzers": "برونزر",
-      "accessories": "إكسسوارات",
-      "bundles": "حزم"
+      "bundles": "سلة العروض"
     },
     "support": {
       "faq": "الأسئلة الشائعة",
-      "contactUs": "اتصل بنا",
-      "shippingPolicy": "سياسة الشحن",
-      "returns": "سياسة الإسترجاع"
+      "aboutUs": "من نحن",
+      "contactUs": "اتصل بنا"
     },
     "company": {
-      "aboutUs": "من نحن",
       "privacyPolicy": "سياسة الخصوصية",
       "termsOfService": "شروط الخدمة",
-      "legalNotice": "الإشعارات القانونية",
-      "refundPolicy": "سياسة الاسترجاع"
+      "shippingPolicy": "سياسة الشحن",
+      "returns": "سياسة الإسترجاع",
+      "legalNotice": "الإشعارات القانونية"
     }
   },
   "hero": {

@@ -19,7 +19,7 @@ export function FAQSection() {
   };
 
   return (
-    <section className="bg-black py-20 sm:py-28" aria-labelledby="faq-heading">
+    <section className="bg-black/10 py-20 sm:py-28" aria-labelledby="faq-heading">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -32,10 +32,10 @@ export function FAQSection() {
           <span className="mb-4 inline-block text-lg font-semibold tracking-widest text-golden uppercase">
             {t("faqSection.tag")}
           </span>
-          <h2 id="faq-heading" className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+          <h2 id="faq-heading" className="text-3xl font-bold tracking-tight text-black sm:text-4xl">
             {t("faqSection.title")}
           </h2>
-          <p className="mt-4 text-white/80">{t("faqSection.description")}</p>
+          <p className="mt-4 text-black/70">{t("faqSection.description")}</p>
         </motion.div>
 
         {/* FAQ Accordion List */}

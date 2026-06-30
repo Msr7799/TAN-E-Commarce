@@ -1,6 +1,7 @@
 "use client";
 
 import ReactMarkdown from "react-markdown";
+import type { Components } from "react-markdown";
 import { useTranslation } from "@/utils/i18n";
 
 // ─── محتوى سياسة الخصوصية بالعربية والإنجليزية ────────────────────────────
@@ -213,9 +214,41 @@ Should you have questions about our privacy practices or wish to exercise any ri
   },
 };
 
-// ─── Metadata (Server-side export) ───────────────────────────────────────────
-// ملاحظة: generateMetadata يجب أن يكون في ملف منفصل (layout أو server component)
-// لأن هذه الصفحة أصبحت "use client". يمكنك إضافته في الـ layout.tsx الخاص بالصفحة.
+// ─── تنسيق عناصر الماركداون يدوياً (بدون الاعتماد على إضافة typography) ──────
+
+const markdownComponents: Components = {
+  h2: ({ children }) => (
+    <h2 className="mt-10 mb-3 text-xl font-bold text-slate-900 first:mt-0 dark:text-white">
+      {children}
+    </h2>
+  ),
+  h3: ({ children }) => (
+    <h3 className="mt-6 mb-2 text-lg font-semibold text-slate-900 dark:text-white">{children}</h3>
+  ),
+  h4: ({ children }) => (
+    <h4 className="mt-4 mb-2 text-base font-semibold text-slate-800 dark:text-slate-100">
+      {children}
+    </h4>
+  ),
+  p: ({ children }) => (
+    <p className="mb-4 leading-relaxed text-slate-700 dark:text-slate-300">{children}</p>
+  ),
+  strong: ({ children }) => (
+    <strong className="font-semibold text-slate-900 dark:text-white">{children}</strong>
+  ),
+  a: ({ href, children }) => (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-golden underline underline-offset-2 hover:text-golden/80"
+    >
+      {children}
+    </a>
+  ),
+  ul: ({ children }) => <ul className="mb-4 list-disc space-y-1 ps-5">{children}</ul>,
+  li: ({ children }) => <li className="text-slate-700 dark:text-slate-300">{children}</li>,
+};
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -227,10 +260,13 @@ export default function PrivacyPage() {
   const { title, lastUpdated, body } = privacyContent[lang];
 
   return (
-    <main className="prose prose-slate dark:prose-invert mx-auto max-w-4xl px-4 py-16">
-      <h1>{title}</h1>
-      <p className="text-slate-500 dark:text-slate-400">{lastUpdated}</p>
-      <ReactMarkdown>{body}</ReactMarkdown>
+    <main dir={lang === "ar" ? "rtl" : "ltr"} className="mx-auto max-w-4xl px-4 py-16">
+      <h1 className="relative mb-3 inline-block text-3xl font-bold text-slate-900 dark:text-white">
+        {title}
+        <span className="absolute -bottom-2 left-0 h-1 w-16 rounded-full bg-golden" />
+      </h1>
+      <p className="mt-4 mb-8 text-sm text-slate-500 dark:text-slate-400">{lastUpdated}</p>
+      <ReactMarkdown components={markdownComponents}>{body}</ReactMarkdown>
     </main>
   );
 }
