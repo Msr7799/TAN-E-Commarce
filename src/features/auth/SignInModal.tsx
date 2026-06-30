@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
 import { Loader2, X } from "lucide-react";
 import { signInWithGoogle, signInWithApple, signInAsAnonymous } from "@/services/auth";
@@ -98,23 +97,20 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
               <button
                 onClick={handleGoogleSignIn}
                 disabled={isLoading}
-                className="flex h-14 w-full items-center justify-center gap-3 rounded-2xl border border-gray-200 bg-white px-4 transition disabled:opacity-50"
+                className="flex h-16 w-full items-center justify-center rounded-2xl border border-gray-200 bg-white px-0 transition disabled:opacity-50"
+                aria-label="Sign in with Google"
               >
                 {isLoading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
                 ) : (
-                  <>
-                    <Image
-                      src="/google-login-button.png"
-                      alt="Sign in with Google"
-                      width={24}
-                      height={24}
-                      className="h-6 w-auto"
-                    />
-                    <span className="text-sm font-medium text-gray-900">
-                      {t("auth.signInGoogle") || "Sign in with Google"}
-                    </span>
-                  </>
+                  <img
+                    src="/google-login-button.svg"
+                    alt="Sign in with Google"
+                    width={200}
+                    height={30}
+                    className="h-12 w-auto cursor-pointer"
+                    style={{ width: "auto", height: "48px" }}
+                  />
                 )}
               </button>
 
@@ -122,23 +118,20 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
               <button
                 onClick={handleAppleSignIn}
                 disabled={isLoading}
-                className="flex h-14 w-full items-center justify-center gap-3 rounded-2xl border border-gray-200 bg-white px-4 transition disabled:opacity-50"
+                className="flex h-16 w-full items-center justify-center rounded-2xl border border-gray-200 bg-white px-0 transition disabled:opacity-50"
+                aria-label="Sign in with Apple"
               >
                 {isLoading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
                 ) : (
-                  <>
-                    <Image
-                      src="/apple-login-button.png"
-                      alt="Sign in with Apple"
-                      width={24}
-                      height={24}
-                      className="h-6 w-auto"
-                    />
-                    <span className="text-sm font-medium text-gray-900">
-                      {t("auth.signInApple") || "Sign in with Apple"}
-                    </span>
-                  </>
+                  <img
+                    src="/apple-login-button.png"
+                    alt="Sign in with Apple"
+                    width={70}
+                    height={60}
+                    className="h-15 w-40 cursor-pointer"
+                    style={{ width: "auto", height: "80px" }}
+                  />
                 )}
               </button>
 
@@ -146,7 +139,7 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
               <button
                 onClick={handleAnonymousSignIn}
                 disabled={isLoading}
-                className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3 font-medium text-gray-900 transition hover:bg-gray-50 disabled:opacity-50"
+                className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3 font-medium text-gray-900 transition hover:bg-gray-50 disabled:opacity-50"
               >
                 {isLoading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />

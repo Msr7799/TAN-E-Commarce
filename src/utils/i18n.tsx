@@ -72,8 +72,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       if (value === undefined) break;
     }
 
-    // إذا لم يتم العثور على المفتاح، يتم إرجاع المفتاح نفسه كقيمة احتياطية لتفادي انهيار الواجهة
-    if (value === undefined) return key;
+    // إذا لم يتم العثور على المفتاح، نعيد سلسلة فارغة حتى تقوم المكونات باستخدم القيمة الافتراضية
+    if (value === undefined) return "";
 
     // معالجة المتغيرات وصيغ الجمع إن وجدت داخل النص المترجم
     if (typeof value === "string" && vars) {

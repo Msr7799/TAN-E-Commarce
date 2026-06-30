@@ -22,6 +22,8 @@
     "signInDesc": "اختر طريقة تسجيل الدخول المفضلة لديك",
     "signInSuccess": "تم تسجيل الدخول بنجاح!",
     "signInError": "فشل تسجيل الدخول",
+    "signInGoogle": "تسجيل الدخول عبر Google",
+    "signInApple": "تسجيل الدخول عبر Apple",
     "signInAnon": "استمر كضيف",
     "or": "أو",
     "agreeTerms": "بالتسجيل، فإنك توافق على",

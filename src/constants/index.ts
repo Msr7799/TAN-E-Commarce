@@ -3,12 +3,12 @@
 // ============================================================
 
 // ——— Site Info ——————————————————————————————
-export const SITE_NAME = process.env.NEXT_PUBLIC_APP_NAME ?? "Marbella Tan";
-export const SITE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://marbella-tan.vercel.app";
+export const SITE_NAME = process.env.NEXT_PUBLIC_APP_NAME ?? "Merbella Tan";
+export const SITE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://merbellatan.com";
 export const SITE_DESCRIPTION =
-  process.env.NEXT_PUBLIC_APP_DESCRIPTION ?? "Marbella Tan - Natural & Safe Tanning Products";
+  process.env.NEXT_PUBLIC_APP_DESCRIPTION ?? "Merbella Tan - Natural & Safe Tanning Products";
 export const SITE_LOCALE = process.env.NEXT_PUBLIC_SITE_LOCALE ?? "en_US";
-export const TWITTER_HANDLE = process.env.NEXT_PUBLIC_TWITTER_HANDLE ?? "@marbellatan";
+export const TWITTER_HANDLE = process.env.NEXT_PUBLIC_TWITTER_HANDLE ?? "@merbellatan";
 
 // ——— WhatsApp ———————————————————————————————
 export const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "00000000000";

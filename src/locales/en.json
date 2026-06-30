@@ -22,6 +22,8 @@
     "signInDesc": "Choose your preferred sign-in method",
     "signInSuccess": "Signed in successfully!",
     "signInError": "Failed to sign in",
+    "signInGoogle": "Sign in with Google",
+    "signInApple": "Sign in with Apple",
     "signInAnon": "Continue as Guest",
     "or": "OR",
     "agreeTerms": "By signing in, you agree to our",
