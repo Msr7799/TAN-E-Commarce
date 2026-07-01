@@ -77,11 +77,7 @@ export const defaultMetadata: Metadata = {
     images: [`${SITE_URL}/og-image.jpg`],
   },
   icons: {
-    icon: [
-      { url: "/logo-orange.png", sizes: "any" },
-      { url: "/logo-orange.png", sizes: "192x192", type: "image/png" },
-      { url: "/logo-orange.png", sizes: "512x512", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico", sizes: "any", type: "image/x-icon" }],
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
   },
   manifest: "/manifest.json",
