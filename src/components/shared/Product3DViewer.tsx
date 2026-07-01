@@ -11,7 +11,7 @@ import {
   Html,
 } from "@react-three/drei";
 import * as THREE from "three";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { RotateCcw, ZoomIn, ZoomOut, Maximize2, X } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────
@@ -19,7 +19,6 @@ import { RotateCcw, ZoomIn, ZoomOut, Maximize2, X } from "lucide-react";
 // ─────────────────────────────────────────────────────────
 interface Product3DViewerProps {
   frontTextureUrl?: string;
-  backTextureUrl?: string;
   liquidColor?: string;
   productName?: string;
   height?: number;
@@ -120,8 +119,6 @@ function CameraController({ zoom }: { zoom: number }) {
 // ─────────────────────────────────────────────────────────
 export default function Product3DViewer({
   frontTextureUrl,
-  backTextureUrl,
-  liquidColor = "#8B1A1A",
   productName = "المنتج",
   height = 520,
   onClose,

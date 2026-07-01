@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "@/utils/i18n";
@@ -63,9 +64,11 @@ export function InfiniteCarousel() {
 
         <div className="absolute inset-x-0 top-4 z-20 mx-auto flex w-full max-w-7xl flex-col items-center justify-center gap-6 px-4 pb-6 sm:top-8 sm:px-6 lg:flex-row lg:items-center lg:justify-center lg:gap-8">
           <div className="hidden w-full max-w-full flex-col items-center justify-center rounded-[1.75rem] border border-white/20 bg-black/60 p-5 shadow-2xl backdrop-blur-2xl sm:p-6 lg:flex lg:w-[44%]">
-            <img
+            <Image
               src={carouselItems[activeIndex].image}
               alt={carouselItems[activeIndex].alt}
+              width={320}
+              height={320}
               className="mt-30 h-97 w-auto object-cover sm:h-64 lg:h-82"
             />
           </div>

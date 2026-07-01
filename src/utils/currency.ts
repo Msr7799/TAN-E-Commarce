@@ -13,6 +13,7 @@ export interface CurrencyConfig {
   symbolAr: string;
   decimals: number;
   rateToBHD: number; // static fallback rate relative to BHD
+  flag: string; // emoji flag for the country
 }
 
 export const DEFAULT_CURRENCY: CurrencyCode = "BHD";
@@ -25,6 +26,7 @@ export const CURRENCIES: Record<CurrencyCode, CurrencyConfig> = {
     symbolAr: "د.ب",
     decimals: 3,
     rateToBHD: 1.0,
+    flag: "🇧🇭",
   },
   SAR: {
     code: "SAR",
@@ -33,6 +35,7 @@ export const CURRENCIES: Record<CurrencyCode, CurrencyConfig> = {
     symbolAr: "ر.س",
     decimals: 2,
     rateToBHD: 9.97,
+    flag: "🇸🇦",
   },
   AED: {
     code: "AED",
@@ -41,6 +44,7 @@ export const CURRENCIES: Record<CurrencyCode, CurrencyConfig> = {
     symbolAr: "د.إ",
     decimals: 2,
     rateToBHD: 9.75,
+    flag: "🇦🇪",
   },
   KWD: {
     code: "KWD",
@@ -49,6 +53,7 @@ export const CURRENCIES: Record<CurrencyCode, CurrencyConfig> = {
     symbolAr: "د.ك",
     decimals: 3,
     rateToBHD: 0.81,
+    flag: "🇰🇼",
   },
   OMR: {
     code: "OMR",
@@ -57,6 +62,7 @@ export const CURRENCIES: Record<CurrencyCode, CurrencyConfig> = {
     symbolAr: "ر.ع",
     decimals: 3,
     rateToBHD: 1.02,
+    flag: "🇴🇲",
   },
   QAR: {
     code: "QAR",
@@ -65,6 +71,7 @@ export const CURRENCIES: Record<CurrencyCode, CurrencyConfig> = {
     symbolAr: "ر.ق",
     decimals: 2,
     rateToBHD: 9.66,
+    flag: "🇶🇦",
   },
   USD: {
     code: "USD",
@@ -73,6 +80,7 @@ export const CURRENCIES: Record<CurrencyCode, CurrencyConfig> = {
     symbolAr: "$",
     decimals: 2,
     rateToBHD: 2.65,
+    flag: "🇺🇸",
   },
 };
 

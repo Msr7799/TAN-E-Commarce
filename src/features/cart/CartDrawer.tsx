@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cartStore";
 import { useCurrency } from "@/utils";
 import { useTranslation } from "@/utils/i18n";
+import { trackBeginCheckout } from "@/lib/analytics";
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, removeItem, updateQuantity, getSummary } = useCartStore();
@@ -208,8 +209,16 @@ export function CartDrawer() {
                 </div>
 
                 {/* Checkout button */}
-                <Button className="mt-4 w-full" size="lg" asChild>
-                  <Link href="/cart" onClick={closeCart}>
+                <Button
+                  className="mt-4 w-full"
+                  size="lg"
+                  asChild
+                  onClick={() => {
+                    closeCart();
+                    trackBeginCheckout(summary.total, "USD");
+                  }}
+                >
+                  <Link href="/cart">
                     {t("cartPage.checkout")}
                     <ArrowRight className="h-4 w-4" aria-hidden="true" />
                   </Link>

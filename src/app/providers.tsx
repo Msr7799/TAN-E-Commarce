@@ -9,6 +9,9 @@ import { SearchOverlay } from "@/features/search/SearchOverlay";
 import { LanguageProvider } from "@/utils/i18n";
 import { CurrencyProvider } from "@/utils/currency-provider";
 import { AuthProvider } from "@/hooks/useAuth";
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { trackPageView } from "@/lib/analytics";
 
 interface ProvidersProps {
   children: ReactNode;
@@ -17,6 +20,11 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
   // Obtain or create the query client instance
   const [queryClient] = useState(() => getQueryClient());
+  const pathname = usePathname();
+
+  useEffect(() => {
+    trackPageView(pathname);
+  }, [pathname]);
 
   return (
     <AuthProvider>
@@ -36,7 +44,7 @@ export function Providers({ children }: ProvidersProps) {
                   color: "#0a0a0a",
                   border: "1px solid #f5edd8",
                   borderRadius: "1rem",
-                  fontFamily: "var(--font-sans)",
+                  fontFamily: "inherit",
                 },
                 className: "MarbellaTan-toast",
               }}

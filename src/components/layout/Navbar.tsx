@@ -1,19 +1,17 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
-import { ShoppingBag, Search, Menu, X, LogIn } from "lucide-react";
+import { ShoppingBag, Search, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cartStore";
 import { useUIStore } from "@/store/uiStore";
 import { NAV_LINKS } from "@/constants";
 import { useTranslation } from "@/utils/i18n";
-import { cn, useCurrency, type CurrencyCode } from "@/utils";
-import { useAuth } from "@/hooks/useAuth";
-import { SignInModal } from "@/features/auth/SignInModal";
+import { cn } from "@/utils";
 
 /**
  * مكون شريط التنقل العلوي (Navbar)
@@ -22,9 +20,7 @@ import { SignInModal } from "@/features/auth/SignInModal";
  */
 export function Navbar() {
   const pathname = usePathname(); // تتبع المسار الحالي لتحديد الصفحة النشطة
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isSignInOpen, setIsSignInOpen] = useState(false);
-
+  const [isScrolled, setIsScrolled] = useState(false); // حالة تتبع التمرير لتطبيق تأثير الخلفية
   const itemCount = useCartStore((s) => s.getItemCount()); // عدد العناصر المضافة للسلة
   const toggleCart = useCartStore((s) => s.toggleCart); // دالة فتح وإغلاق السلة الجانبية
 
@@ -32,8 +28,6 @@ export function Navbar() {
   const { isSearchOpen, toggleSearch, isMobileMenuOpen, toggleMobileMenu, closeMobileMenu } =
     useUIStore();
   const { t, locale, setLocale } = useTranslation();
-  const { currency, supportedCurrencies, setCurrency } = useCurrency();
-  const { user, isLoading } = useAuth();
 
   // دالة مراقبة التمرير لإضافة تأثير الضباب (backdrop-blur) بعد إزاحة 20 بكسل
   const handleScroll = useCallback(() => {
@@ -63,36 +57,29 @@ export function Navbar() {
         )}
       >
         <nav
-          className={cn(
-            "mx-auto flex max-w-7xl items-center justify-between px-4 py-4 transition-all duration-300 sm:px-6 sm:py-4 lg:px-8 lg:py-6",
-            isScrolled ? "h-22" : "h-16"
-          )}
+          className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
           aria-label="Main navigation"
         >
           {/* شعار الموقع مع حركة دوران خفيفة عند تمرير مؤشر الفأرة */}
           <Link
             href="/"
-            className="flex items-center gap-3 text-xl font-bold tracking-tight"
+            className="flex items-center gap-2 text-xl font-bold tracking-tight"
             aria-label="go to homepage"
           >
             <motion.div
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ rotate: 20 }}
               transition={{ type: "spring", stiffness: 300 }}
-              className="flex items-center justify-center overflow-hidden rounded-md"
+              className="flex h-10 w-10 items-center justify-center"
             >
               <Image
                 src="/logo.avif"
-                alt="Marbella Tan Logo"
-                width={700}
-                height={700}
-                priority
-                className={cn(
-                  "w-auto object-contain transition-all duration-300",
-                  isScrolled ? "h-12" : "h-20"
-                )}
+                alt={t("siteName")}
+                width={36}
+                height={36}
+                className="h-9 w-9 object-contain"
               />
             </motion.div>
-            <span className="bg-gradient-to-r from-golden to-[#ff7119] bg-clip-text font-extrabold text-transparent">
+            <span className="bg-gradient-to-r from-golden to-amber-500 bg-clip-text text-transparent">
               {t("siteName")}
             </span>
           </Link>
@@ -156,24 +143,6 @@ export function Navbar() {
                 AR
               </button>
             </div>
-            <div className="hidden items-center gap-2 sm:flex">
-              <label htmlFor="currency-select" className="sr-only">
-                Currency
-              </label>
-              <select
-                id="currency-select"
-                value={currency.code}
-                onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
-                className="rounded-xl border border-beige bg-white px-3 py-1 text-sm font-semibold transition-colors duration-150 outline-none focus:border-golden"
-                aria-label="Select display currency"
-              >
-                {supportedCurrencies.map((item) => (
-                  <option key={item.code} value={item.code}>
-                    {item.code}
-                  </option>
-                ))}
-              </select>
-            </div>
 
             {/* زر البحث المنبثق */}
             <motion.button
@@ -186,39 +155,6 @@ export function Navbar() {
             >
               <Search className="h-5 w-5" />
             </motion.button>
-
-            {/* زر تسجيل الدخول أو صورة المستخدم */}
-            {!isLoading &&
-              (user ? (
-                <Link
-                  href="/profile"
-                  className="text-foreground flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-cream"
-                >
-                  {user.photoURL ? (
-                    <Image
-                      src={user.photoURL}
-                      alt={user.displayName || "User"}
-                      width={40}
-                      height={40}
-                      className="h-10 w-10 rounded-full object-cover"
-                    />
-                  ) : (
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-golden font-bold text-white">
-                      {user.email?.charAt(0).toUpperCase() || "U"}
-                    </div>
-                  )}
-                </Link>
-              ) : (
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setIsSignInOpen(true)}
-                  className="text-foreground flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-cream hover:text-golden"
-                  aria-label={t("auth.signIn")}
-                >
-                  <LogIn className="h-5 w-5" />
-                </motion.button>
-              ))}
 
             {/* زر السلة مع شارة توضح عدد العناصر المضافة */}
             <motion.button
@@ -384,9 +320,6 @@ export function Navbar() {
           </>
         )}
       </AnimatePresence>
-
-      {/* Sign In Modal */}
-      <SignInModal isOpen={isSignInOpen} onClose={() => setIsSignInOpen(false)} />
     </>
   );
 }

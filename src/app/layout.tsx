@@ -1,16 +1,62 @@
 import type { Metadata, Viewport } from "next";
-import { Outfit } from "next/font/google";
+import localFont from "next/font/local";
 import { defaultMetadata, organizationSchema } from "@/config/metadata";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Providers } from "@/app/providers";
 import "./globals.css";
 
-// Premium modern font for luxury brand feel
-const outfit = Outfit({
-  subsets: ["latin"],
+const googleSans = localFont({
+  src: [
+    {
+      path: "../../public/fonts/Google_Sans/static/GoogleSans-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Google_Sans/static/GoogleSans-Medium.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Google_Sans/static/GoogleSans-SemiBold.ttf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Google_Sans/static/GoogleSans-Bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
   variable: "--font-sans",
-  weight: ["300", "400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
+const notoNaskhArabic = localFont({
+  src: [
+    {
+      path: "../../public/fonts/Noto_Naskh_Arabic/static/NotoNaskhArabic-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Noto_Naskh_Arabic/static/NotoNaskhArabic-Medium.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Noto_Naskh_Arabic/static/NotoNaskhArabic-SemiBold.ttf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Noto_Naskh_Arabic/static/NotoNaskhArabic-Bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-ar",
   display: "swap",
 });
 
@@ -33,7 +79,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${outfit.variable} h-full scroll-smooth antialiased`}
+      className={`${googleSans.variable} ${notoNaskhArabic.variable} h-full scroll-smooth antialiased`}
     >
       <body className="text-foreground flex min-h-full flex-col bg-white">
         {/* Schema markup for SEO */}

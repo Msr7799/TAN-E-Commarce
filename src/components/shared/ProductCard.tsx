@@ -17,6 +17,7 @@ import { formatDiscount, getStockLabel, useCurrency, cn } from "@/utils";
 import type { Product } from "@/types";
 
 import { useTranslation } from "@/utils/i18n";
+import { trackAddToCart } from "@/lib/analytics";
 
 interface ProductCardProps {
   product: Product;
@@ -38,6 +39,7 @@ export function ProductCard({ product }: ProductCardProps) {
     if (isOutOfStock || isAddingToCart) return;
     setIsAddingToCart(true);
     addItem(product);
+    trackAddToCart(product);
     await new Promise((r) => setTimeout(r, 600));
     setIsAddingToCart(false);
   };

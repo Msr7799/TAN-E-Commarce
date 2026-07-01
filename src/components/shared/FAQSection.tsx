@@ -65,7 +65,7 @@ export function FAQSection() {
               >
                 <button
                   onClick={() => toggleFaq(item.id)}
-                  className="text-foreground flex w-full items-center justify-between gap-4 px-6 py-5 text-left font-semibold sm:px-8"
+                  className="text-foreground flex w-full items-center justify-between gap-4 px-6 py-5 text-left font-bold sm:px-8"
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${item.id}`}
                 >

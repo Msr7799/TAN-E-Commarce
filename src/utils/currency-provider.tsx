@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import {
   CURRENCIES,
   CurrencyCode,
@@ -53,11 +53,14 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
     saveCurrencyCode(nextCurrency.code);
   };
 
-  const formatPrice = (amount: number, currencyCode?: CurrencyCode) => {
-    return formatPriceSimple(amount, currencyCode ?? currency.code, exchangeRates);
-  };
+  const formatPrice = useCallback(
+    (amount: number, currencyCode?: CurrencyCode) => {
+      return formatPriceSimple(amount, currencyCode ?? currency.code, exchangeRates);
+    },
+    [currency.code, exchangeRates]
+  );
 
-  const refreshRates = async () => {
+  const refreshRates = useCallback(async () => {
     setIsLoadingRates(true);
     try {
       const response = await fetch(
@@ -91,13 +94,13 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
     } finally {
       setIsLoadingRates(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (shouldRefreshExchangeRates(exchangeRates)) {
       void refreshRates();
     }
-  }, []);
+  }, [exchangeRates, refreshRates]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -123,7 +126,7 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
       convertAmount: (amount: number, from?: CurrencyCode, to?: CurrencyCode) =>
         convertAmount(amount, from ?? DEFAULT_CURRENCY, to ?? currency.code, exchangeRates),
     }),
-    [currency, exchangeRates, isLoadingRates]
+    [currency, exchangeRates, isLoadingRates, formatPrice, refreshRates]
   );
 
   return <CurrencyContext.Provider value={value}>{children}</CurrencyContext.Provider>;

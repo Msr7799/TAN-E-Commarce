@@ -6,9 +6,10 @@ import { ShoppingBag, Minus, Plus, Trash2, ArrowRight, ArrowLeft, Tag } from "lu
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cartStore";
 import { useCurrency } from "@/utils";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { toast } from "sonner";
 import { useTranslation } from "@/utils/i18n";
+import { trackPurchase } from "@/lib/analytics";
 
 /**
  * صفحة السلة التفصيلية (CartPage)
@@ -29,6 +30,19 @@ export default function CartPage() {
   const summary = getSummary();
 
   // دالة التحقق وتطبيق الكوبون
+  const handleCheckout = useCallback(() => {
+    if (items.length === 0) return;
+
+    const orderId = `order-${Date.now()}`;
+    trackPurchase({
+      id: orderId,
+      total: summary.total,
+      currency: "USD",
+    });
+
+    toast.success(t("cartPage.checkoutSuccess") || "Checkout simulation successful!");
+  }, [items.length, summary.total, t]);
+
   const handleApplyCoupon = (e: React.FormEvent) => {
     e.preventDefault();
     const clean = couponCode.trim().toUpperCase();
@@ -267,17 +281,7 @@ export default function CartPage() {
                 )}
 
                 {/* زر الدفع النهائي */}
-                <Button
-                  className="w-full"
-                  size="lg"
-                  onClick={() => {
-                    const checkMsg =
-                      t("cartPage.toast.checkoutSuccess") !== "cartPage.toast.checkoutSuccess"
-                        ? t("cartPage.toast.checkoutSuccess")
-                        : "Checkout simulation successful!";
-                    toast.success(checkMsg);
-                  }}
-                >
+                <Button className="w-full" size="lg" onClick={handleCheckout}>
                   {t("cartPage.checkout")}
                   <ArrowRight className="ml-2 h-4.5 w-4.5" />
                 </Button>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -11,7 +12,7 @@ import {
 } from "@/services/user";
 import { getProductsByIds } from "@/services/products";
 import { motion } from "motion/react";
-import { LogOut, ShoppingBag, Heart, Settings } from "lucide-react";
+import { LogOut, ShoppingBag, Heart } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "@/utils/i18n";
 import { useCurrency } from "@/utils/currency-provider";
@@ -47,7 +48,6 @@ export function UserProfile() {
     ? t("profile.online") || "Online"
     : t("profile.offline") || "Offline";
   const [isLoadingPurchases, setIsLoadingPurchases] = useState(false);
-  const [isLoadingWishlist, setIsLoadingWishlist] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -68,7 +68,8 @@ export function UserProfile() {
       setIsLoadingPurchases(true);
       const history = await getPurchaseHistory(user.uid);
       setPurchaseHistory(history);
-    } catch {
+    } catch (error) {
+      console.error("Failed to load purchases", error);
       toast.error(t("profile.loadError") || "Failed to load purchases");
     } finally {
       setIsLoadingPurchases(false);
@@ -82,6 +83,7 @@ export function UserProfile() {
       await updateUserCurrency(user.uid, currencyCode);
       toast.success(t("profile.currencyUpdated") || "Currency updated");
     } catch (error) {
+      console.error("Currency update failed", error);
       toast.error(t("profile.updateError") || "Failed to update");
     }
   };
@@ -97,10 +99,6 @@ export function UserProfile() {
         return;
       }
 
-      if (!isCancelled) {
-        setIsLoadingWishlist(true);
-      }
-
       try {
         const products = await getProductsByIds(userProfile.wishlist);
         if (!isCancelled) {
@@ -110,10 +108,6 @@ export function UserProfile() {
         console.error("Failed to load wishlist products", error);
         if (!isCancelled) {
           setWishlistProducts([]);
-        }
-      } finally {
-        if (!isCancelled) {
-          setIsLoadingWishlist(false);
         }
       }
     };
@@ -143,7 +137,7 @@ export function UserProfile() {
     try {
       await updateUserLanguage(user.uid, lang);
       toast.success(t("profile.languageUpdated") || "Language updated");
-    } catch (error) {
+    } catch {
       toast.error(t("profile.updateError") || "Failed to update");
     }
   };
@@ -154,147 +148,159 @@ export function UserProfile() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mx-auto w-full max-w-2xl rounded-lg bg-white p-6 shadow-lg"
+      className="mx-auto w-full max-w-4xl rounded-lg bg-white p-4 shadow-lg sm:p-6 md:p-8"
     >
       {/* Header */}
-      <div className="mb-8 flex items-center justify-between border-b pb-6">
-        <div className="flex items-center gap-4">
+      <div className="mb-6 flex flex-col gap-4 border-b pb-6 sm:mb-8 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3 sm:gap-4">
           {user.photoURL && (
             <Image
               src={user.photoURL}
               alt={user.displayName || "User"}
               width={64}
               height={64}
-              className="h-16 w-16 rounded-full"
+              className="h-12 w-12 rounded-full sm:h-16 sm:w-16"
             />
           )}
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">
+          <div className="min-w-0">
+            <h1 className="truncate text-lg font-bold text-gray-900 sm:text-2xl">
               {user.displayName || (userProfile?.isAnonymous ? "Guest User" : user.email)}
             </h1>
-            <p className="text-sm text-gray-600">
+            <p className="text-xs text-gray-600 sm:text-sm">
               {userProfile?.isAdmin && "🔐 Administrator"}
               {userProfile?.isOnline && " • Online"}
             </p>
           </div>
         </div>
-        <button
-          onClick={handleLogout}
-          className="flex cursor-pointer items-center gap-2 rounded-lg bg-red-50 px-4 py-2 text-red-600 transition hover:bg-red-100"
-        >
-          <LogOut className="h-4 w-4" />
-          {t("auth.logout") || "Logout"}
-        </button>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          {userProfile?.isAdmin && (
+            <Link
+              href="/admin"
+              className="inline-flex items-center justify-center rounded-full border border-golden bg-golden/10 px-4 py-2 text-sm font-semibold text-golden transition hover:bg-golden/20"
+            >
+              {t("admin.openDashboard")}
+            </Link>
+          )}
+          <button
+            onClick={handleLogout}
+            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-red-50 px-4 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-100 sm:w-auto"
+          >
+            <LogOut className="h-4 w-4" />
+            {t("auth.logout") || "Logout"}
+          </button>
+        </div>
       </div>
 
       {/* Tabs */}
-      <div className="mb-6 flex gap-4 border-b">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`border-b-2 px-4 py-2 font-medium transition ${
-              activeTab === tab.id
-                ? "border-golden text-golden"
-                : "border-transparent text-gray-600 hover:text-gray-900"
-            }`}
-          >
-            {tab.icon} {tab.label}
-          </button>
-        ))}
+      <div className="mb-6 overflow-x-auto border-b">
+        <div className="flex gap-2 sm:gap-4">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`border-b-2 px-3 py-2 text-xs font-medium whitespace-nowrap transition sm:px-4 sm:py-2 sm:text-sm ${
+                activeTab === tab.id
+                  ? "border-golden text-golden"
+                  : "border-transparent text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              {tab.icon} <span className="hidden sm:inline">{tab.label}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Content */}
       {activeTab === "profile" && (
-        <div className="space-y-4">
-          <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-4 sm:space-y-6">
+          <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Email</label>
+              <label className="block text-xs font-medium text-gray-700 sm:text-sm">Email</label>
               <input
                 type="email"
                 value={user.email || ""}
                 disabled
-                className="mt-1 w-full rounded-lg border bg-gray-50 px-4 py-2 text-gray-600"
+                className="mt-1 w-full rounded-lg border bg-gray-50 px-3 py-2 text-xs text-gray-600 sm:px-4 sm:py-2 sm:text-sm"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-xs font-medium text-gray-700 sm:text-sm">
                 {t("profile.status") || "Status"}
               </label>
               <input
                 type="text"
                 value={statusText}
                 disabled
-                className="mt-1 w-full rounded-lg border bg-gray-50 px-4 py-2 text-gray-600"
+                className="mt-1 w-full rounded-lg border bg-gray-50 px-3 py-2 text-xs text-gray-600 sm:px-4 sm:py-2 sm:text-sm"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-xs font-medium text-gray-700 sm:text-sm">
                 {t("profile.joined") || "Joined"}
               </label>
               <input
                 type="text"
                 value={formatDate(joinedDate)}
                 disabled
-                className="mt-1 w-full rounded-lg border bg-gray-50 px-4 py-2 text-gray-600"
+                className="mt-1 w-full rounded-lg border bg-gray-50 px-3 py-2 text-xs text-gray-600 sm:px-4 sm:py-2 sm:text-sm"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-xs font-medium text-gray-700 sm:text-sm">
                 {t("profile.lastLogin") || "Last Login"}
               </label>
               <input
                 type="text"
                 value={formatDate(lastLoginDate)}
                 disabled
-                className="mt-1 w-full rounded-lg border bg-gray-50 px-4 py-2 text-gray-600"
+                className="mt-1 w-full rounded-lg border bg-gray-50 px-3 py-2 text-xs text-gray-600 sm:px-4 sm:py-2 sm:text-sm"
               />
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-xs font-medium text-gray-700 sm:text-sm">
                 {t("profile.language") || "Language"}
               </label>
               <input
                 type="text"
                 value={userProfile?.language || t("profile.noData") || "No data"}
                 disabled
-                className="mt-1 w-full rounded-lg border bg-gray-50 px-4 py-2 text-gray-600"
+                className="mt-1 w-full rounded-lg border bg-gray-50 px-3 py-2 text-xs text-gray-600 sm:px-4 sm:py-2 sm:text-sm"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-xs font-medium text-gray-700 sm:text-sm">
                 {t("profile.currency") || "Currency"}
               </label>
               <input
                 type="text"
                 value={currency.code}
                 disabled
-                className="mt-1 w-full rounded-lg border bg-gray-50 px-4 py-2 text-gray-600"
+                className="mt-1 w-full rounded-lg border bg-gray-50 px-3 py-2 text-xs text-gray-600 sm:px-4 sm:py-2 sm:text-sm"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-xs font-medium text-gray-700 sm:text-sm">
                 {t("profile.admin") || "Admin"}
               </label>
               <input
                 type="text"
                 value={userProfile?.isAdmin ? t("profile.yes") || "Yes" : t("profile.no") || "No"}
                 disabled
-                className="mt-1 w-full rounded-lg border bg-gray-50 px-4 py-2 text-gray-600"
+                className="mt-1 w-full rounded-lg border bg-gray-50 px-3 py-2 text-xs text-gray-600 sm:px-4 sm:py-2 sm:text-sm"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-xs font-medium text-gray-700 sm:text-sm">
                 {t("profile.wishlistCount") || "Wishlist Items"}
               </label>
               <input
                 type="text"
                 value={userProfile?.wishlist?.length ?? 0}
                 disabled
-                className="mt-1 w-full rounded-lg border bg-gray-50 px-4 py-2 text-gray-600"
+                className="mt-1 w-full rounded-lg border bg-gray-50 px-3 py-2 text-xs text-gray-600 sm:px-4 sm:py-2 sm:text-sm"
               />
             </div>
           </div>
@@ -304,32 +310,39 @@ export function UserProfile() {
       {activeTab === "purchases" && (
         <div>
           {purchaseHistory.length === 0 && !isLoadingPurchases ? (
-            <div className="py-12 text-center">
-              <ShoppingBag className="mx-auto mb-4 h-12 w-12 text-gray-300" />
-              <p className="mb-4 text-gray-600">{t("profile.noPurchases") || "No purchases yet"}</p>
+            <div className="py-8 text-center sm:py-12">
+              <ShoppingBag className="mx-auto mb-3 h-10 w-10 text-gray-300 sm:mb-4 sm:h-12 sm:w-12" />
+              <p className="mb-3 text-sm text-gray-600 sm:mb-4 sm:text-base">
+                {t("profile.noPurchases") || "No purchases yet"}
+              </p>
               <button
                 onClick={handleLoadPurchases}
-                className="rounded-lg bg-golden px-4 py-2 text-white transition hover:bg-golden/90"
+                className="rounded-lg bg-golden px-3 py-2 text-xs font-semibold text-white transition hover:bg-golden/90 sm:px-4 sm:py-2 sm:text-sm"
               >
                 {t("profile.loadPurchases") || "Load Purchases"}
               </button>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {purchaseHistory.map((item) => (
-                <div key={item.id} className="rounded-lg border p-4 transition hover:bg-gray-50">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="font-semibold text-gray-900">{item.productName}</h3>
-                      <p className="text-sm text-gray-600">
+                <div
+                  key={item.id}
+                  className="rounded-lg border p-3 transition hover:bg-gray-50 sm:p-4"
+                >
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="min-w-0">
+                      <h3 className="truncate text-sm font-semibold text-gray-900 sm:text-base">
+                        {item.productName}
+                      </h3>
+                      <p className="text-xs text-gray-600 sm:text-sm">
                         {new Date(item.purchaseDate).toLocaleDateString()}
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-golden">
+                      <p className="text-xs font-bold text-golden sm:text-sm">
                         {item.price} {item.currency}
                       </p>
-                      <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
+                      <p className="text-xs text-gray-600 sm:text-sm">Qty: {item.quantity}</p>
                     </div>
                   </div>
                 </div>
@@ -340,15 +353,15 @@ export function UserProfile() {
       )}
 
       {activeTab === "wishlist" && (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {wishlistProducts.length ? (
-            <ul className="grid gap-3">
+            <ul className="grid gap-3 sm:gap-4">
               {wishlistProducts.map((product) => (
                 <li
                   key={product.id}
-                  className="group flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition hover:shadow-md sm:flex-row"
+                  className="group flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-3 shadow-sm transition hover:shadow-md sm:flex-row sm:gap-4 sm:rounded-2xl sm:p-4"
                 >
-                  <div className="h-28 w-full overflow-hidden rounded-2xl sm:h-28 sm:w-28">
+                  <div className="h-24 w-full overflow-hidden rounded-lg sm:h-28 sm:w-28 sm:rounded-2xl">
                     <Image
                       src={product.images[0]?.url}
                       alt={product.images[0]?.alt || product.name}
@@ -358,21 +371,27 @@ export function UserProfile() {
                     />
                   </div>
                   <div className="flex-1">
-                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                      <div>
-                        <h3 className="text-base font-semibold text-gray-900">{product.name}</h3>
-                        <p className="text-sm text-gray-500">{product.shortDescription}</p>
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                      <div className="min-w-0">
+                        <h3 className="truncate text-sm font-semibold text-gray-900 sm:text-base">
+                          {product.name}
+                        </h3>
+                        <p className="line-clamp-2 text-xs text-gray-500 sm:text-sm">
+                          {product.shortDescription}
+                        </p>
                       </div>
                       <div className="text-right">
-                        <p className="font-semibold text-golden">{formatPrice(product.price)}</p>
+                        <p className="text-xs font-semibold text-golden sm:text-base">
+                          {formatPrice(product.price)}
+                        </p>
                         {product.compareAtPrice && (
-                          <p className="text-sm text-gray-400 line-through">
+                          <p className="text-xs text-gray-400 line-through sm:text-sm">
                             {formatPrice(product.compareAtPrice)}
                           </p>
                         )}
                       </div>
                     </div>
-                    <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-gray-600">
+                    <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-gray-600 sm:gap-3 sm:text-sm">
                       <span>
                         {product.stockStatus === "in_stock"
                           ? t("profile.inStock") || "In stock"
@@ -385,26 +404,28 @@ export function UserProfile() {
               ))}
             </ul>
           ) : (
-            <div className="py-12 text-center">
-              <Heart className="mx-auto mb-4 h-12 w-12 text-gray-300" />
-              <p className="text-gray-600">{t("profile.noWishlist") || "No wishlist items yet."}</p>
+            <div className="py-8 text-center sm:py-12">
+              <Heart className="mx-auto mb-3 h-10 w-10 text-gray-300 sm:mb-4 sm:h-12 sm:w-12" />
+              <p className="text-sm text-gray-600 sm:text-base">
+                {t("profile.noWishlist") || "No wishlist items yet."}
+              </p>
             </div>
           )}
         </div>
       )}
 
       {activeTab === "settings" && (
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">
+            <label className="mb-2 block text-xs font-medium text-gray-700 sm:text-sm">
               {t("settings.language") || "Language"}
             </label>
-            <div className="flex gap-2">
+            <div className="flex gap-2 sm:gap-3">
               {["en", "ar"].map((lang) => (
                 <button
                   key={lang}
                   onClick={() => handleLanguageChange(lang as "en" | "ar")}
-                  className={`rounded-lg px-4 py-2 font-medium transition ${
+                  className={`flex-1 rounded-lg px-3 py-2 text-xs font-medium transition sm:flex-none sm:px-4 sm:py-2.5 sm:text-sm ${
                     userProfile?.language === lang
                       ? "bg-golden text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -417,17 +438,17 @@ export function UserProfile() {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">
+            <label className="mb-2 block text-xs font-medium text-gray-700 sm:text-sm">
               {t("settings.currency") || "Currency"}
             </label>
             <select
               onChange={(e) => handleCurrencyChange(e.target.value)}
               value={currency.code}
-              className="w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-golden focus:outline-none"
+              className="w-full rounded-lg border border-beige bg-white px-3 py-2 text-xs font-medium focus:border-golden focus:ring-2 focus:ring-golden/30 focus:outline-none sm:px-4 sm:py-2.5 sm:text-sm"
             >
               {supportedCurrencies.map((currencyConfig) => (
                 <option key={currencyConfig.code} value={currencyConfig.code}>
-                  {currencyConfig.code} - {currencyConfig.label}
+                  {currencyConfig.flag} {currencyConfig.code} - {currencyConfig.label}
                 </option>
               ))}
             </select>

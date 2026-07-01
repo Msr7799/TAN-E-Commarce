@@ -57,6 +57,148 @@
     "language": "Language",
     "currency": "Currency"
   },
+  "admin": {
+    "badge": "Admin Control Center",
+    "title": "Operations Console",
+    "loading": "Loading admin workspace",
+    "online": "Online",
+    "liveStatus": "Live status",
+    "toggleNav": "Toggle navigation",
+    "welcome": "Welcome back",
+    "signOut": "Sign out",
+    "admin": "Administrator",
+    "access": {
+      "title": "Access required",
+      "description": "Please sign in to access the control center.",
+      "backHome": "Back home",
+      "deniedTitle": "Administrator access required",
+      "deniedDescription": "Your account does not have admin privileges yet.",
+      "signOut": "Sign out"
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "analytics": "Analytics",
+      "ai": "AI Insights",
+      "orders": "Orders",
+      "products": "Products",
+      "customers": "Customers",
+      "search": "Search",
+      "settings": "Settings",
+      "system": "System"
+    },
+    "metrics": {
+      "revenue": "Revenue",
+      "orders": "Orders",
+      "visitors": "Visitors",
+      "cartAdds": "Cart Adds",
+      "weekly": "vs last week",
+      "last7Days": "last 7 days",
+      "returning": "returning visitors",
+      "productViews": "product views"
+    },
+    "dashboard": {
+      "title": "Overview",
+      "description": "Monitor performance, customers, and store health from one place.",
+      "chartTitle": "Revenue trend",
+      "chartSubtitle": "A weekly view of the store’s momentum",
+      "recentOrders": "Recent orders",
+      "recentOrdersSubtitle": "Latest customer checkouts",
+      "quickActions": "Quick actions",
+      "quickActionsSubtitle": "Jump into the most common admin tasks",
+      "alert": "Priority",
+      "alertTitle": "Inventory sync is healthy",
+      "alertText": "No action is required right now. Campaigns are performing steadily."
+    },
+    "analytics": {
+      "title": "Analytics",
+      "description": "Review growth, traffic, and conversion performance.",
+      "chartTitle": "Revenue performance",
+      "chartSubtitle": "Channel-adjusted weekly performance",
+      "channels": "Channel mix",
+      "live": "Live pulse",
+      "insight": "Conversion is climbing",
+      "insightText": "Visitors from organic search are steadily improving the store’s conversion rate."
+    },
+    "orders": {
+      "title": "Orders",
+      "description": "Keep an eye on fulfillment and recent purchases.",
+      "subtitle": "Latest order activity",
+      "table": {
+        "order": "Order",
+        "customer": "Customer",
+        "status": "Status",
+        "total": "Total",
+        "paid": "Paid",
+        "processing": "Processing",
+        "shipped": "Shipped"
+      }
+    },
+    "products": {
+      "title": "Products",
+      "description": "Manage the catalog and high-performing offers.",
+      "subtitle": "Featured products snapshot",
+      "topRated": "Top rated",
+      "bestseller": "Bestseller",
+      "lowStock": "Low stock"
+    },
+    "customers": {
+      "title": "Customers",
+      "description": "Understand loyalty and repeat-buying behavior.",
+      "subtitle": "Most active customer segments",
+      "vip": "VIP",
+      "repeater": "Repeat buyer",
+      "new": "New"
+    },
+    "search": {
+      "title": "Search",
+      "description": "Explore live search and discoverability insights.",
+      "subtitle": "Popular search terms",
+      "placeholder": "Search admin",
+      "result1": "bronze oil",
+      "result2": "coco bundle",
+      "result3": "gift set",
+      "result4": "summer glow"
+    },
+    "settings": {
+      "title": "Settings",
+      "description": "Tune operational preferences and integrations.",
+      "autoSync": "Auto sync",
+      "autoSyncHint": "Keep product and order channels up to date",
+      "alerts": "Team alerts",
+      "alertsHint": "Notify your team when a campaign spikes",
+      "api": "API access",
+      "apiText": "Use the production API keys to connect your reporting stack."
+    },
+    "system": {
+      "title": "System",
+      "description": "Keep services and infrastructure healthy.",
+      "operations": "Operations",
+      "operationsText": "Core services status for the storefront",
+      "database": "Database",
+      "cache": "Cache",
+      "jobs": "Background jobs",
+      "health": "Health",
+      "healthText": "Current uptime and response metrics",
+      "uptime": "Uptime",
+      "response": "Median response"
+    },
+    "actions": {
+      "export": "Export",
+      "addProduct": "Add product",
+      "refresh": "Refresh",
+      "viewAll": "View all",
+      "reviewOrders": "Review orders",
+      "manageCustomers": "Manage customers",
+      "openDashboard": "Admin Dashboard"
+    },
+    "ai": {
+      "title": "AI Analytics Copilot",
+      "description": "Ask the assistant for revenue, traffic, and product performance insights based on your store metrics.",
+      "promptPlaceholder": "Ask about sales, traffic, product demand, or conversion insights...",
+      "help": "Use AI to summarize weekly performance and uncover what to optimize next.",
+      "historyTitle": "Recent AI questions"
+    }
+  },
   "footer": {
     "description": "Luxury tanning products, carefully crafted for all skin types and in various tanning shades, eliminating the need for sunscreen products.",
     "rights": "All Rights Reserved.",

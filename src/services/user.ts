@@ -2,7 +2,7 @@
 // User Data Management Service (Realtime Database)
 // ============================================================
 
-import { ref, set, get, update, push, remove, onValue, off } from "firebase/database";
+import { ref, get, update, push, onValue, off } from "firebase/database";
 import { db } from "@/lib/firebase";
 import { logger } from "@/lib/logger";
 

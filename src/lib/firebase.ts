@@ -5,7 +5,7 @@
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
-import { getAnalytics } from "firebase/analytics";
+import { getAnalytics, isSupported } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCrw-S3ucIuF5RZD6vRLYdRhr2UedHESM0",
@@ -25,14 +25,18 @@ const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0
 export const auth = getAuth(app);
 export const db = getDatabase(app);
 
-// Analytics (only in browser)
+export let analytics: ReturnType<typeof getAnalytics> | null = null;
+
 if (typeof window !== "undefined") {
-  try {
-    getAnalytics(app);
-  } catch (error) {
-    // Analytics can fail when the network is blocked or measurement ID cannot be retrieved.
-    console.warn("Firebase analytics initialization failed", error);
-  }
+  isSupported()
+    .then((supported) => {
+      if (supported) {
+        analytics = getAnalytics(app);
+      }
+    })
+    .catch((error) => {
+      console.warn("Firebase analytics support check failed", error);
+    });
 }
 
 export default app;

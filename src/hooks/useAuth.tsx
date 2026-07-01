@@ -4,13 +4,13 @@
 
 "use client";
 
-import { useEffect, useState, useContext, createContext, ReactNode } from "react";
+import { useEffect, useState, useContext, createContext, ReactNode, useRef } from "react";
 import { User } from "firebase/auth";
 import {
   onAuthStateChange,
-  getCurrentUser,
   logoutUser,
   handleRedirectResult,
+  signInAsAnonymous,
 } from "@/services/auth";
 import { onUserProfileChange, setWishlist, UserProfile } from "@/services/user";
 import { logger } from "@/lib/logger";
@@ -38,6 +38,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const initialAuthCheck = useRef(true);
 
   useEffect(() => {
     let isMounted = true;
@@ -83,9 +85,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         setUserProfile(null);
         useWishlistStore.getState().clearWishlist();
+
+        if (initialAuthCheck.current) {
+          try {
+            await signInAsAnonymous();
+          } catch (error) {
+            logger.error("Anonymous sign-in failed", { error: String(error) });
+          }
+        }
       }
 
       setIsLoading(false);
+      initialAuthCheck.current = false;
     });
 
     const hasRedirectParams =

@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
 import { Loader2, X } from "lucide-react";
 import { signInWithGoogle, signInWithApple, signInAsAnonymous } from "@/services/auth";
+import { trackLogin } from "@/lib/analytics";
 import { toast } from "sonner";
 import { useTranslation } from "@/utils/i18n";
 
@@ -20,9 +22,10 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
     try {
       setIsLoading(true);
       await signInWithGoogle();
+      trackLogin("google");
       toast.success(t("auth.signInSuccess") || "Signed in successfully!");
       onClose();
-    } catch (error) {
+    } catch {
       toast.error(t("auth.signInError") || "Failed to sign in");
     } finally {
       setIsLoading(false);
@@ -33,9 +36,10 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
     try {
       setIsLoading(true);
       await signInWithApple();
+      trackLogin("apple");
       toast.success(t("auth.signInSuccess") || "Signed in successfully!");
       onClose();
-    } catch (error) {
+    } catch {
       toast.error(t("auth.signInError") || "Failed to sign in");
     } finally {
       setIsLoading(false);
@@ -46,9 +50,10 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
     try {
       setIsLoading(true);
       await signInAsAnonymous();
+      trackLogin("anonymous");
       toast.success(t("auth.anonSignInSuccess") || "Browsing as guest");
       onClose();
-    } catch (error) {
+    } catch {
       toast.error(t("auth.signInError") || "Failed to sign in");
     } finally {
       setIsLoading(false);
@@ -103,13 +108,12 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
                 {isLoading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
                 ) : (
-                  <img
+                  <Image
                     src="/google-login-button.svg"
                     alt="Sign in with Google"
                     width={200}
-                    height={30}
-                    className="h-12 w-auto cursor-pointer"
-                    style={{ width: "auto", height: "48px" }}
+                    height={48}
+                    className="h-12 w-auto"
                   />
                 )}
               </button>
@@ -124,13 +128,12 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
                 {isLoading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
                 ) : (
-                  <img
+                  <Image
                     src="/apple-login-button.png"
                     alt="Sign in with Apple"
-                    width={70}
-                    height={60}
-                    className="h-15 w-40 cursor-pointer"
-                    style={{ width: "auto", height: "80px" }}
+                    width={160}
+                    height={48}
+                    className="h-15 w-40"
                   />
                 )}
               </button>

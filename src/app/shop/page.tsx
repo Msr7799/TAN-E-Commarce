@@ -78,15 +78,15 @@ export default function ShopPage() {
   // دالة جلب الاسم المترجم للفئات من ملف الترجمة
   const getTranslatedCategory = (catVal: string, defaultLabel: string) => {
     const key = `shop.categories.${catVal}`;
-    const trans = t(key);
-    return trans !== key ? trans : defaultLabel;
+    const trans = t(key).trim();
+    return trans && trans !== key ? trans : defaultLabel;
   };
 
   // دالة جلب النص المترجم لخيارات الترتيب
   const getTranslatedSort = (sortVal: string, defaultLabel: string) => {
     const key = `shop.sort.${sortVal}`;
-    const trans = t(key);
-    return trans !== key ? trans : defaultLabel;
+    const trans = t(key).trim();
+    return trans && trans !== key ? trans : defaultLabel;
   };
 
   return (

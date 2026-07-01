@@ -1,15 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import dynamic from "next/dynamic";
-
-// Three.js / WebGL — loaded only on client to avoid SSR errors
-const Product3DViewer = dynamic(() => import("@/components/shared/Product3DViewer"), {
-  ssr: false,
-  loading: () => <div className="aspect-[4/5] w-full animate-pulse rounded bg-[#f4f2ef]" />,
-});
 import { motion } from "motion/react";
 import { ShoppingBag, Heart, Share2, Plus, Minus, Check, Truck, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -23,6 +16,7 @@ import type { Product } from "@/types";
 import { toast } from "sonner";
 import { useTranslation } from "@/utils/i18n";
 import type { ProductImage } from "@/types";
+import { trackProductView, trackAddToCart } from "@/lib/analytics";
 
 interface ProductDetailClientProps {
   product: Product;
@@ -51,7 +45,6 @@ export default function ProductDetailClient({
   const [selectedImageUrl, setSelectedImageUrl] = useState(detailImages[0]?.url ?? "");
   const [isCopied, setIsCopied] = useState(false); // حالة نسخ رابط المنتج لمشاركته
   const [isAdding, setIsAdding] = useState(false); // حالة تحميل زر الإضافة إلى السلة
-  const [show3D, setShow3D] = useState(false); // تبديل عرض الزجاجة ثلاثي الأبعاد
   const { t } = useTranslation();
 
   // دوال الإضافة للسلة والمفضلة
@@ -87,6 +80,7 @@ export default function ProductDetailClient({
     if (isOutOfStock || isAdding) return;
     setIsAdding(true);
     addItem(product, quantity);
+    trackAddToCart(product, quantity);
     const addedMsg =
       t("productDetail.toast.added") !== "productDetail.toast.added"
         ? t("productDetail.toast.added")
@@ -131,28 +125,12 @@ export default function ProductDetailClient({
       : product.shortDescription;
 
   const newLabel = t("productDetail.new") !== "productDetail.new" ? t("productDetail.new") : "New";
-  const canShow3DViewer = [
-    "bronze-tanning-oil",
-    "coco-tanning-oil",
-    "deer-blood-tanning-oil",
-  ].includes(product.slug);
-  const textureMap: Record<string, { front: string; back: string }> = {
-    "bronze-tanning-oil": {
-      front: "/brown-removebg.png",
-      back: "/brown-back-removebg.png",
-    },
-    "coco-tanning-oil": {
-      front: "/orange-removebg.png",
-      back: "/orange-back-removebg.png",
-    },
-    "deer-blood-tanning-oil": {
-      front: "/red-front-removebg.png",
-      back: "/red-back-removebg.png",
-    },
-  };
   const selectedImage =
     detailImages.find((image) => image.url === selectedImageUrl) ?? detailImages[0];
-  const currentTextures = textureMap[product.slug];
+
+  useEffect(() => {
+    trackProductView(product);
+  }, [product]);
 
   return (
     <div className="min-h-screen bg-[#e9e6e2] py-12 sm:py-20">
@@ -182,53 +160,27 @@ export default function ProductDetailClient({
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.95fr)] lg:gap-16">
           {/* القسم الأيمن: معرض صور المنتج أو العارض ثلاثي الأبعاد */}
           <div className="space-y-5">
-            {show3D ? (
-              /* ─── عارض 3D ─── */
-              <Product3DViewer
-                frontTextureUrl={currentTextures?.front}
-                backTextureUrl={currentTextures?.back}
-                productName={productName}
-                liquidColor="#8B1A1A"
-                height={520}
-                onClose={() => setShow3D(false)}
-              />
-            ) : (
-              /* ─── معرض الصور الاعتيادي ─── */
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="relative aspect-[4/5] w-full overflow-hidden border border-black/10 bg-[#f2f0ed] shadow-sm"
-              >
-                {selectedImage && (
-                  <Image
-                    src={selectedImage.url}
-                    alt={selectedImage.alt}
-                    fill
-                    priority
-                    sizes="(min-width: 1024px) 46vw, 100vw"
-                    className="object-cover"
-                  />
-                )}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="relative aspect-[4/5] w-full overflow-hidden border border-black/10 bg-[#f2f0ed] shadow-sm"
+            >
+              {selectedImage && (
+                <Image
+                  src={selectedImage.url}
+                  alt={selectedImage.alt}
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 46vw, 100vw"
+                  className="object-cover"
+                />
+              )}
 
-                <div className="absolute top-6 left-6 flex flex-col gap-2">
-                  {product.isNew && <Badge variant="new">{newLabel}</Badge>}
-                  {product.discount && <Badge variant="golden">-{product.discount}%</Badge>}
-                </div>
-
-                {/* زر تفعيل العرض ثلاثي الأبعاد */}
-                {canShow3DViewer && (
-                  <button
-                    id="toggle-3d-view"
-                    onClick={() => setShow3D(true)}
-                    className="absolute right-4 bottom-4 flex items-center gap-2 rounded-full border border-stone-200 bg-white/90 px-4 py-2 text-xs font-semibold tracking-wider text-stone-700 shadow backdrop-blur transition-all hover:bg-white hover:text-red-700"
-                    aria-label="عرض المنتج ثلاثي الأبعاد"
-                  >
-                    <span aria-hidden="true">⬡</span>
-                    عرض ثلاثي الأبعاد
-                  </button>
-                )}
-              </motion.div>
-            )}
+              <div className="absolute top-6 left-6 flex flex-col gap-2">
+                {product.isNew && <Badge variant="new">{newLabel}</Badge>}
+                {product.discount && <Badge variant="golden">-{product.discount}%</Badge>}
+              </div>
+            </motion.div>
 
             {/* الصور المصغرة — تظهر دائماً تحت سواء 3D أو صورة */}
             {detailImages.length > 1 && (
@@ -237,13 +189,10 @@ export default function ProductDetailClient({
                   <button
                     key={image.id}
                     type="button"
-                    onClick={() => {
-                      setSelectedImageUrl(image.url);
-                      setShow3D(false); // العودة للصورة عند اختيار صورة مصغرة
-                    }}
+                    onClick={() => setSelectedImageUrl(image.url)}
                     className={cn(
                       "relative aspect-[4/5] overflow-hidden border bg-[#f2f0ed] transition-all",
-                      selectedImage?.url === image.url && !show3D
+                      selectedImage?.url === image.url
                         ? "border-black"
                         : "border-black/10 hover:border-black/40"
                     )}

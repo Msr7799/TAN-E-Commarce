@@ -10,8 +10,6 @@ import {
   getCurrentCurrencyCode,
   getSavedCurrencyCode,
   saveCurrencyCode,
-  type CurrencyCode,
-  type ExchangeRates,
 } from "./currency";
 import { useCurrency } from "./currency-provider";
 

@@ -11,6 +11,7 @@ import { useUIStore } from "@/store/uiStore";
 import { searchProducts } from "@/services/products";
 import { cn, useCurrency } from "@/utils";
 import { SEARCH_DEBOUNCE_MS } from "@/constants";
+import { trackSearch } from "@/lib/analytics";
 import type { Product } from "@/types";
 
 export function SearchOverlay() {
@@ -42,6 +43,9 @@ export function SearchOverlay() {
   const handleSearch = useCallback(
     (query: string) => {
       setSearchQuery(query);
+      if (query.trim()) {
+        trackSearch(query.trim());
+      }
       clearTimeout(debounceTimer.current);
 
       if (!query.trim()) {
