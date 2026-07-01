@@ -146,7 +146,82 @@
       "subtitle": "ملخص المنتجات المميزة",
       "topRated": "الأعلى تقييماً",
       "bestseller": "الأكثر مبيعاً",
-      "lowStock": "مخزون قليل"
+      "lowStock": "مخزون قليل",
+      "manager": {
+        "sectionTitle": "إدارة المنتجات",
+        "sectionDescription": "أضف، حرّر، أو احذف المنتجات مباشرة من لوحة الإدارة.",
+        "addNewProduct": "إضافة منتج جديد",
+        "formTitle": "نموذج المنتج",
+        "formDescription": "حرّر منتجاً مختاراً أو أنشئ منتجاً جديداً.",
+        "deleteProduct": "حذف المنتج",
+        "name": "اسم المنتج",
+        "placeholderName": "زيت برونز",
+        "slug": "الرابط المختصر",
+        "placeholderSlug": "bronze-oil",
+        "shortDescription": "وصف قصير",
+        "fullDescription": "الوصف الكامل",
+        "price": "السعر",
+        "compareAtPrice": "سعر المقارنة",
+        "category": "الفئة",
+        "stockStatus": "حالة المخزون",
+        "stockCount": "عدد المخزون",
+        "sku": "رمز المنتج",
+        "imageUrl": "رابط الصورة",
+        "placeholderImageUrl": "/orange.webp",
+        "imageAltText": "نص بديل للصورة",
+        "placeholderImageAltText": "زيت تسمير برونزي",
+        "uploadImageFile": "رفع صورة",
+        "imageFileHint": "استخدم رابط أو ارفع ملفاً. إذا لم يتم تقديم أي منهما، سيتم استخدام صورة منتج افتراضية.",
+        "featured": "مميز",
+        "new": "جديد",
+        "discount": "نسبة الخصم",
+        "saveChanges": "حفظ التغييرات",
+        "categoryOptions": {
+          "self-tanner": "مقشّر ذاتي",
+          "tanning-lotion": "لوشن تسمير",
+          "tanning-oil": "زيت تسمير",
+          "bronzer": "برونزر",
+          "after-sun": "بعد الشمس",
+          "accessories": "إكسسوارات",
+          "bundles": "سلات"
+        },
+        "stockStatusOptions": {
+          "in_stock": "متوفر",
+          "low_stock": "مخزون قليل",
+          "out_of_stock": "غير متوفر"
+        },
+        "createProduct": "إنشاء منتج",
+        "cancel": "إلغاء",
+        "catalogTitle": "كتالوج المنتجات",
+        "edit": "تحرير",
+        "remove": "إزالة",
+        "noProducts": "لا توجد منتجات.",
+        "selectedFile": "الملف المحدد: {fileName}"
+      }
+    },
+    "gallery": {
+      "manager": {
+        "sectionTitle": "إدارة المعرض",
+        "sectionDescription": "أضف واحذف الصور والفيديوهات من صفحة المعرض العامة.",
+        "newMedia": "ميديا جديدة",
+        "newMediaHint": "أضف ملفاً أو أدخل رابط صورة/فيديو مستضاف.",
+        "urlOrPath": "رابط الميديا أو المسار",
+        "urlOrPathPlaceholder": "/gallery/21.jpg أو https://.../video.mp4",
+        "uploadFile": "رفع ملف",
+        "altTextPlaceholder": "نص بديل للميديا",
+        "addMedia": "أضف ميديا",
+        "adding": "جاري الإضافة...",
+        "mediaLabel": "ميديا {id}",
+        "deleteMedia": "حذف",
+        "emptyState": "لا توجد ميديا في المعرض.",
+        "loadMore": "عرض المزيد",
+        "error": {
+          "readFile": "فشل قراءة الملف المحدد. حاول مرة أخرى.",
+          "enterMediaSource": "أدخل رابط ميديا أو اختر ملفاً.",
+          "videoDurationLimit": "يجب أن يكون طول الفيديو 30 ثانية أو أقل.",
+          "videoMetadata": "تعذر تحميل بيانات الفيديو. استخدم ملف فيديو صالحًا أو رابط فيديو."
+        }
+      }
     },
     "customers": {
       "title": "العملاء",

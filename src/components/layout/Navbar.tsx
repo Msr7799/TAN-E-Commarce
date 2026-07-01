@@ -91,12 +91,10 @@ export function Navbar() {
                 alt={t("siteName")}
                 width={500}
                 height={500}
+                priority
                 className="h-full w-full object-contain"
               />
             </motion.div>
-            <span className="hidden bg-gradient-to-r from-golden to-amber-500 bg-clip-text text-xl font-extrabold text-transparent md:inline-block">
-              {t("siteName")}
-            </span>
           </Link>
 
           {/* روابط التنقل الرئيسية للشاشات الكبيرة */}

@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence, type Variants } from "motion/react";
+import { loadGalleryImages } from "@/lib/galleryStorage";
 
 /**
  * ------------------------------------------------------------------
@@ -43,13 +44,29 @@ const RAW_FILES = [
   "20.mp4",
 ];
 
-const galleryItems: GalleryItem[] = RAW_FILES.map((file, index) => {
+function isVideoSource(src: string) {
+  return /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(src) || src.startsWith("data:video");
+}
+
+const DEFAULT_GALLERY_ITEMS: GalleryItem[] = RAW_FILES.map((file, index) => {
   const id = index + 1;
-  const type: MediaType = file.endsWith(".mp4") ? "video" : "image";
+  const type: MediaType = isVideoSource(file) ? "video" : "image";
   // نمط بسيط لتنويع الارتفاعات بشكل جمالي داخل الـ masonry
   const span: 1 | 2 = [0, 3, 7, 10].includes(index) ? 2 : 1;
   return { id, src: `/gallery/${file}`, type, span };
 });
+
+function convertStoredGalleryItems(stored: Array<{ id: number; src: string; alt: string }>) {
+  return stored.map(
+    (item, index) =>
+      ({
+        id: item.id,
+        src: item.src,
+        type: isVideoSource(item.src) ? "video" : "image",
+        span: [0, 3, 7, 10].includes(index) ? 2 : 1,
+      }) as GalleryItem
+  );
+}
 
 /* ------------------------------------------------------------------ */
 /* أنيميشنز */
@@ -158,9 +175,6 @@ function GalleryTile({ item, onOpen }: { item: GalleryItem; onOpen: (item: Galle
         />
       )}
 
-      {/* تدرّج سفلي + أيقونة النوع */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
       {item.type === "video" && (
         <span className="absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-black shadow-sm backdrop-blur">
           <svg viewBox="0 0 24 24" fill="currentColor" className="ml-0.5 h-3.5 w-3.5">
@@ -182,8 +196,17 @@ function GalleryTile({ item, onOpen }: { item: GalleryItem; onOpen: (item: Galle
 
 export default function GalleryGrid() {
   const [active, setActive] = useState<GalleryItem | null>(null);
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>(DEFAULT_GALLERY_ITEMS);
 
   const close = useCallback(() => setActive(null), []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const storedImages = loadGalleryImages();
+    if (storedImages.length > 0) {
+      setGalleryItems(convertStoredGalleryItems(storedImages));
+    }
+  }, []);
 
   // إغلاق بزر Escape + منع تمرير الصفحة أثناء فتح اللايت بوكس
   useEffect(() => {

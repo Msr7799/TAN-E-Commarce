@@ -24,6 +24,8 @@ import {
   getAdminRevenueSeriesFromSnapshot,
 } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
+import { AdminGalleryManager } from "@/components/admin/AdminGalleryManager";
+import { AdminProductsManager } from "@/components/admin/AdminProductsManager";
 
 interface AdminDashboardPageProps {
   section:
@@ -213,35 +215,9 @@ export function AdminDashboardPage({ section }: AdminDashboardPageProps) {
         );
       case "products":
         return (
-          <div className="rounded-3xl border border-cream bg-white/90 p-6 shadow-sm shadow-black/5">
-            <div className="mb-6 flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold text-black-rich">
-                  {t("admin.products.title")}
-                </h3>
-                <p className="text-sm text-black/55">{t("admin.products.subtitle")}</p>
-              </div>
-              <Button variant="outline" size="sm">
-                {t("admin.actions.addProduct")}
-              </Button>
-            </div>
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {[
-                { name: "Bronze Oil", stock: "24 in stock", state: t("admin.products.topRated") },
-                { name: "Coco Bundle", stock: "9 in stock", state: t("admin.products.bestseller") },
-                { name: "Deer Blood", stock: "18 in stock", state: t("admin.products.lowStock") },
-              ].map((item) => (
-                <div key={item.name} className="rounded-2xl border border-cream bg-[#fbfdff] p-4">
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-semibold text-black-rich">{item.name}</h4>
-                    <span className="rounded-full bg-cream px-2 py-1 text-xs font-semibold text-golden">
-                      {item.state}
-                    </span>
-                  </div>
-                  <p className="mt-3 text-sm text-black/55">{item.stock}</p>
-                </div>
-              ))}
-            </div>
+          <div className="space-y-6">
+            <AdminProductsManager />
+            <AdminGalleryManager />
           </div>
         );
       case "customers":

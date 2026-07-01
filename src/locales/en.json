@@ -146,7 +146,82 @@
       "subtitle": "Featured products snapshot",
       "topRated": "Top rated",
       "bestseller": "Bestseller",
-      "lowStock": "Low stock"
+      "lowStock": "Low stock",
+      "manager": {
+        "sectionTitle": "Manage Products",
+        "sectionDescription": "Add, edit, or remove products directly from the admin dashboard.",
+        "addNewProduct": "Add New Product",
+        "formTitle": "Product Form",
+        "formDescription": "Edit a selected product or create a new one.",
+        "deleteProduct": "Delete Product",
+        "name": "Product name",
+        "placeholderName": "Bronze Oil",
+        "slug": "Slug",
+        "placeholderSlug": "bronze-oil",
+        "shortDescription": "Short description",
+        "fullDescription": "Full description",
+        "price": "Price",
+        "compareAtPrice": "Compare at price",
+        "category": "Category",
+        "stockStatus": "Stock status",
+        "stockCount": "Stock count",
+        "sku": "SKU",
+        "imageUrl": "Image URL",
+        "placeholderImageUrl": "/orange.webp",
+        "imageAltText": "Image alt text",
+        "placeholderImageAltText": "Bronze Tanning Oil",
+        "uploadImageFile": "Upload image file",
+        "imageFileHint": "Use a URL or upload a file. If neither is provided, a default product image will be used.",
+        "featured": "Featured",
+        "new": "New",
+        "discount": "Discount %",
+        "saveChanges": "Save Changes",
+        "categoryOptions": {
+          "self-tanner": "Self Tanner",
+          "tanning-lotion": "Tanning Lotion",
+          "tanning-oil": "Tanning Oil",
+          "bronzer": "Bronzer",
+          "after-sun": "After Sun",
+          "accessories": "Accessories",
+          "bundles": "Bundles"
+        },
+        "stockStatusOptions": {
+          "in_stock": "In Stock",
+          "low_stock": "Low Stock",
+          "out_of_stock": "Out of Stock"
+        },
+        "createProduct": "Create Product",
+        "cancel": "Cancel",
+        "catalogTitle": "Product Catalog",
+        "edit": "Edit",
+        "remove": "Remove",
+        "noProducts": "No products found.",
+        "selectedFile": "Selected file: {fileName}"
+      }
+    },
+    "gallery": {
+      "manager": {
+        "sectionTitle": "Manage Gallery",
+        "sectionDescription": "Add and remove images and videos from the public gallery.",
+        "newMedia": "New media",
+        "newMediaHint": "Add a file or enter a hosted image/video link.",
+        "urlOrPath": "Media URL or path",
+        "urlOrPathPlaceholder": "/gallery/21.jpg or https://.../video.mp4",
+        "uploadFile": "Upload file",
+        "altTextPlaceholder": "Media alt text",
+        "addMedia": "Add Media",
+        "adding": "Adding...",
+        "mediaLabel": "Media {id}",
+        "deleteMedia": "Delete",
+        "emptyState": "No gallery media configured.",
+        "loadMore": "Load more",
+        "error": {
+          "readFile": "Failed to read the selected file. Please try again.",
+          "enterMediaSource": "Enter a media URL/path or choose a file.",
+          "videoDurationLimit": "Video duration must be 30 seconds or less.",
+          "videoMetadata": "Unable to load video metadata. Use a valid video file or video URL."
+        }
+      }
     },
     "customers": {
       "title": "Customers",
