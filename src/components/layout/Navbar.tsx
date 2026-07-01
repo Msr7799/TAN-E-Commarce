@@ -80,9 +80,11 @@ export function Navbar() {
             aria-label="go to homepage"
           >
             <motion.div
-              whileHover={{ rotate: 20 }}
-              transition={{ type: "spring", stiffness: 300 }}
+              initial={{ scale: 1 }}
+              whileHover={{ scale: 1.03 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
               className="flex h-35 w-35 items-center justify-center"
+              style={{ transformOrigin: "center center" }}
             >
               <Image
                 src="/logo.avif"

@@ -7,7 +7,7 @@ import { PerformanceChart } from "@/components/admin/PerformanceChart";
 import {
   AdminAnalyticsSnapshot,
   EMPTY_ADMIN_ANALYTICS_SNAPSHOT,
-  fetchAdminAnalyticsSnapshot,
+  fetchAdminAnalyticsData,
   getAdminChannelBreakdown,
   getAdminRevenueSeriesFromSnapshot,
 } from "@/lib/analytics";
@@ -44,9 +44,9 @@ export function AdminAIAssistant() {
 
   useEffect(() => {
     let mounted = true;
-    fetchAdminAnalyticsSnapshot()
+    fetchAdminAnalyticsData()
       .then((data) => {
-        if (mounted) setSnapshot(data);
+        if (mounted) setSnapshot(data.snapshot);
       })
       .finally(() => {
         if (mounted) setIsLoading(false);

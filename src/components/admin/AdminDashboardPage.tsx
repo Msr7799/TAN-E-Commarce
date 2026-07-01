@@ -19,7 +19,7 @@ import { PerformanceChart } from "@/components/admin/PerformanceChart";
 import {
   AdminAnalyticsSnapshot,
   EMPTY_ADMIN_ANALYTICS_SNAPSHOT,
-  fetchAdminAnalyticsSnapshot,
+  fetchAdminAnalyticsData,
   getAdminChannelBreakdown,
   getAdminRevenueSeriesFromSnapshot,
 } from "@/lib/analytics";
@@ -40,15 +40,21 @@ interface AdminDashboardPageProps {
 export function AdminDashboardPage({ section }: AdminDashboardPageProps) {
   const { t } = useTranslation();
   const { currency, formatPrice, convertAmount } = useCurrency();
-  const [snapshot, setSnapshot] = useState<AdminAnalyticsSnapshot>(EMPTY_ADMIN_ANALYTICS_SNAPSHOT);
+  const [analyticsSnapshot, setAnalyticsSnapshot] = useState<AdminAnalyticsSnapshot>(
+    EMPTY_ADMIN_ANALYTICS_SNAPSHOT
+  );
+  const [purchaseOrders, setPurchaseOrders] = useState<
+    Array<{ id: string; total: number; currency: string; status: string; timestamp: string }>
+  >([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
-    fetchAdminAnalyticsSnapshot()
+    fetchAdminAnalyticsData()
       .then((data) => {
         if (mounted) {
-          setSnapshot(data);
+          setAnalyticsSnapshot(data.snapshot);
+          setPurchaseOrders(data.purchaseOrders);
         }
       })
       .finally(() => {
@@ -60,7 +66,7 @@ export function AdminDashboardPage({ section }: AdminDashboardPageProps) {
     };
   }, []);
 
-  const revenueSeries = getAdminRevenueSeriesFromSnapshot(snapshot).map((item) => ({
+  const revenueSeries = getAdminRevenueSeriesFromSnapshot(analyticsSnapshot).map((item) => ({
     ...item,
     revenue: convertAmount(item.revenue, "BHD", currency.code),
   }));
@@ -69,28 +75,31 @@ export function AdminDashboardPage({ section }: AdminDashboardPageProps) {
   const metrics = [
     {
       title: t("admin.metrics.revenue"),
-      value: formatPrice(convertAmount(snapshot.revenue, "BHD", currency.code), currency.code),
+      value: formatPrice(
+        convertAmount(analyticsSnapshot.revenue, "BHD", currency.code),
+        currency.code
+      ),
       delta: "+18.2%",
       detail: t("admin.metrics.weekly"),
       icon: CircleDollarSign,
     },
     {
       title: t("admin.metrics.orders"),
-      value: snapshot.orders.toString(),
+      value: analyticsSnapshot.orders.toString(),
       delta: "+7.4%",
       detail: t("admin.metrics.last7Days"),
       icon: ShoppingBag,
     },
     {
       title: t("admin.metrics.visitors"),
-      value: snapshot.visitors.toLocaleString(),
+      value: analyticsSnapshot.visitors.toLocaleString(),
       delta: "+12.1%",
       detail: t("admin.metrics.returning"),
       icon: Users,
     },
     {
       title: t("admin.metrics.cartAdds"),
-      value: snapshot.cartAdds.toString(),
+      value: analyticsSnapshot.cartAdds.toString(),
       delta: "+4.8%",
       detail: t("admin.metrics.productViews"),
       icon: Sparkles,
@@ -412,40 +421,32 @@ export function AdminDashboardPage({ section }: AdminDashboardPageProps) {
                   </Link>
                 </div>
                 <div className="space-y-3">
-                  {[
-                    {
-                      id: "#1042",
-                      customer: "Sara",
-                      total: formatPrice(convertAmount(248, "BHD", currency.code), currency.code),
-                      status: t("admin.orders.table.paid"),
-                    },
-                    {
-                      id: "#1041",
-                      customer: "Mona",
-                      total: formatPrice(convertAmount(76, "BHD", currency.code), currency.code),
-                      status: t("admin.orders.table.processing"),
-                    },
-                    {
-                      id: "#1040",
-                      customer: "Ali",
-                      total: formatPrice(convertAmount(132, "BHD", currency.code), currency.code),
-                      status: t("admin.orders.table.shipped"),
-                    },
-                  ].map((order) => (
-                    <div
-                      key={order.id}
-                      className="flex items-center justify-between rounded-2xl border border-cream bg-[#fbfdff] px-4 py-3"
-                    >
-                      <div>
-                        <p className="font-semibold text-black-rich">{order.id}</p>
-                        <p className="text-sm text-black/55">{order.customer}</p>
+                  {purchaseOrders.length > 0 ? (
+                    purchaseOrders.map((order) => (
+                      <div
+                        key={order.id}
+                        className="flex items-center justify-between rounded-2xl border border-cream bg-[#fbfdff] px-4 py-3"
+                      >
+                        <div>
+                          <p className="font-semibold text-black-rich">{order.id}</p>
+                          <p className="text-sm text-black/55">{order.status}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-semibold text-black-rich">
+                            {formatPrice(
+                              convertAmount(order.total, order.currency as "BHD", currency.code),
+                              currency.code
+                            )}
+                          </p>
+                          <p className="text-sm text-golden">{order.currency}</p>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <p className="font-semibold text-black-rich">{order.total}</p>
-                        <p className="text-sm text-golden">{order.status}</p>
-                      </div>
+                    ))
+                  ) : (
+                    <div className="rounded-3xl border border-cream bg-[#fbfdff] p-4 text-center text-sm text-black/55">
+                      {t("admin.dashboard.noOrders") || "No orders available."}
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
               <div className="space-y-6">

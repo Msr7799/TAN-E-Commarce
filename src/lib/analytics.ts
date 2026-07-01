@@ -32,6 +32,26 @@ export interface AdminAnalyticsSnapshot {
   avgOrderValue: number;
 }
 
+export interface AdminPurchaseOrder {
+  id: string;
+  total: number;
+  currency: string;
+  status: string;
+  timestamp: string;
+}
+
+interface AnalyticsOrderRecord {
+  total?: number | string;
+  currency?: string;
+  status?: string;
+  timestamp?: string;
+}
+
+export interface AdminAnalyticsData {
+  snapshot: AdminAnalyticsSnapshot;
+  purchaseOrders: AdminPurchaseOrder[];
+}
+
 export const EMPTY_ADMIN_ANALYTICS_SNAPSHOT: AdminAnalyticsSnapshot = {
   revenue: 0,
   orders: 0,
@@ -236,19 +256,47 @@ function buildAnalyticsSnapshot(events: AnalyticsEventRecord[]): AdminAnalyticsS
   };
 }
 
-export async function fetchAdminAnalyticsSnapshot(): Promise<AdminAnalyticsSnapshot> {
-  if (typeof window === "undefined") return EMPTY_ADMIN_ANALYTICS_SNAPSHOT;
+export async function fetchAdminAnalyticsData(): Promise<AdminAnalyticsData> {
+  if (typeof window === "undefined") {
+    return {
+      snapshot: EMPTY_ADMIN_ANALYTICS_SNAPSHOT,
+      purchaseOrders: [],
+    };
+  }
 
   try {
-    const snapshot = await get(ref(db, "analytics/events"));
-    if (!snapshot.exists()) return EMPTY_ADMIN_ANALYTICS_SNAPSHOT;
+    const [analyticsSnapshot, ordersSnapshot] = await Promise.all([
+      get(ref(db, "analytics/events")),
+      get(ref(db, "analytics/orders")),
+    ]);
 
-    const raw = snapshot.val() as Record<string, AnalyticsEventRecord>;
-    const events = Object.values(raw);
-    return buildAnalyticsSnapshot(events);
+    const analyticsEvents = analyticsSnapshot.exists()
+      ? Object.values(analyticsSnapshot.val() as Record<string, AnalyticsEventRecord>)
+      : [];
+
+    const snapshot = buildAnalyticsSnapshot(analyticsEvents);
+    const purchaseOrders: AdminPurchaseOrder[] = ordersSnapshot.exists()
+      ? Object.entries(ordersSnapshot.val() as Record<string, AnalyticsOrderRecord>).map(
+          ([key, value]) => ({
+            id: key,
+            total: Number(value.total ?? 0),
+            currency: value.currency ?? "BHD",
+            status: value.status ?? "unknown",
+            timestamp: value.timestamp ?? "",
+          })
+        )
+      : [];
+
+    return {
+      snapshot,
+      purchaseOrders,
+    };
   } catch (error) {
-    console.warn("Failed to fetch admin analytics snapshot from Firebase", error);
-    return EMPTY_ADMIN_ANALYTICS_SNAPSHOT;
+    console.warn("Failed to fetch admin analytics data from Firebase", error);
+    return {
+      snapshot: EMPTY_ADMIN_ANALYTICS_SNAPSHOT,
+      purchaseOrders: [],
+    };
   }
 }
 
