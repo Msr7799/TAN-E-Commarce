@@ -6,6 +6,7 @@ import { ExternalLink, X } from "lucide-react";
 import { useState, type SVGProps } from "react";
 
 const INSTAGRAM_URL = "https://www.instagram.com/marbellacosmetics1";
+const WEBSITE_URL = "https://marbellacosmetics.com";
 const INSTAGRAM_PROFILE_IMAGE = "/logo-orange.png";
 
 function InstagramIcon(props: SVGProps<SVGSVGElement>) {
@@ -45,21 +46,27 @@ export function InstagramPreviewCard() {
           side="bottom"
           sideOffset={12}
           align="center"
-          className="z-50 w-[22rem] rounded-3xl border border-white/10 bg-black/95 p-4 shadow-2xl shadow-black/40 backdrop-blur-xl"
+          collisionPadding={12}
+          className="z-50 w-[calc(100vw-2rem)] max-w-[22rem] rounded-3xl border border-white/10 bg-black/95 p-4 shadow-2xl shadow-black/40 backdrop-blur-xl sm:w-[22rem]"
         >
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="relative h-14 w-14 overflow-hidden rounded-full border border-white/10 shadow-lg">
-                <img
-                  src={INSTAGRAM_PROFILE_IMAGE}
-                  alt="Instagram profile"
-                  className="h-full w-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-black/10 to-black/30" />
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-3">
+              <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-full border-2 border-transparent bg-gradient-to-tr from-[#feda75] via-[#d62976] to-[#4f5bd5] p-[2px] shadow-lg">
+                <div className="h-full w-full overflow-hidden rounded-full bg-black">
+                  <img
+                    src={INSTAGRAM_PROFILE_IMAGE}
+                    alt="marbellacosmetics1"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
               </div>
-              <div>
-                <div className="text-base font-semibold text-white">marbellacosmetics1</div>
-                <div className="text-sm text-white/70">Natural tanning & beauty</div>
+              <div className="min-w-0">
+                <div className="truncate text-base font-semibold text-white">
+                  marbellacosmetics1
+                </div>
+                <div className="truncate text-sm text-white/70">
+                  Marbella = Glamour &amp; Chaos 🏝
+                </div>
               </div>
             </div>
             <Popover.Close asChild>
@@ -73,24 +80,41 @@ export function InstagramPreviewCard() {
             </Popover.Close>
           </div>
 
-          <div className="mt-4 space-y-3 text-sm text-white/70">
-            <p>
-              تتبعنا على إنستقرام لمشاهدة أحدث الصور، الفيديوهات، والعروض الخاصة بصبغات التسمير
-              والمنتجات الطبيعية.
+          <div className="mt-4 space-y-3 text-sm text-white/80" dir="rtl">
+            <p className="leading-relaxed">
+              ماربيا تان، المعروف لا يُعرف
+              <br />
+              ضمان الصيغه من الاستخدام الأول 🌟
+              <br />
+              1000+ رأي وتجربة في الـ Highlights
             </p>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-3xl bg-white/5 p-3 text-center">
-                <div className="text-sm text-white/60">تابع</div>
-                <div className="mt-1 text-lg font-semibold">4.2K</div>
-              </div>
-              <div className="rounded-3xl bg-white/5 p-3 text-center">
-                <div className="text-sm text-white/60">منشورات</div>
-                <div className="mt-1 text-lg font-semibold">182</div>
-              </div>
+            <Link
+              href={WEBSITE_URL}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="inline-block text-sm text-sky-400 hover:underline"
+              dir="ltr"
+            >
+              marbellacosmetics.com
+            </Link>
+          </div>
+
+          <div className="mt-4 grid grid-cols-3 gap-2 text-center" dir="rtl">
+            <div className="rounded-2xl bg-white/5 p-2.5">
+              <div className="text-base font-semibold text-white">161</div>
+              <div className="text-xs text-white/60">منشورات</div>
+            </div>
+            <div className="rounded-2xl bg-white/5 p-2.5">
+              <div className="text-base font-semibold text-white">19.4K</div>
+              <div className="text-xs text-white/60">متابعين</div>
+            </div>
+            <div className="rounded-2xl bg-white/5 p-2.5">
+              <div className="text-base font-semibold text-white">12</div>
+              <div className="text-xs text-white/60">يتابع</div>
             </div>
           </div>
 
-          <div className="mt-4 flex items-center justify-between gap-3">
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
             <Link
               href={INSTAGRAM_URL}
               target="_blank"
