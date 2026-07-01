@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
+import { usePathname } from "next/navigation";
 import { ShoppingBag, Minus, Plus, Trash2, ArrowRight, ArrowLeft, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cartStore";
@@ -20,6 +21,7 @@ export default function CartPage() {
   // استدعاء قيم متجر السلة وحالتها العامة
   const { items, removeItem, updateQuantity, getSummary, coupon, applyCoupon, removeCoupon } =
     useCartStore();
+  const pathname = usePathname();
   const { t } = useTranslation();
 
   // حالة محلية لإدخال كود كوبون الخصم من قبل المستخدم
@@ -76,9 +78,12 @@ export default function CartPage() {
     <div className="min-h-screen bg-cream/20 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* عنوان الصفحة الرئيسي */}
-        <h1 className="mb-10 text-center text-3xl font-bold tracking-tight text-black sm:text-left">
+        <h1 className="mb-4 text-center text-3xl font-bold tracking-tight text-black sm:text-left">
           {t("cartPage.title")}
         </h1>
+        <p className="text-muted-foreground mb-10 text-center text-sm sm:text-left">
+          {t("cartPage.currentRoute", { route: pathname }) || `Current route: ${pathname}`}
+        </p>
 
         {items.length === 0 ? (
           /* واجهة السلة الفارغة */
