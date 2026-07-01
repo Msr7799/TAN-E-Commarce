@@ -4,9 +4,11 @@ import { logEvent } from "firebase/analytics";
 import { get, push, ref } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth";
 import { analytics, auth, db } from "@/lib/firebase";
+import { logger } from "@/lib/logger";
 
 const ANALYTICS_STORAGE_KEY = "marbella-admin-events";
 let hasInitializedAuthListener = false;
+let authInitializationCompleted = false;
 
 export type AnalyticsEventName =
   "page_view" | "view_item" | "add_to_cart" | "begin_checkout" | "purchase" | "search" | "login";
@@ -113,6 +115,7 @@ function ensureAnalyticsAuthListener() {
 
   hasInitializedAuthListener = true;
   onAuthStateChanged(auth, (user) => {
+    authInitializationCompleted = true;
     if (user) {
       void flushStoredEventsToFirebase();
     }
@@ -136,10 +139,12 @@ function persistAnalyticsEvent(eventName: AnalyticsEventName, payload: Analytics
 
   if (auth.currentUser) {
     persistAnalyticsEventToFirebase(eventRecord).catch((error) => {
-      console.warn("Firebase analytics DB write failed", error);
+      logger.warn("Firebase analytics DB write failed", { error: String(error) });
     });
+  } else if (!authInitializationCompleted) {
+    logger.debug("Analytics event queued until authentication is available.");
   } else {
-    console.warn("Skipping Firebase analytics write until authentication is available.");
+    logger.info("Analytics event queued while the user is not authenticated.");
   }
 }
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
-import { motion, AnimatePresence, type Variants } from "motion/react";
 import { loadGalleryImages } from "@/lib/galleryStorage";
 
 /**
@@ -72,49 +71,6 @@ function convertStoredGalleryItems(stored: Array<{ id: number; src: string; alt:
 /* أنيميشنز */
 /* ------------------------------------------------------------------ */
 
-const containerVariants: Variants = {
-  hidden: {},
-  show: {
-    transition: {
-      staggerChildren: 0.07,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const tileVariants: Variants = {
-  hidden: { opacity: 0, y: 28, scale: 0.96, filter: "blur(6px)" },
-  show: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    filter: "blur(0px)",
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-  },
-};
-
-const overlayVariants: Variants = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { duration: 0.25, ease: "easeOut" } },
-  exit: { opacity: 0, transition: { duration: 0.2, ease: "easeIn" } },
-};
-
-const lightboxVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.92, y: 24 },
-  show: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
-  },
-  exit: {
-    opacity: 0,
-    scale: 0.95,
-    y: 12,
-    transition: { duration: 0.2, ease: "easeIn" },
-  },
-};
-
 /* ------------------------------------------------------------------ */
 /* بلاطة واحدة داخل المعرض */
 /* ------------------------------------------------------------------ */
@@ -135,14 +91,11 @@ function GalleryTile({ item, onOpen }: { item: GalleryItem; onOpen: (item: Galle
   }, []);
 
   return (
-    <motion.button
+    <button
       type="button"
-      variants={tileVariants}
       onClick={() => onOpen(item)}
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
-      whileHover={{ y: -4 }}
-      whileTap={{ scale: 0.98 }}
       className="group relative mb-4 block w-full overflow-hidden rounded-2xl border border-black/10 bg-neutral-100 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-black/70"
       style={{
         breakInside: "avoid",
@@ -186,7 +139,7 @@ function GalleryTile({ item, onOpen }: { item: GalleryItem; onOpen: (item: Galle
       <span className="pointer-events-none absolute bottom-3 left-3 translate-y-2 text-xs font-medium tracking-wide text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
         {String(item.id).padStart(2, "0")}
       </span>
-    </motion.button>
+    </button>
   );
 }
 
@@ -224,77 +177,60 @@ export default function GalleryGrid() {
 
   return (
     <section className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="show"
-        className="columns-2 gap-4 sm:columns-3 lg:columns-4"
-      >
+      <div className="columns-2 gap-4 sm:columns-3 lg:columns-4">
         {galleryItems.map((item) => (
           <GalleryTile key={item.id} item={item} onOpen={setActive} />
         ))}
-      </motion.div>
+      </div>
 
       {/* -------------------------------------------------------------- */}
       {/* Lightbox */}
       {/* -------------------------------------------------------------- */}
-      <AnimatePresence>
-        {active && (
-          <motion.div
-            key="overlay"
-            variants={overlayVariants}
-            initial="hidden"
-            animate="show"
-            exit="exit"
-            onClick={close}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+      {active && (
+        <div
+          onClick={close}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-h-[85vh] max-w-4xl overflow-hidden rounded-2xl bg-neutral-950 shadow-2xl"
           >
-            <motion.div
-              key="content"
-              variants={lightboxVariants}
-              initial="hidden"
-              animate="show"
-              exit="exit"
-              onClick={(e) => e.stopPropagation()}
-              className="relative max-h-[85vh] max-w-4xl overflow-hidden rounded-2xl bg-neutral-950 shadow-2xl"
-            >
-              {active.type === "image" ? (
-                <img
-                  src={active.src}
-                  alt={`صورة المعرض ${active.id}`}
-                  className="max-h-[85vh] w-auto object-contain"
-                />
-              ) : (
-                <video
-                  src={active.src}
-                  autoPlay
-                  loop
-                  controls
-                  playsInline
-                  className="max-h-[85vh] w-auto object-contain"
-                />
-              )}
+            {active.type === "image" ? (
+              <img
+                src={active.src}
+                alt={`صورة المعرض ${active.id}`}
+                className="max-h-[85vh] w-auto object-contain"
+              />
+            ) : (
+              <video
+                src={active.src}
+                autoPlay
+                loop
+                controls
+                playsInline
+                className="max-h-[85vh] w-auto object-contain"
+              />
+            )}
 
-              <button
-                type="button"
-                onClick={close}
-                aria-label="إغلاق"
-                className="absolute top-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-black transition hover:bg-white"
+            <button
+              type="button"
+              onClick={close}
+              aria-label="إغلاق"
+              className="absolute top-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-black transition hover:bg-white"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                className="h-4 w-4"
               >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  className="h-4 w-4"
-                >
-                  <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
-                </svg>
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

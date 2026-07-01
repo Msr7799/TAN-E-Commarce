@@ -148,35 +148,38 @@ export function UserProfile() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mx-auto w-full max-w-4xl rounded-lg bg-white p-4 shadow-lg sm:p-6 md:p-8"
+      className="mx-auto w-full max-w-full rounded-lg bg-white p-4 shadow-lg sm:p-6 md:p-8 lg:max-w-4xl"
     >
       {/* Header */}
       <div className="mb-6 flex flex-col gap-4 border-b pb-6 sm:mb-8 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex min-w-0 items-center gap-3 sm:gap-4">
           {user.photoURL && (
-            <Image
-              src={user.photoURL}
-              alt={user.displayName || "User"}
-              width={64}
-              height={64}
-              className="h-12 w-12 rounded-full sm:h-16 sm:w-16"
-            />
+            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full sm:h-16 sm:w-16">
+              <Image
+                src={user.photoURL}
+                alt={user.displayName || "User"}
+                fill
+                sizes="64px"
+                className="object-cover"
+              />
+            </div>
           )}
-          <div className="min-w-0">
+          <div className="min-w-0 truncate">
             <h1 className="truncate text-lg font-bold text-gray-900 sm:text-2xl">
               {user.displayName || (userProfile?.isAnonymous ? "Guest User" : user.email)}
             </h1>
             <p className="text-xs text-gray-600 sm:text-sm">
               {userProfile?.isAdmin && "🔐 Administrator"}
-              {userProfile?.isOnline && " • Online"}
+              {userProfile?.isOnline && (userProfile?.isAdmin ? " • " : "")}
+              {userProfile?.isOnline && t("profile.online")}
             </p>
           </div>
         </div>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
           {userProfile?.isAdmin && (
             <Link
               href="/admin"
-              className="inline-flex items-center justify-center rounded-full border border-golden bg-golden/10 px-4 py-2 text-sm font-semibold text-golden transition hover:bg-golden/20"
+              className="inline-flex w-full items-center justify-center rounded-full border border-golden bg-golden/10 px-4 py-2 text-sm font-semibold text-golden transition hover:bg-golden/20 sm:w-auto"
             >
               {t("admin.openDashboard")}
             </Link>
@@ -191,21 +194,26 @@ export function UserProfile() {
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="mb-6 flex gap-4 border-b">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`border-b-2 px-4 py-2 font-medium transition ${
-              activeTab === tab.id
-                ? "border-golden text-golden"
-                : "border-transparent text-gray-600 hover:text-gray-900"
-            }`}
-          >
-            {tab.icon} {tab.label}
-          </button>
-        ))}
+      {/* Tabs — a fixed 4-column grid on phones (no hidden overflow to discover,
+          every tab is reachable with one tap) that becomes a scrollable pill row
+          from sm up, where horizontal space is no longer the constraint. */}
+      <div className="sticky top-0 z-10 -mx-4 mb-6 border-b bg-white/95 px-4 backdrop-blur-sm sm:static sm:mx-0 sm:overflow-x-auto sm:bg-transparent sm:px-1 sm:backdrop-blur-none">
+        <div className="grid grid-cols-4 gap-1 py-1 sm:flex sm:gap-3 sm:px-1 sm:py-0 sm:whitespace-nowrap">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex min-h-[3rem] flex-col items-center justify-center gap-0.5 rounded-lg border-b-2 px-2 py-2 text-[11px] font-medium transition sm:min-w-[8rem] sm:flex-row sm:gap-2 sm:rounded-full sm:px-4 sm:text-sm ${
+                activeTab === tab.id
+                  ? "border-golden bg-golden/5 text-golden sm:bg-transparent"
+                  : "border-transparent text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              <span className="text-base sm:text-sm">{tab.icon}</span>
+              <span className="truncate">{tab.label}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Content */}
@@ -322,14 +330,14 @@ export function UserProfile() {
             <div className="space-y-3 sm:space-y-4">
               {purchaseHistory.map((item) => (
                 <div key={item.id} className="rounded-lg border p-4 transition hover:bg-gray-50">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="font-semibold text-gray-900">{item.productName}</h3>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <h3 className="truncate font-semibold text-gray-900">{item.productName}</h3>
                       <p className="text-sm text-gray-600">
                         {new Date(item.purchaseDate).toLocaleDateString()}
                       </p>
                     </div>
-                    <div className="text-right">
+                    <div className="shrink-0 text-right">
                       <p className="text-xs font-bold text-golden sm:text-sm">
                         {item.price} {item.currency}
                       </p>
@@ -352,13 +360,13 @@ export function UserProfile() {
                   key={product.id}
                   className="group flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition hover:shadow-md sm:flex-row"
                 >
-                  <div className="h-24 w-full overflow-hidden rounded-lg sm:h-28 sm:w-28 sm:rounded-2xl">
+                  <div className="relative h-24 w-full shrink-0 overflow-hidden rounded-lg sm:h-28 sm:w-28 sm:rounded-2xl">
                     <Image
                       src={product.images[0]?.url}
                       alt={product.images[0]?.alt || product.name}
-                      width={180}
-                      height={180}
-                      className="h-full w-full object-cover"
+                      fill
+                      sizes="(max-width: 640px) 100vw, 112px"
+                      className="object-cover"
                     />
                   </div>
                   <div className="flex-1">

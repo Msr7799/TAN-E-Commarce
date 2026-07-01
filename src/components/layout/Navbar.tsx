@@ -40,7 +40,7 @@ export function Navbar() {
   } = useUIStore();
   const { t, locale, setLocale } = useTranslation();
   const { currency, supportedCurrencies, setCurrency } = useCurrency();
-  const { user, userProfile, isLoading } = useAuth();
+  const { user, userProfile, isLoading, logout } = useAuth();
 
   // دالة مراقبة التمرير لإضافة تأثير الضباب (backdrop-blur) بعد إزاحة 20 بكسل
   const handleScroll = useCallback(() => {
@@ -422,16 +422,34 @@ export function Navbar() {
 
               {/* زر الدعوة للتسوق وتسجيل الدخول */}
               <div className="mt-auto space-y-3 border-t border-beige p-6">
-                <Button
-                  className="w-full"
-                  onClick={() => {
-                    toggleSignIn();
-                    closeMobileMenu();
-                  }}
-                >
-                  <LogIn className="mr-2 h-4 w-4" />
-                  {t("auth.signIn") || "Sign In"}
-                </Button>
+                {user ? (
+                  <>
+                    <Button className="w-full" asChild>
+                      <Link href="/profile">{t("profile.tab") || "Profile"}</Link>
+                    </Button>
+                    <Button
+                      className="w-full"
+                      variant="outline"
+                      onClick={async () => {
+                        await logout();
+                        closeMobileMenu();
+                      }}
+                    >
+                      {t("auth.logout") || "Logout"}
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    className="w-full"
+                    onClick={() => {
+                      toggleSignIn();
+                      closeMobileMenu();
+                    }}
+                  >
+                    <LogIn className="mr-2 h-4 w-4" />
+                    {t("auth.signIn") || "Sign In"}
+                  </Button>
+                )}
                 <Button className="w-full" asChild>
                   <Link href="/shop">{t("actions.shopNow")}</Link>
                 </Button>
