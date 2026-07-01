@@ -11,7 +11,9 @@ import { useCartStore } from "@/store/cartStore";
 import { useUIStore } from "@/store/uiStore";
 import { NAV_LINKS } from "@/constants";
 import { useTranslation } from "@/utils/i18n";
-import { cn } from "@/utils";
+import { cn, useCurrency } from "@/utils";
+import { useAuth } from "@/hooks/useAuth";
+import type { CurrencyCode } from "@/utils";
 import { SignInModal } from "@/features/auth/SignInModal";
 
 /**
@@ -37,6 +39,8 @@ export function Navbar() {
     closeSignIn,
   } = useUIStore();
   const { t, locale, setLocale } = useTranslation();
+  const { currency, supportedCurrencies, setCurrency } = useCurrency();
+  const { user, userProfile, isLoading } = useAuth();
 
   // دالة مراقبة التمرير لإضافة تأثير الضباب (backdrop-blur) بعد إزاحة 20 بكسل
   const handleScroll = useCallback(() => {
@@ -120,6 +124,29 @@ export function Navbar() {
                 </li>
               );
             })}
+            {userProfile?.isAdmin && (
+              <li key="/admin">
+                <Link
+                  href="/admin"
+                  className={cn(
+                    "relative px-4 py-2 text-sm font-medium transition-colors duration-200",
+                    pathname === "/admin"
+                      ? "text-[#800000]"
+                      : "text-[#800000]/90 hover:text-[#800000]"
+                  )}
+                  aria-current={pathname === "/admin" ? "page" : undefined}
+                >
+                  {t("admin.nav.dashboard")}
+                  {pathname === "/admin" && (
+                    <motion.span
+                      layoutId="nav-indicator"
+                      className="absolute bottom-0 left-1/2 h-0.5 w-4 -translate-x-1/2 rounded-full bg-[#800000]"
+                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                    />
+                  )}
+                </Link>
+              </li>
+            )}
           </ul>
 
           {/* أيقونات وأزرار التحكم */}
@@ -152,6 +179,24 @@ export function Navbar() {
                 AR
               </button>
             </div>
+            <div className="hidden items-center gap-2 sm:flex">
+              <label htmlFor="currency-select" className="sr-only">
+                Currency
+              </label>
+              <select
+                id="currency-select"
+                value={currency.code}
+                onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
+                className="rounded-xl border border-beige bg-white px-2 py-1 text-sm font-semibold transition-colors duration-150 outline-none focus:border-golden"
+                aria-label="Select display currency"
+              >
+                {supportedCurrencies.map((item) => (
+                  <option key={item.code} value={item.code}>
+                    {item.flag} {item.code}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             {/* زر البحث المنبثق */}
             <motion.button
@@ -175,6 +220,48 @@ export function Navbar() {
             >
               <LogIn className="h-5 w-5" />
             </motion.button>
+            {/* زر تسجيل الدخول أو صورة المستخدم */}
+            {!isLoading &&
+              (user ? (
+                <>
+                  {userProfile?.isAdmin && (
+                    <Link
+                      href="/admin"
+                      className="hidden items-center rounded-full border border-golden bg-golden/10 px-3 py-2 text-xs font-semibold text-golden transition hover:bg-golden/20 sm:flex"
+                    >
+                      {t("admin.openDashboard")}
+                    </Link>
+                  )}
+                  <Link
+                    href="/profile"
+                    className="text-foreground flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-cream"
+                  >
+                    {user.photoURL ? (
+                      <Image
+                        src={user.photoURL}
+                        alt={user.displayName || "User"}
+                        width={40}
+                        height={40}
+                        className="h-10 w-10 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-golden font-bold text-white">
+                        {user.email?.charAt(0).toUpperCase() || "U"}
+                      </div>
+                    )}
+                  </Link>
+                </>
+              ) : (
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={toggleSignIn}
+                  className="text-foreground flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-cream hover:text-golden"
+                  aria-label={t("auth.signIn")}
+                >
+                  <LogIn className="h-5 w-5" />
+                </motion.button>
+              ))}
 
             {/* زر السلة مع شارة توضح عدد العناصر المضافة */}
             <motion.button
@@ -298,6 +385,27 @@ export function Navbar() {
                     </Link>
                   </motion.li>
                 ))}
+                {userProfile?.isAdmin && (
+                  <motion.li
+                    key="/admin"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: NAV_LINKS.length * 0.05 }}
+                  >
+                    <Link
+                      href="/admin"
+                      className={cn(
+                        "flex items-center rounded-xl px-4 py-3 text-base font-medium transition-colors",
+                        pathname === "/admin"
+                          ? "bg-cream text-golden"
+                          : "hover:bg-cream hover:text-golden"
+                      )}
+                      aria-current={pathname === "/admin" ? "page" : undefined}
+                    >
+                      {t("admin.nav.dashboard")}
+                    </Link>
+                  </motion.li>
+                )}
               </ul>
 
               {/* مبدل لغة متجاوب لنسخة الهواتف المحمولة */}

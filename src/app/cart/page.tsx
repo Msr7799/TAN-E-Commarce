@@ -6,7 +6,7 @@ import { ShoppingBag, Minus, Plus, Trash2, ArrowRight, ArrowLeft, Tag } from "lu
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cartStore";
 import { useCurrency } from "@/utils";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { useTranslation } from "@/utils/i18n";
 import { trackPurchase } from "@/lib/analytics";
@@ -30,10 +30,11 @@ export default function CartPage() {
   const summary = getSummary();
 
   // دالة التحقق وتطبيق الكوبون
-  const handleCheckout = useCallback(() => {
+  const handleCheckout = () => {
     if (items.length === 0) return;
 
-    const orderId = `order-${Date.now()}`;
+    const orderId = `order-${items.map((item) => `${item.product.id}:${item.quantity}`).join("-")}`;
+
     trackPurchase({
       id: orderId,
       total: summary.total,
@@ -41,7 +42,7 @@ export default function CartPage() {
     });
 
     toast.success(t("cartPage.checkoutSuccess") || "Checkout simulation successful!");
-  }, [items.length, summary.total, t]);
+  };
 
   const handleApplyCoupon = (e: React.FormEvent) => {
     e.preventDefault();

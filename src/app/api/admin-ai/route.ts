@@ -69,9 +69,15 @@ export async function POST(request: Request) {
       );
     }
 
-    const result = await response.json();
+    const result = (await response.json()) as {
+      candidates?: Array<{
+        message?: {
+          content?: Array<{ text?: string }>;
+        };
+      }>;
+    };
     const answer = result?.candidates?.[0]?.message?.content
-      ?.map((item: Record<string, unknown>) => (item as { text: string }).text)
+      ?.map((item) => item.text)
       .join(" ")
       .trim();
 

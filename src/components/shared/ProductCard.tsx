@@ -3,7 +3,7 @@
 // ============================================================
 // ProductCard — responsive card with motion animations
 // ============================================================
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "motion/react";
@@ -25,12 +25,17 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
   const addItem = useCartStore((s) => s.addItem);
   const { toggleItem, isInWishlist } = useWishlistStore();
   const { t } = useTranslation();
   const { formatPrice } = useCurrency();
 
-  const inWishlist = isInWishlist(product.id);
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  const inWishlist = hasMounted ? isInWishlist(product.id) : false;
   const stockInfo = getStockLabel(product.stockStatus, product.stockCount);
   const isOutOfStock = product.stockStatus === "out_of_stock";
 

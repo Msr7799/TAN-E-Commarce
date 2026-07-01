@@ -192,28 +192,26 @@ export function UserProfile() {
       </div>
 
       {/* Tabs */}
-      <div className="mb-6 overflow-x-auto border-b">
-        <div className="flex gap-2 sm:gap-4">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`border-b-2 px-3 py-2 text-xs font-medium whitespace-nowrap transition sm:px-4 sm:py-2 sm:text-sm ${
-                activeTab === tab.id
-                  ? "border-golden text-golden"
-                  : "border-transparent text-gray-600 hover:text-gray-900"
-              }`}
-            >
-              {tab.icon} <span className="hidden sm:inline">{tab.label}</span>
-            </button>
-          ))}
-        </div>
+      <div className="mb-6 flex gap-4 border-b">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`border-b-2 px-4 py-2 font-medium transition ${
+              activeTab === tab.id
+                ? "border-golden text-golden"
+                : "border-transparent text-gray-600 hover:text-gray-900"
+            }`}
+          >
+            {tab.icon} {tab.label}
+          </button>
+        ))}
       </div>
 
       {/* Content */}
       {activeTab === "profile" && (
-        <div className="space-y-4 sm:space-y-6">
-          <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
+        <div className="space-y-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="block text-xs font-medium text-gray-700 sm:text-sm">Email</label>
               <input
@@ -258,7 +256,7 @@ export function UserProfile() {
             </div>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="block text-xs font-medium text-gray-700 sm:text-sm">
                 {t("profile.language") || "Language"}
@@ -310,11 +308,9 @@ export function UserProfile() {
       {activeTab === "purchases" && (
         <div>
           {purchaseHistory.length === 0 && !isLoadingPurchases ? (
-            <div className="py-8 text-center sm:py-12">
-              <ShoppingBag className="mx-auto mb-3 h-10 w-10 text-gray-300 sm:mb-4 sm:h-12 sm:w-12" />
-              <p className="mb-3 text-sm text-gray-600 sm:mb-4 sm:text-base">
-                {t("profile.noPurchases") || "No purchases yet"}
-              </p>
+            <div className="py-12 text-center">
+              <ShoppingBag className="mx-auto mb-4 h-12 w-12 text-gray-300" />
+              <p className="mb-4 text-gray-600">{t("profile.noPurchases") || "No purchases yet"}</p>
               <button
                 onClick={handleLoadPurchases}
                 className="rounded-lg bg-golden px-3 py-2 text-xs font-semibold text-white transition hover:bg-golden/90 sm:px-4 sm:py-2 sm:text-sm"
@@ -325,16 +321,11 @@ export function UserProfile() {
           ) : (
             <div className="space-y-3 sm:space-y-4">
               {purchaseHistory.map((item) => (
-                <div
-                  key={item.id}
-                  className="rounded-lg border p-3 transition hover:bg-gray-50 sm:p-4"
-                >
-                  <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                    <div className="min-w-0">
-                      <h3 className="truncate text-sm font-semibold text-gray-900 sm:text-base">
-                        {item.productName}
-                      </h3>
-                      <p className="text-xs text-gray-600 sm:text-sm">
+                <div key={item.id} className="rounded-lg border p-4 transition hover:bg-gray-50">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h3 className="font-semibold text-gray-900">{item.productName}</h3>
+                      <p className="text-sm text-gray-600">
                         {new Date(item.purchaseDate).toLocaleDateString()}
                       </p>
                     </div>
@@ -359,7 +350,7 @@ export function UserProfile() {
               {wishlistProducts.map((product) => (
                 <li
                   key={product.id}
-                  className="group flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-3 shadow-sm transition hover:shadow-md sm:flex-row sm:gap-4 sm:rounded-2xl sm:p-4"
+                  className="group flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition hover:shadow-md sm:flex-row"
                 >
                   <div className="h-24 w-full overflow-hidden rounded-lg sm:h-28 sm:w-28 sm:rounded-2xl">
                     <Image
@@ -371,19 +362,13 @@ export function UserProfile() {
                     />
                   </div>
                   <div className="flex-1">
-                    <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                      <div className="min-w-0">
-                        <h3 className="truncate text-sm font-semibold text-gray-900 sm:text-base">
-                          {product.name}
-                        </h3>
-                        <p className="line-clamp-2 text-xs text-gray-500 sm:text-sm">
-                          {product.shortDescription}
-                        </p>
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <h3 className="text-base font-semibold text-gray-900">{product.name}</h3>
+                        <p className="text-sm text-gray-500">{product.shortDescription}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-xs font-semibold text-golden sm:text-base">
-                          {formatPrice(product.price)}
-                        </p>
+                        <p className="font-semibold text-golden">{formatPrice(product.price)}</p>
                         {product.compareAtPrice && (
                           <p className="text-xs text-gray-400 line-through sm:text-sm">
                             {formatPrice(product.compareAtPrice)}
@@ -404,11 +389,9 @@ export function UserProfile() {
               ))}
             </ul>
           ) : (
-            <div className="py-8 text-center sm:py-12">
-              <Heart className="mx-auto mb-3 h-10 w-10 text-gray-300 sm:mb-4 sm:h-12 sm:w-12" />
-              <p className="text-sm text-gray-600 sm:text-base">
-                {t("profile.noWishlist") || "No wishlist items yet."}
-              </p>
+            <div className="py-12 text-center">
+              <Heart className="mx-auto mb-4 h-12 w-12 text-gray-300" />
+              <p className="text-gray-600">{t("profile.noWishlist") || "No wishlist items yet."}</p>
             </div>
           )}
         </div>
