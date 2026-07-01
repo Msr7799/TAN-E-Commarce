@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { usePathname } from "next/navigation";
@@ -131,11 +132,30 @@ export default function CartPage() {
                         {/* صورة المنتج المصغرة */}
                         <Link
                           href={`/products/${item.product.slug}`}
-                          className="mx-auto flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-golden/20 to-amber-100 sm:mx-0"
+                          className="relative mx-auto h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-cream sm:mx-0"
                         >
-                          <span className="text-3xl font-bold text-golden">
-                            {itemName.charAt(0)}
-                          </span>
+                          {(() => {
+                            const image =
+                              item.product.images.find((image) => image.isPrimary) ??
+                              item.product.images[0];
+
+                            if (!image?.url) {
+                              return (
+                                <span className="flex h-full w-full items-center justify-center text-3xl font-bold text-golden">
+                                  {itemName.charAt(0)}
+                                </span>
+                              );
+                            }
+
+                            return (
+                              <Image
+                                src={image.url}
+                                alt={image.alt || itemName}
+                                fill
+                                className="object-cover"
+                              />
+                            );
+                          })()}
                         </Link>
 
                         {/* تفاصيل الاسم والسعر والتحكم */}
