@@ -7,7 +7,7 @@ import { useState, type SVGProps } from "react";
 
 const INSTAGRAM_URL = "https://www.instagram.com/marbellacosmetics1";
 const WEBSITE_URL = "https://marbellacosmetics.com";
-const INSTAGRAM_PROFILE_IMAGE = "/logo-orange.png";
+const INSTAGRAM_PROFILE_IMAGE = "/logo.png";
 
 function InstagramIcon(props: SVGProps<SVGSVGElement>) {
   return (
