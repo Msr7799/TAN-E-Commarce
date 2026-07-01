@@ -76,14 +76,14 @@ export function Navbar() {
           {/* شعار الموقع مع حركة دوران خفيفة عند تمرير مؤشر الفأرة */}
           <Link
             href="/"
-            className="flex items-center gap-3 text-3xl font-bold tracking-tight"
+            className="flex items-center gap-2 text-2xl font-bold tracking-tight md:gap-3 md:text-3xl"
             aria-label="go to homepage"
           >
             <motion.div
               initial={{ scale: 1 }}
               whileHover={{ scale: 1.03 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
-              className="flex h-35 w-35 items-center justify-center"
+              className="flex h-30 w-30 items-center justify-center md:h-30 md:w-30 xl:h-40 xl:w-40"
               style={{ transformOrigin: "center center" }}
             >
               <Image
@@ -91,10 +91,10 @@ export function Navbar() {
                 alt={t("siteName")}
                 width={500}
                 height={500}
-                className="h-55 w-55 object-contain"
+                className="h-full w-full object-contain"
               />
             </motion.div>
-            <span className="bg-gradient-to-r from-golden to-amber-500 bg-clip-text text-xl font-extrabold text-transparent">
+            <span className="hidden bg-gradient-to-r from-golden to-amber-500 bg-clip-text text-xl font-extrabold text-transparent md:inline-block">
               {t("siteName")}
             </span>
           </Link>
