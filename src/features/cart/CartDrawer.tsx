@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "motion/react";
+import Image from "next/image";
 import Link from "next/link";
 import { X, ShoppingBag, Minus, Plus, Trash2, Tag, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -112,16 +113,30 @@ export function CartDrawer() {
                           transition={{ duration: 0.2 }}
                           className="flex gap-4 px-6 py-4"
                         >
-                          {/* Product image placeholder */}
+                          {/* Product image */}
                           <Link
                             href={`/products/${item.product.slug}`}
                             onClick={closeCart}
-                            className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-golden/20 to-amber-100"
+                            className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-cream"
                             aria-label={itemName}
                           >
-                            <span className="text-2xl font-bold text-golden">
-                              {itemName.charAt(0)}
-                            </span>
+                            {(() => {
+                              const image =
+                                item.product.images.find((image) => image.isPrimary) ??
+                                item.product.images[0];
+                              return image?.url ? (
+                                <Image
+                                  src={image.url}
+                                  alt={image.alt || itemName}
+                                  fill
+                                  className="object-cover"
+                                />
+                              ) : (
+                                <span className="flex h-full w-full items-center justify-center text-2xl font-bold text-golden">
+                                  {itemName.charAt(0)}
+                                </span>
+                              );
+                            })()}
                           </Link>
 
                           {/* Details */}
