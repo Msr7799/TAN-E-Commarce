@@ -8,12 +8,17 @@ import { create } from "zustand";
 interface UIState {
   isSearchOpen: boolean;
   isMobileMenuOpen: boolean;
+  isSignInOpen: boolean;
   searchQuery: string;
 
   openSearch: () => void;
   closeSearch: () => void;
   toggleSearch: () => void;
   setSearchQuery: (query: string) => void;
+
+  openSignIn: () => void;
+  closeSignIn: () => void;
+  toggleSignIn: () => void;
 
   openMobileMenu: () => void;
   closeMobileMenu: () => void;
@@ -23,6 +28,7 @@ interface UIState {
 export const useUIStore = create<UIState>((set) => ({
   isSearchOpen: false,
   isMobileMenuOpen: false,
+  isSignInOpen: false,
   searchQuery: "",
 
   openSearch: () => set({ isSearchOpen: true, isMobileMenuOpen: false }),
@@ -33,6 +39,10 @@ export const useUIStore = create<UIState>((set) => ({
       searchQuery: state.isSearchOpen ? "" : state.searchQuery,
     })),
   setSearchQuery: (query) => set({ searchQuery: query }),
+
+  openSignIn: () => set({ isSignInOpen: true }),
+  closeSignIn: () => set({ isSignInOpen: false }),
+  toggleSignIn: () => set((state) => ({ isSignInOpen: !state.isSignInOpen })),
 
   openMobileMenu: () => set({ isMobileMenuOpen: true }),
   closeMobileMenu: () => set({ isMobileMenuOpen: false }),

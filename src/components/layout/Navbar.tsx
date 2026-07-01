@@ -5,13 +5,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
-import { ShoppingBag, Search, Menu, X } from "lucide-react";
+import { ShoppingBag, Search, Menu, X, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cartStore";
 import { useUIStore } from "@/store/uiStore";
 import { NAV_LINKS } from "@/constants";
 import { useTranslation } from "@/utils/i18n";
 import { cn } from "@/utils";
+import { SignInModal } from "@/features/auth/SignInModal";
 
 /**
  * مكون شريط التنقل العلوي (Navbar)
@@ -25,8 +26,16 @@ export function Navbar() {
   const toggleCart = useCartStore((s) => s.toggleCart); // دالة فتح وإغلاق السلة الجانبية
 
   // استدعاء الحالات والعمليات العامة من متجر واجهة المستخدم (UI Store)
-  const { isSearchOpen, toggleSearch, isMobileMenuOpen, toggleMobileMenu, closeMobileMenu } =
-    useUIStore();
+  const {
+    isSearchOpen,
+    toggleSearch,
+    isMobileMenuOpen,
+    toggleMobileMenu,
+    closeMobileMenu,
+    isSignInOpen,
+    toggleSignIn,
+    closeSignIn,
+  } = useUIStore();
   const { t, locale, setLocale } = useTranslation();
 
   // دالة مراقبة التمرير لإضافة تأثير الضباب (backdrop-blur) بعد إزاحة 20 بكسل
@@ -154,6 +163,17 @@ export function Navbar() {
               aria-expanded={isSearchOpen}
             >
               <Search className="h-5 w-5" />
+            </motion.button>
+
+            {/* زر تسجيل الدخول */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={toggleSignIn}
+              className="text-foreground flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-cream hover:text-golden"
+              aria-label={t("auth.signIn") || "Sign In"}
+            >
+              <LogIn className="h-5 w-5" />
             </motion.button>
 
             {/* زر السلة مع شارة توضح عدد العناصر المضافة */}
@@ -310,8 +330,18 @@ export function Navbar() {
                 </button>
               </div>
 
-              {/* زر الدعوة للتسوق */}
-              <div className="mt-auto border-t border-beige p-6">
+              {/* زر الدعوة للتسوق وتسجيل الدخول */}
+              <div className="mt-auto space-y-3 border-t border-beige p-6">
+                <Button
+                  className="w-full"
+                  onClick={() => {
+                    toggleSignIn();
+                    closeMobileMenu();
+                  }}
+                >
+                  <LogIn className="mr-2 h-4 w-4" />
+                  {t("auth.signIn") || "Sign In"}
+                </Button>
                 <Button className="w-full" asChild>
                   <Link href="/shop">{t("actions.shopNow")}</Link>
                 </Button>
@@ -320,6 +350,9 @@ export function Navbar() {
           </>
         )}
       </AnimatePresence>
+
+      {/* نافذة تسجيل الدخول */}
+      <SignInModal isOpen={isSignInOpen} onClose={closeSignIn} />
     </>
   );
 }
