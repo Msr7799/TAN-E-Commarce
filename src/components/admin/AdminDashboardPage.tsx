@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "@/utils/i18n";
+import { useCurrency } from "@/utils";
 import { MetricCard } from "@/components/admin/MetricCard";
 import { PerformanceChart } from "@/components/admin/PerformanceChart";
 import {
@@ -38,6 +39,7 @@ interface AdminDashboardPageProps {
 
 export function AdminDashboardPage({ section }: AdminDashboardPageProps) {
   const { t } = useTranslation();
+  const { currency, formatPrice, convertAmount } = useCurrency();
   const [snapshot, setSnapshot] = useState<AdminAnalyticsSnapshot>(EMPTY_ADMIN_ANALYTICS_SNAPSHOT);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -58,13 +60,16 @@ export function AdminDashboardPage({ section }: AdminDashboardPageProps) {
     };
   }, []);
 
-  const revenueSeries = getAdminRevenueSeriesFromSnapshot(snapshot);
+  const revenueSeries = getAdminRevenueSeriesFromSnapshot(snapshot).map((item) => ({
+    ...item,
+    revenue: convertAmount(item.revenue, "BHD", currency.code),
+  }));
   const channelBreakdown = getAdminChannelBreakdown();
 
   const metrics = [
     {
       title: t("admin.metrics.revenue"),
-      value: `$${snapshot.revenue.toLocaleString()}`,
+      value: formatPrice(convertAmount(snapshot.revenue, "BHD", currency.code), currency.code),
       delta: "+18.2%",
       detail: t("admin.metrics.weekly"),
       icon: CircleDollarSign,
@@ -411,19 +416,19 @@ export function AdminDashboardPage({ section }: AdminDashboardPageProps) {
                     {
                       id: "#1042",
                       customer: "Sara",
-                      total: "$248",
+                      total: formatPrice(convertAmount(248, "BHD", currency.code), currency.code),
                       status: t("admin.orders.table.paid"),
                     },
                     {
                       id: "#1041",
                       customer: "Mona",
-                      total: "$76",
+                      total: formatPrice(convertAmount(76, "BHD", currency.code), currency.code),
                       status: t("admin.orders.table.processing"),
                     },
                     {
                       id: "#1040",
                       customer: "Ali",
-                      total: "$132",
+                      total: formatPrice(convertAmount(132, "BHD", currency.code), currency.code),
                       status: t("admin.orders.table.shipped"),
                     },
                   ].map((order) => (

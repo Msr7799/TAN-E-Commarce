@@ -21,7 +21,7 @@ export const defaultMetadata: Metadata = {
     "fake tan",
     "gradual tan",
     "tanning drops",
-    "Merbella Tan",
+    "marbella Tan",
     "after sun",
     "tanning accessories",
     "tanning products",

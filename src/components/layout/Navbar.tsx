@@ -76,23 +76,23 @@ export function Navbar() {
           {/* شعار الموقع مع حركة دوران خفيفة عند تمرير مؤشر الفأرة */}
           <Link
             href="/"
-            className="flex items-center gap-2 text-xl font-bold tracking-tight"
+            className="flex items-center gap-3 text-3xl font-bold tracking-tight"
             aria-label="go to homepage"
           >
             <motion.div
               whileHover={{ rotate: 20 }}
               transition={{ type: "spring", stiffness: 300 }}
-              className="flex h-10 w-10 items-center justify-center"
+              className="flex h-35 w-35 items-center justify-center"
             >
               <Image
                 src="/logo.avif"
                 alt={t("siteName")}
-                width={36}
-                height={36}
-                className="h-9 w-9 object-contain"
+                width={500}
+                height={500}
+                className="h-55 w-55 object-contain"
               />
             </motion.div>
-            <span className="bg-gradient-to-r from-golden to-amber-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-golden to-amber-500 bg-clip-text text-xl font-extrabold text-transparent">
               {t("siteName")}
             </span>
           </Link>
@@ -210,28 +210,10 @@ export function Navbar() {
               <Search className="h-5 w-5" />
             </motion.button>
 
-            {/* زر تسجيل الدخول */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={toggleSignIn}
-              className="text-foreground flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-cream hover:text-golden"
-              aria-label={t("auth.signIn") || "Sign In"}
-            >
-              <LogIn className="h-5 w-5" />
-            </motion.button>
             {/* زر تسجيل الدخول أو صورة المستخدم */}
             {!isLoading &&
               (user ? (
                 <>
-                  {userProfile?.isAdmin && (
-                    <Link
-                      href="/admin"
-                      className="hidden items-center rounded-full border border-golden bg-golden/10 px-3 py-2 text-xs font-semibold text-golden transition hover:bg-golden/20 sm:flex"
-                    >
-                      {t("admin.openDashboard")}
-                    </Link>
-                  )}
                   <Link
                     href="/profile"
                     className="text-foreground flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-cream"

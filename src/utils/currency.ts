@@ -90,8 +90,8 @@ export interface ExchangeRates {
   timestamp: number;
 }
 
-const CURRENCY_STORAGE_KEY = "merbella-selected-currency";
-const EXCHANGE_RATES_STORAGE_KEY = "merbella-exchange-rates";
+const CURRENCY_STORAGE_KEY = "marbella-selected-currency";
+const EXCHANGE_RATES_STORAGE_KEY = "marbella-exchange-rates";
 const EXCHANGE_RATES_TTL = 1000 * 60 * 60 * 12; // 12 hours
 
 const TIMEZONE_CURRENCY_MAP: Record<string, CurrencyCode> = {
@@ -238,9 +238,13 @@ export function formatCurrency(
     locale ||
     (typeof window !== "undefined" && document.documentElement.lang === "ar" ? "ar" : "en-US");
 
+  const currencyDisplay =
+    code === "BHD" ? (formatLocale.startsWith("ar") ? "symbol" : "code") : "symbol";
+
   return new Intl.NumberFormat(formatLocale, {
     style: "currency",
     currency: config.code,
+    currencyDisplay,
     minimumFractionDigits: config.decimals,
     maximumFractionDigits: config.decimals,
   }).format(convertedAmount);

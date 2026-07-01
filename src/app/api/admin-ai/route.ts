@@ -2,10 +2,40 @@ import { NextResponse } from "next/server";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const AI_ENABLED = process.env.NEXT_PUBLIC_AI_ENABLED === "true";
-const MODEL_NAME = "gemini-2.5-flash";
+const MODEL_NAMES = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash"];
+const MAX_RETRIES = 3;
+const RETRY_DELAY_MS = 2000;
 
 if (!GEMINI_API_KEY) {
   console.warn("GEMINI_API_KEY is not configured. AI assistant endpoint will remain disabled.");
+}
+
+async function callGemini(model: string, requestBody: unknown) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
+
+  for (let attempt = 0; attempt < MAX_RETRIES; attempt += 1) {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    if (response.ok) {
+      return response;
+    }
+
+    if (response.status !== 503) {
+      return response;
+    }
+
+    if (attempt < MAX_RETRIES - 1) {
+      await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS * (attempt + 1)));
+    }
+  }
+
+  return null;
 }
 
 export async function POST(request: Request) {
@@ -36,49 +66,69 @@ export async function POST(request: Request) {
     )}\nChannel breakdown: ${JSON.stringify(context.channelBreakdown ?? [])}`;
 
     const requestBody = {
-      messages: [
-        {
-          role: "system",
-          content: [{ type: "text", text: `${systemPrompt}\n\n${contextText}` }],
-        },
+      contents: [
         {
           role: "user",
-          content: [{ type: "text", text: question }],
+          parts: [
+            {
+              text: `${systemPrompt}\n\n${contextText}\n\nQuestion: ${question}`,
+            },
+          ],
         },
       ],
-      temperature: 0.45,
-      maxOutputTokens: 400,
+      generationConfig: {
+        temperature: 0.45,
+        maxOutputTokens: 400,
+      },
     };
 
-    const response = await fetch(
-      `https://generativeai.googleapis.com/v1/models/${MODEL_NAME}:generateMessage?key=${GEMINI_API_KEY}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      }
-    );
+    let response = null;
+    let lastErrorBody = null;
 
-    if (!response.ok) {
-      const errorBody = await response.text();
+    for (const model of MODEL_NAMES) {
+      const res = await callGemini(model, requestBody);
+      if (!res) {
+        continue;
+      }
+
+      if (res.ok) {
+        response = res;
+        break;
+      }
+
+      if (res.status === 503) {
+        lastErrorBody = await res.text();
+        continue;
+      }
+
+      const errorBody = await res.text();
       return NextResponse.json(
-        { error: `Gemini API request failed: ${response.status} ${errorBody}` },
+        { error: `Gemini API request failed: ${res.status} ${errorBody}` },
         { status: 502 }
+      );
+    }
+
+    if (!response) {
+      return NextResponse.json(
+        {
+          error: "خدمة الذكاء الاصطناعي مشغولة مؤقتًا. يُرجى المحاولة مرة أخرى بعد قليل.",
+          details: lastErrorBody || "Gemini service unavailable.",
+        },
+        { status: 503 }
       );
     }
 
     const result = (await response.json()) as {
       candidates?: Array<{
-        message?: {
-          content?: Array<{ text?: string }>;
+        content?: {
+          parts?: Array<{ text?: string }>;
         };
       }>;
     };
-    const answer = result?.candidates?.[0]?.message?.content
+
+    const answer = result?.candidates?.[0]?.content?.parts
       ?.map((item) => item.text)
-      .join(" ")
+      .join("\n")
       .trim();
 
     return NextResponse.json({ answer: answer || "Unable to interpret the AI response." });
