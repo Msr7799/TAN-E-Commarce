@@ -6,6 +6,7 @@ import { ExternalLink, X } from "lucide-react";
 import { useState, type SVGProps } from "react";
 
 const INSTAGRAM_URL = "https://www.instagram.com/marbellacosmetics1";
+const INSTAGRAM_PROFILE_IMAGE = "/logo-orange.png";
 
 function InstagramIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -48,18 +49,17 @@ export function InstagramPreviewCard() {
         >
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div
-                className="flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #feda75 0%, #fa7e1e 25%, #d62976 50%, #962fbf 75%, #4f5bd5 100%)",
-                }}
-              >
-                <InstagramIcon className="h-6 w-6" />
+              <div className="relative h-14 w-14 overflow-hidden rounded-full border border-white/10 shadow-lg">
+                <img
+                  src={INSTAGRAM_PROFILE_IMAGE}
+                  alt="Instagram profile"
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-black/10 to-black/30" />
               </div>
               <div>
-                <div className="text-base font-semibold">marbellacosmetics1</div>
-                <div className="text-sm text-white/60">Natural tanning & beauty</div>
+                <div className="text-base font-semibold text-white">marbellacosmetics1</div>
+                <div className="text-sm text-white/70">Natural tanning & beauty</div>
               </div>
             </div>
             <Popover.Close asChild>
