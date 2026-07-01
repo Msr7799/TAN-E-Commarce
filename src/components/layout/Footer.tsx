@@ -4,7 +4,6 @@
 // ============================================================
 import Image from "next/image";
 import Link from "next/link";
-import { MessageCircle } from "lucide-react";
 import { FOOTER_LINKS, WHATSAPP_URL } from "@/constants";
 import { useTranslation } from "@/utils/i18n";
 
@@ -131,7 +130,13 @@ export function Footer() {
         className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-[#25D366]/30 transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-[#25D366]/40 focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2 focus:outline-none"
         aria-label="Chat with us on WhatsApp"
       >
-        <MessageCircle className="h-7 w-7 fill-white" aria-hidden="true" />
+        <Image
+          src="/whatsapp-logo.svg"
+          alt="WhatsApp logo"
+          width={28}
+          height={28}
+          className="h-7 w-7"
+        />
       </a>
     </>
   );

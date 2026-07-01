@@ -4,8 +4,15 @@
     "home": "Home",
     "shop": "Shop",
     "about": "About",
+    "gallery": "Gallery",
     "faq": "FAQ",
     "contact": "Contact"
+  },
+  "gallery": {
+    "title": "Gallery",
+    "description": "A curated collection of photos and videos from Marbella Tan.",
+    "heading": "Our visual story",
+    "subheading": "Explore selected moments and product highlights"
   },
   "actions": {
     "search": "Open search",
